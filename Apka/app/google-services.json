@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "741614214235",
+    "firebase_url": "https://receipt-carer.firebaseio.com",
+    "project_id": "receipt-carer",
+    "storage_bucket": "receipt-carer.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:741614214235:android:ff7b1f140f8ba6382ff37e",
+        "android_client_info": {
+          "package_name": "com.fryderykrott.receiptcarer"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "741614214235-9o1rgio9vjqsng3r2pk00cfep68ap6ms.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.fryderykrott.receiptcarer",
+            "certificate_hash": "3bbe05df240dfcc2626cc314df0774d5bbec7ba3"
+          }
+        },
+        {
+          "client_id": "741614214235-hj178s568v9bsnj09flvtltri2eb3tbl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDkhT4hqfOFMGHZE2m7XpZji1SUOOA6UmI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "741614214235-hj178s568v9bsnj09flvtltri2eb3tbl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
