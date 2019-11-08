@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/coordinatorLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <FrameLayout
+        android:id="@+id/frame_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/toolbar"
+        android:background="@color/cardview_background"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" >
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_view_chips"
+                android:layout_width="match_parent"
+                style="@style/Widget.MaterialComponents.CardView"
+                app:cardCornerRadius="4dp"
+                android:outlineAmbientShadowColor="@color/colorBlack"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
+                android:layout_gravity="bottom"
+                android:layout_marginBottom="54dp"
+                app:cardBackgroundColor="@color/colorPrimary">
+
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="8dp"
+                    android:visibility="gone"
+                    >
+
+                    <com.google.android.material.chip.ChipGroup
+                        android:id="@+id/chipGroup"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:scrollbarAlwaysDrawHorizontalTrack="true"
+                        android:layout_margin="8dp">
+
+<!--                        <com.google.android.material.chip.Chip-->
+<!--                            android:id="@+id/chip_for_searching_from_to_date"-->
+<!--                            style="@style/Widget.MaterialComponents.Chip.Action"-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:text="@string/range_date_chip_base_string"-->
+<!--                            android:textColor="@color/colorWhite"-->
+<!--                            app:chipBackgroundColor="@color/colorAccent_2"-->
+<!--                            app:chipIcon="@drawable/ic_perm_contact_calendar_white_24dp"-->
+<!--                            />-->
+
+<!--                        <com.google.android.material.chip.Chip-->
+<!--                            android:id="@+id/chip_for_searching_money"-->
+<!--                            style="@style/Widget.MaterialComponents.Chip.Action"-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:text="__ - __ PLN"-->
+<!--                            android:textColor="@color/colorWhite"-->
+<!--                            app:chipBackgroundColor="@color/folder_icon_color_3"-->
+<!--                            app:chipIcon="@drawable/ic_perm_contact_calendar_white_24dp"-->
+<!--                            />-->
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chip7"
+                            style="@style/Widget.MaterialComponents.Chip.Filter"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Water" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chip8"
+                            style="@style/Widget.MaterialComponents.Chip.Filter"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Psychic" />
+
+                        <com.google.android.material.chip.Chip
+                            style="@style/Widget.MaterialComponents.Chip.Filter"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Water" />
+
+
+
+                    </com.google.android.material.chip.ChipGroup>
+                </HorizontalScrollView>
+
+            </com.google.android.material.card.MaterialCardView>
+
+    </FrameLayout>
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:theme="@style/ToolbarColoredBackArrow"
+        app:title="Animals"
+        app:titleTextColor="#ffffff" >
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".MainActivity">
+
+        <com.google.android.material.bottomappbar.BottomAppBar
+            android:id="@+id/bottom_appbar"
+            android:layout_width="match_parent"
+            android:layout_height="?actionBarSize"
+            android:layout_gravity="bottom"
+            android:minHeight="?actionBarSize"
+            app:backgroundTint="@color/colorPrimary"
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:menu="@menu/my_menu"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            app:navigationIcon="@drawable/ic_menu_black_24dp"
+            app:popupTheme="@style/ThemeOverlay.MaterialComponents.Light">
+        </com.google.android.material.bottomappbar.BottomAppBar>
+
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center_horizontal"
+            android:src="@drawable/ic_add_black_24dp"
+            app:layout_anchor="@id/bottom_appbar"
+            />
+
+
+
+        <include layout="@layout/fab_layout" />
+
+
+
+        <!--        <com.github.clans.fab.FloatingActionButton-->
+<!--            android:id="@+id/fab"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginBottom="25dp"-->
+<!--            android:layout_gravity="bottom|center_horizontal"-->
+<!--            android:src="@drawable/ic_add_black_24dp"-->
+<!--            />-->
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+</RelativeLayout>

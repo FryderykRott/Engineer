@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+android:orientation="vertical" android:layout_width="match_parent"
+android:layout_height="match_parent" xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.google.android.material.chip.Chip
+        android:id="@+id/range_calendar_chip"
+        style="@style/Widget.MaterialComponents.Chip.Action"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/range_date_chip_base_string"
+        app:closeIconTint="@color/colorWhite"
+        android:textColor="@color/colorWhite"
+        app:chipBackgroundColor="@color/calendar_chip_color"
+        app:chipIcon="@drawable/ic_perm_contact_calendar_white_24dp"
+        />
+
+    <com.google.android.material.chip.Chip
+        android:id="@+id/warranty_chip"
+        style="@style/Widget.MaterialComponents.Chip.Action"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="No warranty"
+        app:closeIconTint="@color/colorWhite"
+        android:textColor="@color/colorWhite"
+        app:chipBackgroundColor="@color/warranty_chip_color"
+        />
+
+    <com.google.android.material.chip.Chip
+        android:id="@+id/range_price_chip"
+        style="@style/Widget.MaterialComponents.Chip.Action"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="__ - __ PLN"
+        app:closeIconTint="@color/colorWhite"
+        android:textColor="@color/colorWhite"
+        app:chipBackgroundColor="@color/price_chip_color"
+        />
+
+    <com.google.android.material.chip.Chip
+        android:id="@+id/group_chip"
+        style="@style/Widget.MaterialComponents.Chip.Action"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=" Choose Group"
+        app:closeIconTint="@color/colorWhite"
+        android:textColor="@color/colorWhite"
+        app:chipBackgroundColor="@color/group_and_receipt_choose_chip_color"
+        app:chipIcon="@drawable/ic_group_base"
+        app:chipIconSize="23dp"
+        app:iconStartPadding="4dp"
+        />
+
+    <com.google.android.material.chip.Chip
+        android:id="@+id/group_receipt_filter_chip"
+        style="@style/Widget.MaterialComponents.Chip.Action"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=" Groups &amp; Receipts"
+        app:closeIconTint="@color/colorWhite"
+        android:textColor="@color/colorWhite"
+        app:chipBackgroundColor="@color/group_and_receipt_choose_chip_color"
+        app:chipIcon="@drawable/receipt_and_folder"
+        app:chipIconSize="35dp"
+        />
+
+
+
+    <com.google.android.material.chip.Chip
+        android:id="@+id/basic_chip"
+        style="@style/Widget.MaterialComponents.Chip.Filter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="#"
+        android:textColor="@color/color_dark_grey"
+        app:chipBackgroundColor="@color/basic_chip_color"
+        />
+
+</LinearLayout>

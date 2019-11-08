@@ -1,0 +1,55 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="bottom|center"
+    android:layout_marginBottom="16dp"
+    android:foregroundGravity="bottom|center"
+    app:layout_anchorGravity="bottom|center">
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_single_receipt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center"
+        android:layout_margin="@dimen/fab_margin"
+        android:src="@drawable/ic_receipt_single"
+        android:tint="@color/colorWhite"
+        android:visibility="invisible"
+        app:backgroundTint="@color/receipt_color" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_multy_receipts"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center"
+        android:layout_margin="@dimen/fab_margin"
+        android:src="@drawable/ic_receipt_multi"
+        android:tint="@color/colorWhite"
+        android:visibility="invisible"
+        app:backgroundTint="@color/receipt_color"
+        />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_add_group"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center"
+        android:layout_margin="@dimen/fab_margin"
+        android:src="@drawable/ic_folder"
+        android:visibility="invisible"
+        app:backgroundTint="@color/group_color" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_inf"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginBottom="64dp"
+        android:layout_marginEnd="24dp"
+        android:src="@drawable/ic_info"
+        android:visibility="invisible"
+        app:backgroundTint="@color/colorFAB_inf"
+        app:fabCustomSize="28dp"/>
+    <!--        app:fab_size="mini"/>-->
+</FrameLayout>
