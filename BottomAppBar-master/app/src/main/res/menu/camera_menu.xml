@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:title="SINGLE"
+        android:icon="@drawable/ic_receipt_single"
+        android:id="@+id/single_photo_item"/>
+
+    <item android:title="MULTI"
+        android:icon="@drawable/ic_receipt_multi"
+        android:id="@+id/multi_photo_item"/>
+</menu>
