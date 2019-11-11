@@ -1,6 +1,11 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        debug {
+            storeFile file('D:\\Desktop\\Studia\\PracaDyplomowa\\Engineer\\BottomAppBar-master\\settings.gradle')
+        }
+    }
     compileSdkVersion 29
     defaultConfig {
         applicationId "com.example.admin.appbarbottom"
