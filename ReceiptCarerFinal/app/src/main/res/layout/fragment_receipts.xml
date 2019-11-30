@@ -6,7 +6,7 @@
     android:background="#EEEEEE">
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/group_fragment_add_group_card"
+        android:id="@+id/receipt_fragment_add_receipt_card"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -65,14 +65,22 @@
 
     </androidx.cardview.widget.CardView>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
-        android:layout_width="match_parent"
+
+    <ScrollView
+        android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="16dp"
-        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/group_fragment_add_group_card"
-        app:spanCount="2" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/receipt_fragment_add_receipt_card">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="vertical"
+            android:id="@+id/recyclerView"
+            />
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

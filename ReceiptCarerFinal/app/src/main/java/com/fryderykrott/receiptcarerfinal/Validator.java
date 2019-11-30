@@ -25,6 +25,28 @@ public class Validator {
         return true;
     }
 
+    public static boolean validateEditGroupName(String name, String orginal_name) {
+        massage = "";
+        if(name.isEmpty() ){
+            massage += "To pole musi być wypełnione";
+            return false;
+        }
+
+        if(name.length() >= 24 ){
+            massage += "Nazwa nie może być dłuższa niż 24 znaki";
+            return false;
+        }
+
+        if(!isUniqGroup(name)){
+            if(!name.equals(orginal_name)){
+                massage += "Istnieje już grupa o podanej nazwie";
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     public static boolean validateGroupName(String name) {
         massage = "";
         if(name.isEmpty() ){
@@ -56,7 +78,7 @@ public class Validator {
         return true;
     }
 
-    public boolean validatePassword(String passwordString){
+    public static boolean validatePassword(String passwordString){
         massage = "";
         if(passwordString.isEmpty() ){
             massage += "Trzeba wypełnić pole hasła";
@@ -91,7 +113,5 @@ public class Validator {
         return true;
     }
 
-
-//    TODO rzeczy zwiazane z validacją apragonu
 
 }

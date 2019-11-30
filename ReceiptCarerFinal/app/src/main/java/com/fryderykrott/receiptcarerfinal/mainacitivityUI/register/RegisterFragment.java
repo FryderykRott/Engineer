@@ -118,6 +118,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
 
         if(pass){
 //            dodaj nowego uzytkwnika o podanych danych
+            ((MainActivity) getActivity()).setProgressView(true);
             Authentication.getInstance().signUpUserWith(emailString, passwordString, this);
         }
     }
@@ -127,7 +128,6 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
 //        zapiszmy nowego uzytkownika do bazy danych
 //        1. musi miec UID
 //        2. Musi miec na poczaktu jedna grupę
-        ((MainActivity) getActivity()).setProgressView(true);
 
         if(task.isSuccessful()){
             Database.getInstance().saveUser(FirebaseAuth.getInstance().getCurrentUser().getUid(), new OnCompleteListener<Void>() {

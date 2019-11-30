@@ -1,28 +1,25 @@
 package com.fryderykrott.receiptcarerfinal.alertdialogs;
 
 
-import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.fryderykrott.receiptcarerfinal.R;
 import com.fryderykrott.receiptcarerfinal.Validator;
 import com.fryderykrott.receiptcarerfinal.model.Group;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class GroupAddingAlertDialog extends Dialog implements android.view.View.OnClickListener {
 
-    public Activity parent_activity;
+    public Context context;
     public Dialog d;
 
     public Button ok;
@@ -44,24 +41,30 @@ public class GroupAddingAlertDialog extends Dialog implements android.view.View.
 
     EditText editTextGroupname;
 
+    Group toEditGroup;
+    TextView titleTextView;
+
     private int layoutID = R.layout.alertdialog_add_new_group;
-    private OnAlertDialogGroupCreationCallBackListener l;
+    private OnGroupCreationCallBackListener l_creation;
+    private OnGroupEditionCallBackListener l_edition;
 
     int chosenColor;
     ImageView currenCheck;
 
     //    public static final int
-    public GroupAddingAlertDialog(Activity a, OnAlertDialogGroupCreationCallBackListener l) {
+    public GroupAddingAlertDialog(Context a, OnGroupCreationCallBackListener l_creation, OnGroupEditionCallBackListener l_edition) {
         super(a);
 
-        this.l = l;
-        parent_activity = a;
+        this.l_creation = l_creation;
+        this.l_edition = l_edition;
+
+        context = a;
     }
 
-//    public void setParams(int color_chosen, String group_name){
-//        changeColorOfFolder(color_chosen);
-//        changeText(group_name);
-//    }
+    public void editGroupMode( Group group){
+        toEditGroup = group;
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,36 +107,49 @@ public class GroupAddingAlertDialog extends Dialog implements android.view.View.
         check_6 = findViewById(R.id.check_6);
 
         editTextGroupname = findViewById(R.id.edit_text_group_name);
-        editTextGroupname.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
 
-                return true;
+        titleTextView = findViewById(R.id.title);
+
+        if(toEditGroup == null){
+            chosenColor = 1;
+            setCurrentColor(check_1);
+        }
+        else{
+            titleTextView.setText("Edytuj grupę");
+            chosenColor = toEditGroup.getColor();
+            editTextGroupname.setText(toEditGroup.getName());
+
+            switch (chosenColor){
+                case (1):
+                    setCurrentColor(check_1);
+                    break;
+                case (2):
+                    setCurrentColor(check_2);
+                    break;
+                case (3):
+                    setCurrentColor(check_3);
+                    break;
+                case (4):
+                    setCurrentColor(check_4);
+                    break;
+                case (5):
+                    setCurrentColor(check_5);
+                    break;
+                case (6):
+                    setCurrentColor(check_6);
+                    break;
             }
-        });
-        chosenColor = 1;
-        setCurrentColor(check_1);
+//            zrobic tutaj takie dane jakie ma stuff
+        }
 //        setParams(GroupReceipt.COLOR_CHOSEN_1, "New group");
+
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.button_ok:
-                String name = editTextGroupname.getText().toString();
-
-//                    TODO tutaj ma byc validacja czy dobra nazwa grupy jest
-//                jesli validacja przejdzie to git
-                if(Validator.validateGroupName(name)){
-                    Group group = new Group(name, chosenColor);
-                    l.onAlertDialogGroupCreationCallBackListener(this, group);
-                    dismiss();
-                }
-                else {
-                    String massage = Validator.getMassage();
-                    editTextGroupname.setError(massage);
-                }
-
+                okGroup();
                 break;
             case R.id.button_cancel:
                 dismiss();
@@ -165,6 +181,43 @@ public class GroupAddingAlertDialog extends Dialog implements android.view.View.
             default:
                 break;
         }
+
+    }
+
+
+    private void okGroup() {
+        String name = editTextGroupname.getText().toString();
+
+        if(toEditGroup == null){
+            if(Validator.validateGroupName(name)){
+                Group group = new Group(name, chosenColor);
+                l_creation.onGroupCreationCallBackListener(this, group);
+                dismiss();
+            }
+            else {
+                String massage = Validator.getMassage();
+                editTextGroupname.setError(massage);
+            }
+
+        }
+        else {
+            if(Validator.validateEditGroupName(name, toEditGroup.getName())){
+                toEditGroup.setName(name);
+                toEditGroup.setColor(chosenColor);
+
+                l_edition.onGroupEditionCallBackListener(this, toEditGroup);
+                dismiss();
+            }
+            else {
+                String massage = Validator.getMassage();
+                editTextGroupname.setError(massage);
+            }
+
+        }
+
+
+
+
 
     }
 
@@ -204,8 +257,20 @@ public class GroupAddingAlertDialog extends Dialog implements android.view.View.
             editTextGroupname.setText(group_name);
     }
 
-    public interface OnAlertDialogGroupCreationCallBackListener {
-        public void onAlertDialogGroupCreationCallBackListener(Dialog dialog, Group ew_group);
+    public interface OnGroupCreationCallBackListener {
+        public void onGroupCreationCallBackListener(Dialog dialog, Group ew_group);
+    }
+
+    public interface OnGroupEditionCallBackListener {
+        public void onGroupEditionCallBackListener(Dialog dialog,Group group);
+    }
+
+    public Group getToEditGroup() {
+        return toEditGroup;
+    }
+
+    public void setToEditGroup(Group toEditGroup) {
+        this.toEditGroup = toEditGroup;
     }
 
 

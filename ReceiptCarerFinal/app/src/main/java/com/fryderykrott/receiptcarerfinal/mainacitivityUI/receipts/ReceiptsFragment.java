@@ -1,6 +1,10 @@
 package com.fryderykrott.receiptcarerfinal.mainacitivityUI.receipts;
 
+import android.Manifest;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,13 +12,18 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 
 import com.fryderykrott.receiptcarerfinal.MainActivity;
 import com.fryderykrott.receiptcarerfinal.R;
+import com.fryderykrott.receiptcarerfinal.ReceiptAddingActivity;
 import com.fryderykrott.receiptcarerfinal.Utils;
+import com.fryderykrott.receiptcarerfinal.model.Group;
 import com.fryderykrott.receiptcarerfinal.model.User;
 import com.fryderykrott.receiptcarerfinal.services.Database;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -28,7 +37,7 @@ import java.util.ArrayList;
 public class ReceiptsFragment extends Fragment {
 
     private FirebaseAuth mAuth;
-
+    CardView add_new_receipt;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -49,6 +58,33 @@ public class ReceiptsFragment extends Fragment {
     }
 
     @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        add_new_receipt = view.findViewById(R.id.receipt_fragment_add_receipt_card);
+        add_new_receipt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(getActivity(), ReceiptAddingActivity.class);
+                startActivityForResult(intent, -1);
+
+            }
+        });
+
+        checkCameraPermissions();
+    }
+
+    private void checkCameraPermissions() {
+        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            add_new_receipt.setVisibility(View.INVISIBLE);
+            ActivityCompat.requestPermissions(getActivity(), new String[] { Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE }, 0);
+        }
+        else
+            add_new_receipt.setVisibility(View.VISIBLE);
+    }
+
+    @Override
     public void onStart() {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
@@ -66,6 +102,9 @@ public class ReceiptsFragment extends Fragment {
     }
 
     private void loadUser() {
+        if(Utils.user != null)
+            return;
+
         ((MainActivity) getActivity()).setProgressView(true);
 
         final FirebaseUser user = mAuth.getCurrentUser();
@@ -79,6 +118,17 @@ public class ReceiptsFragment extends Fragment {
                         Database.getInstance().saveUser(user.getUid(), new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
+                                Group group = new Group();
+                                group.setName("Ogólne");
+                                group.setColor(-1);
+
+                                Database.getInstance().saveGroupOfCurrentUser(group, new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+
+
+                                    }
+                                });
                                 ((MainActivity) getActivity()).setProgressView(false);
                             }
                         });
@@ -95,7 +145,5 @@ public class ReceiptsFragment extends Fragment {
 
     }
 
-    private void updateUI(FirebaseUser currentUser) {
 
-    }
 }

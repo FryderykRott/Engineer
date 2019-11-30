@@ -7,7 +7,7 @@
     android:orientation="vertical">
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/group_fragment_add_group_card"
+        android:id="@+id/receipt_fragment_add_receipt_card"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:translationZ="8dp"

@@ -44,6 +44,7 @@
             android:contentDescription="@string/logoDesc"/>
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/loginFragment_loginEditTextLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -66,11 +67,11 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/loginFragment_passwordEditTextLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:id="@+id/loginFragment_password"
             android:layout_marginTop="@dimen/activity_horizontal_margin"
             android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
             app:hintAnimationEnabled="true">

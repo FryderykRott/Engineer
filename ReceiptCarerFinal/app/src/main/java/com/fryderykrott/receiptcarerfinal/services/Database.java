@@ -51,4 +51,11 @@ public class Database{
 
         db.document(userDocRef).update("groups", groups).addOnCompleteListener(voidOnCompleteListener);
     }
+
+    public void reloadGroupsOfCurrentUser(OnCompleteListener<Void> voidOnCompleteListener) {
+        String userDocRef = Utils.user.getDocRefUser();
+        ArrayList<Group> groups = Utils.user.getGroups();
+
+        db.document(userDocRef).update("groups", groups).addOnCompleteListener(voidOnCompleteListener);
+    }
 }

@@ -4,9 +4,10 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
+import android.widget.FrameLayout;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
@@ -14,6 +15,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
 import androidx.navigation.NavOptions;
@@ -25,15 +27,19 @@ public class MainActivity extends AppCompatActivity implements NavController.OnD
 
     private NavController navController;
     private BottomNavigationView bottomNavigationView;
+    private ConstraintLayout container;
+    private View snackbar_container;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        container = findViewById(R.id.container);
+        snackbar_container = findViewById(R.id.snackbar_containter);
+
         FirebaseApp.initializeApp(this);
         FirebaseDatabase.getInstance().setPersistenceEnabled(true);
-
 
         bottomNavigationView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
@@ -42,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements NavController.OnD
                 R.id.navigation_groups, R.id.navigation_receipts, R.id.navigation_search)
                 .build();
 
-        navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        navController = Navigation.findNavController(this, R.id.receipt_adding_nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
 
@@ -67,6 +73,7 @@ public class MainActivity extends AppCompatActivity implements NavController.OnD
                         .setPopUpTo(R.id.mobile_navigation, true).build();
 
                 navController.navigate(R.id.navigation_login, null, navOptions, null);
+                Utils.user = null;
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -80,6 +87,9 @@ public class MainActivity extends AppCompatActivity implements NavController.OnD
         }
         else
             setNavigationVisibility(true);
+
+        if(destination.getId() == R.id.navigation_search)
+            getSupportActionBar().hide();
     }
 
     private void setNavigationVisibility(boolean isShown) {
@@ -94,22 +104,29 @@ public class MainActivity extends AppCompatActivity implements NavController.OnD
     }
 
     public void showSnackBar(int id){
-//        Snackbar snackbar = Snackbar.make(bottomNavigationView, id, Snackbar.LENGTH_SHORT);
-//        ViewGroup.LayoutParams params = snackbar.getView().getLayoutParams();
-        Toast.makeText(this, id, Toast.LENGTH_LONG).show();
+        Snackbar snackbar = Snackbar.make(snackbar_container, id, Snackbar.LENGTH_LONG);
+        snackbar.show();
     }
 
     public void showSnackBar(String tekst){
-//        Snackbar snackbar = Snackbar.make(bottomNavigationView, id, Snackbar.LENGTH_SHORT);
-//        ViewGroup.LayoutParams params = snackbar.getView().getLayoutParams();
-        Toast.makeText(this, tekst, Toast.LENGTH_LONG).show();
+
+        Snackbar snackbar = Snackbar.make(container, tekst, Snackbar.LENGTH_LONG);
+
+       FrameLayout.LayoutParams params = (FrameLayout.LayoutParams)
+                snackbar.getView().getLayoutParams();
+        params.setMargins(1, 1, 1, 180);
+        snackbar.getView().setLayoutParams(params);
+
+        snackbar.show();
+//        Toast.makeText(this, tekst, Toast.LENGTH_LONG).show();
     }
 
     public void setProgressView(boolean isVisible) {
         if(isVisible){
             findViewById(R.id.progressView).setVisibility(View.VISIBLE);
         }
-        else
+        else{
             findViewById(R.id.progressView).setVisibility(View.GONE);
+        }
     }
 }

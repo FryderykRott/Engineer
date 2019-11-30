@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import com.fryderykrott.receiptcarerfinal.MainActivity;
 import com.fryderykrott.receiptcarerfinal.R;
 import com.fryderykrott.receiptcarerfinal.Utils;
+import com.fryderykrott.receiptcarerfinal.Validator;
 import com.fryderykrott.receiptcarerfinal.model.User;
 import com.fryderykrott.receiptcarerfinal.services.Database;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -30,6 +31,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -51,6 +53,9 @@ public class LoginFragment extends Fragment {
 
     TextInputEditText loginEditText;
     TextInputEditText passwordEditText;
+
+    TextInputLayout loginEditTextLayout;
+    TextInputLayout passwordEditTextLayout;
 
     LoginFragmentPresenter presenter;
 
@@ -92,7 +97,23 @@ public class LoginFragment extends Fragment {
         parent = (MainActivity) getActivity();
 
         loginEditText = view.findViewById(R.id.loginFragment_loginEditText);
+        loginEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                loginEditTextLayout.setErrorEnabled(false);
+            }
+        });
+
         passwordEditText = view.findViewById(R.id.loginFragment_passwordEditText);
+        passwordEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                passwordEditTextLayout.setErrorEnabled(false);
+            }
+        });
+
+        loginEditTextLayout = view.findViewById(R.id.loginFragment_loginEditTextLayout);
+        passwordEditTextLayout = view.findViewById(R.id.loginFragment_passwordEditTextLayout);
 
         singUpButton = view.findViewById(R.id.loginFragment_registerButton);
         singUpButton.setOnClickListener(new View.OnClickListener() {
@@ -109,21 +130,39 @@ public class LoginFragment extends Fragment {
                 String email = loginEditText.getText().toString();
                 String password = passwordEditText.getText().toString();
 
-//                TODO validować
+                boolean pass = true;
 
-                parent.setProgressView(true);
+                if(!Validator.validateEmail(email))
+                {
+                    loginEditTextLayout.setError(Validator.getMassage());
+                    pass = false;
+                }
 
-                presenter.signUserWith(email, password, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if(task.isSuccessful())
-                            parent.showSnackBar("sukces");
-                        else
-                            parent.showSnackBar("sporazka");
+                if(!Validator.validatePassword(password))
+                {
+                    passwordEditTextLayout.setError(Validator.getMassage());
+                    pass = false;
+                }
 
-                        parent.setProgressView(false);
-                    }
-                });
+                if(pass){
+                    parent.setProgressView(true);
+
+                    presenter.signUserWith(email, password, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if(task.isSuccessful())
+                            {
+                                goHome();
+                            }
+                            else
+                                parent.showSnackBar("Wystąpił błąd przy logowaniu");
+
+                            parent.setProgressView(false);
+                        }
+                    });
+
+                }
+
             }
         });
 
@@ -183,12 +222,7 @@ public class LoginFragment extends Fragment {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
-                            final FirebaseUser user = mAuth.getCurrentUser();
-                            NavOptions navOptions = new NavOptions.Builder()
-                                    .setEnterAnim(R.anim.fab_slide_out_to_right)
-                                    .setPopUpTo(R.id.mobile_navigation, true).build();
-
-                            Navigation.findNavController(getView()).navigate(R.id.navigation_receipts, null, navOptions, null);
+                            goHome();
 
                         } else {
                             // If sign in fails, display a message to the user.
@@ -201,6 +235,14 @@ public class LoginFragment extends Fragment {
 
                     }
                 });
+    }
+
+    private void goHome(){
+        NavOptions navOptions = new NavOptions.Builder()
+                .setEnterAnim(R.anim.fab_slide_out_to_right)
+                .setPopUpTo(R.id.mobile_navigation, true).build();
+
+        Navigation.findNavController(getView()).navigate(R.id.navigation_receipts, null, navOptions, null);
     }
 
 }

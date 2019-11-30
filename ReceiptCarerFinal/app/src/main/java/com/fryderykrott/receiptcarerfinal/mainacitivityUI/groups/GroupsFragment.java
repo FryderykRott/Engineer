@@ -16,14 +16,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.fryderykrott.receiptcarerfinal.MainActivity;
 import com.fryderykrott.receiptcarerfinal.R;
+import com.fryderykrott.receiptcarerfinal.adapters.GroupsAdapter;
 import com.fryderykrott.receiptcarerfinal.alertdialogs.GroupAddingAlertDialog;
 import com.fryderykrott.receiptcarerfinal.model.Group;
 import com.fryderykrott.receiptcarerfinal.services.Database;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.QuerySnapshot;
 
-public class GroupsFragment extends Fragment implements GroupAddingAlertDialog.OnAlertDialogGroupCreationCallBackListener, View.OnClickListener {
+public class GroupsFragment extends Fragment implements GroupAddingAlertDialog.OnGroupCreationCallBackListener, View.OnClickListener{
     GroupsAdapter groupsAdapter;
 
    CardView add_new_group;
@@ -45,7 +45,7 @@ public class GroupsFragment extends Fragment implements GroupAddingAlertDialog.O
 
         recyclerView.setAdapter(groupsAdapter);
 
-        add_new_group = view.findViewById(R.id.group_fragment_add_group_card);
+        add_new_group = view.findViewById(R.id.receipt_fragment_add_receipt_card);
 
         add_new_group.setOnClickListener(this);
 
@@ -53,9 +53,13 @@ public class GroupsFragment extends Fragment implements GroupAddingAlertDialog.O
     }
 
     @Override
-    public void onAlertDialogGroupCreationCallBackListener(Dialog dialog, Group group) {
-        ((MainActivity) getActivity()).showSnackBar("udalo si eoddac lol");
+    public void onClick(View v) {
+        Dialog groupAddingAlertDialog = new GroupAddingAlertDialog(getActivity(), this, null);
+        groupAddingAlertDialog.show();
+    }
 
+    @Override
+    public void onGroupCreationCallBackListener(Dialog dialog, Group group) {
         Database.getInstance().saveGroupOfCurrentUser(group, new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
@@ -66,9 +70,5 @@ public class GroupsFragment extends Fragment implements GroupAddingAlertDialog.O
         });
     }
 
-    @Override
-    public void onClick(View v) {
-        Dialog groupAddingAlertDialog = new GroupAddingAlertDialog(getActivity(), this);
-        groupAddingAlertDialog.show();
-    }
+
 }

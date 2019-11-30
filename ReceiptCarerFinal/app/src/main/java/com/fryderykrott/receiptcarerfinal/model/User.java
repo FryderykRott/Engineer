@@ -15,6 +15,7 @@ public class User implements Serializable {
     public User(String uid) {
         this.uid = uid;
         groups = new ArrayList<>();
+
         tags = new ArrayList<>();
     }
 
