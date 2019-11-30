@@ -30,7 +30,6 @@ public class GroupFragment extends Fragment implements CustomItemClick {
 
     ItemAdapter itemAdapter;
 
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

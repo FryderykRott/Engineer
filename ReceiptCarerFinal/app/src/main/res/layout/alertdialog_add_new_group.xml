@@ -1,0 +1,300 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/folder_and_receipt_adding"
+    android:layout_width="320dp"
+    android:layout_height="wrap_content"
+    android:accessibilityLiveRegion="none"
+    android:background="@drawable/alert_dialog"
+    android:backgroundTint="@color/colorWhite"
+    android:orientation="vertical"
+    app:layout_constraintCircleRadius="16dp">
+
+    <View
+        android:id="@+id/separator_2"
+        android:layout_width="0dp"
+        android:layout_height="2dp"
+        android:layout_marginStart="7dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="37dp"
+        android:background="@color/common_google_signin_btn_text_light_disabled"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edit_text_group_name_label" />
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView">
+
+        <ImageView
+            android:id="@+id/fab_color_for_folder_1"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="24dp"
+            android:tint="@color/folder_icon_color_1"
+            android:src="@drawable/circle_white"
+
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+
+            android:contentDescription="kolor 1" />
+
+        <ImageView
+            android:id="@+id/fab_color_for_folder_2"
+
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:tint="@color/folder_icon_color_2"
+            android:src="@drawable/circle_white"
+
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintEnd_toStartOf="@+id/fab_color_for_folder_3"
+            app:layout_constraintStart_toEndOf="@+id/fab_color_for_folder_1"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/fab_color_for_folder_3"
+
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:tint="@color/folder_icon_color_3"
+            android:src="@drawable/circle_white"
+
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="24dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/fab_color_for_folder_4"
+
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:tint="@color/folder_icon_color_4"
+            android:src="@drawable/circle_white"
+
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="24dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/fab_color_for_folder_1" />
+
+        <ImageView
+            android:id="@+id/fab_color_for_folder_5"
+
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:tint="@color/folder_icon_color_5"
+            android:src="@drawable/circle_white"
+
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="24dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/fab_color_for_folder_3"
+            app:layout_constraintStart_toEndOf="@+id/fab_color_for_folder_1"
+            app:layout_constraintTop_toBottomOf="@+id/fab_color_for_folder_2" />
+
+        <ImageView
+            android:id="@+id/fab_color_for_folder_6"
+
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:tint="@color/folder_icon_color_6"
+            android:src="@drawable/circle_white"
+
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginBottom="24dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/fab_color_for_folder_3" />
+
+        <ImageView
+            android:id="@+id/check_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:translationZ="6dp"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="@+id/fab_color_for_folder_1"
+            app:layout_constraintEnd_toEndOf="@+id/fab_color_for_folder_1"
+            app:layout_constraintStart_toStartOf="@+id/fab_color_for_folder_1"
+            app:layout_constraintTop_toTopOf="@+id/fab_color_for_folder_1"
+            app:srcCompat="@drawable/ic_check_circle" />
+
+        <ImageView
+            android:id="@+id/check_4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:translationZ="6dp"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="@+id/fab_color_for_folder_4"
+            app:layout_constraintEnd_toEndOf="@+id/fab_color_for_folder_4"
+            app:layout_constraintStart_toStartOf="@+id/fab_color_for_folder_4"
+            app:layout_constraintTop_toTopOf="@+id/fab_color_for_folder_4"
+            app:srcCompat="@drawable/ic_check_circle" />
+
+        <ImageView
+            android:id="@+id/check_5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:translationZ="6dp"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="@+id/fab_color_for_folder_5"
+            app:layout_constraintEnd_toEndOf="@+id/fab_color_for_folder_5"
+            app:layout_constraintStart_toStartOf="@+id/fab_color_for_folder_5"
+            app:layout_constraintTop_toTopOf="@+id/fab_color_for_folder_5"
+            app:srcCompat="@drawable/ic_check_circle" />
+
+        <ImageView
+            android:id="@+id/check_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:translationZ="6dp"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="@+id/fab_color_for_folder_2"
+            app:layout_constraintEnd_toEndOf="@+id/fab_color_for_folder_2"
+            app:layout_constraintStart_toStartOf="@+id/fab_color_for_folder_2"
+            app:layout_constraintTop_toTopOf="@+id/fab_color_for_folder_2"
+            app:srcCompat="@drawable/ic_check_circle" />
+
+        <ImageView
+            android:id="@+id/check_3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:translationZ="6dp"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="@+id/fab_color_for_folder_3"
+            app:layout_constraintEnd_toEndOf="@+id/fab_color_for_folder_3"
+            app:layout_constraintStart_toStartOf="@+id/fab_color_for_folder_3"
+            app:layout_constraintTop_toTopOf="@+id/fab_color_for_folder_3"
+            app:srcCompat="@drawable/ic_check_circle" />
+
+        <ImageView
+            android:id="@+id/check_6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:translationZ="6dp"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="@+id/fab_color_for_folder_6"
+            app:layout_constraintEnd_toEndOf="@+id/fab_color_for_folder_6"
+            app:layout_constraintStart_toStartOf="@+id/fab_color_for_folder_6"
+            app:layout_constraintTop_toTopOf="@+id/fab_color_for_folder_6"
+            app:srcCompat="@drawable/ic_check_circle" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <Button
+        android:id="@+id/button_ok"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="@color/colorWhite"
+        android:text="@string/ok"
+
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/separator_2" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/button_cancel"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="@color/colorWhite"
+
+        android:text="@string/cancel"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/separator_2" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/edit_text_group_name_label"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="0dp"
+
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:ems="10"
+        app:hintAnimationEnabled="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edit_text_group_name"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="Nazwa grupy"
+            android:inputType="textPersonName" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Wybierz kolor grupy"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view2" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/view2"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:background="@drawable/alert_dialog_top_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="Dodaj nową grupę"
+            android:textColor="@color/colorDefault"
+            android:textSize="22sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/imageView"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="16dp"
+            android:tint="@color/colorDefault"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_groups_black_24dp" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

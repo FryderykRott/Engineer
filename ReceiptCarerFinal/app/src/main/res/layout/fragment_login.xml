@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".mainacitivityUI.login.LoginFragment"
+    android:gravity="center_vertical|center|center_horizontal"
+    android:orientation="vertical"
+    >
+
+    <LinearLayout
+        android:id="@+id/loginFragment_progress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:visibility="gone">
+        <ProgressBar
+            android:id="@+id/loginFragment_progressBar"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:indeterminate="true"
+            android:layout_gravity="center"
+            />
+    </LinearLayout>
+
+
+    <LinearLayout android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/activity_vertical_margin"
+        android:layout_marginVertical="@dimen/activity_vertical_margin"
+        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+        android:layout_gravity="center|center_horizontal|center_vertical"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ImageView
+            android:src="@drawable/logo"
+            android:scaleType="centerInside"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:id="@+id/loginFragment_logo"
+            android:layout_gravity="center"
+            android:contentDescription="@string/logoDesc"/>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_marginTop="@dimen/activity_horizontal_margin"
+            android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+            app:hintAnimationEnabled="true">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/loginUsernameHint"
+                android:id="@+id/loginFragment_loginEditText"
+                android:inputType="text"
+                android:layout_marginVertical="@dimen/activity_vertical_margin"
+                android:textSize="16sp"
+                android:drawableStart="@drawable/ic_people_black_24dp"
+                android:textAlignment="viewStart" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:id="@+id/loginFragment_password"
+            android:layout_marginTop="@dimen/activity_horizontal_margin"
+            android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+            app:hintAnimationEnabled="true">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/loginPasswordHint"
+                android:id="@+id/loginFragment_passwordEditText"
+                android:inputType="textPassword"
+                android:layout_marginVertical="@dimen/activity_vertical_margin"
+                android:textSize="16sp"
+                android:drawableStart="@drawable/ic_lock_black_24dp"
+                android:textAlignment="viewStart"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/loginFragment_login_button"
+            style="@style/Widget.MaterialComponents.Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:cornerRadius="40dp"
+            android:layout_weight="1"
+            android:text="Log in" />
+
+        <com.google.android.gms.common.SignInButton
+            android:id="@+id/loginFragment_signInWithGoogle"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_marginTop="16dp"
+            android:layout_gravity="center_horizontal"/>
+
+        <Button
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="220dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/loginFragment_registerButton"
+            android:text="@string/button_signUp"
+            android:layout_marginTop="24dp"
+            android:textSize="14sp"
+            />
+    </LinearLayout>
+
+
+</LinearLayout>

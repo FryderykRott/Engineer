@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#F8F8F8</color>
+    <color name="colorPrimaryDark">#8B8B8B</color>
+    <color name="colorAccent">#000000</color>
+    <color name="primaryLightColor">#CACACA</color>
+    <color name="colorBackground">#F2F2F2</color>
+
+    <color name="mainSeparatorColor">#808080</color>
+    <color name="primaryDarkColor">#FFFFFF</color>
+    <color name="primaryColor">#FFFFFF</color>
+
+    <color name="white">#FFFFFF</color>
+    <color name="colorWhite">#FFFFFF</color>
+
+    <color name="folder_icon_color_basic">#3A3A3A</color>
+
+    <color name="folder_icon_color_1">#5F7AD2</color>
+    <color name="folder_icon_color_2">#5FD29D</color>
+    <color name="folder_icon_color_3">#C4BF32</color>
+    <color name="folder_icon_color_4">#D25F6F</color>
+    <color name="folder_icon_color_5">#D072DF</color>
+    <color name="folder_icon_color_6">#5FC3D2</color>
+
+    <color name="twitter">#551100</color>
+    <color name="colorDefault">#5E5E5E</color>
+    <color name="colorLightGrey">#F3F3F3</color>
+</resources>
