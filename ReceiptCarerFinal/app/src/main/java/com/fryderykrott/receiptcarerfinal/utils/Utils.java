@@ -1,4 +1,4 @@
-package com.fryderykrott.receiptcarerfinal;
+package com.fryderykrott.receiptcarerfinal.utils;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -11,7 +11,13 @@ import android.provider.MediaStore;
 import com.fryderykrott.receiptcarerfinal.model.User;
 
 import java.io.ByteArrayOutputStream;
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Base64;
 import java.util.Calendar;
 import java.util.Date;
@@ -19,7 +25,9 @@ import java.util.Date;
 public class Utils {
     public static User user;
 
-    public static String date_format = "dd.MM.yyyy";
+
+
+    public static String date_format = "yyyy-MM-dd";
 
     public static String bitmapToBase64(Bitmap bm){
 
@@ -161,4 +169,6 @@ public class Utils {
         calendar.add(Calendar.DATE, days);
         return calendar.getTime();
     }
+
+
 }

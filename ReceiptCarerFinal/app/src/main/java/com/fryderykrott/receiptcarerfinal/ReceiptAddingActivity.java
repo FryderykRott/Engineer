@@ -1,25 +1,27 @@
 package com.fryderykrott.receiptcarerfinal;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.navigation.NavController;
-import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
 
-import android.Manifest;
-import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toolbar;
+import android.view.View;
 
 import com.fryderykrott.receiptcarerfinal.alertdialogs.AlertDialogFullScreenImageDisplayer;
-import com.google.firebase.auth.FirebaseAuth;
+import com.fryderykrott.receiptcarerfinal.model.Receipt;
+import com.fryderykrott.receiptcarerfinal.receiptaddingUI.camerapreview.camerapreview.CameraPreviewFragment;
+import com.fryderykrott.receiptcarerfinal.services.ReceiptScaner;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.ml.vision.text.FirebaseVisionText;
 
-public class ReceiptAddingActivity extends AppCompatActivity implements AlertDialogFullScreenImageDisplayer.OnImagePreviewCallbackListener {
+import java.util.ArrayList;
+
+public class ReceiptAddingActivity extends AppCompatActivity implements CameraPreviewFragment.OnPhotoTakingListener, OnFailureListener, OnSuccessListener<FirebaseVisionText>, AlertDialogFullScreenImageDisplayer.OnImagePreviewCallbackListener {
     private NavController navController;
 
     @Override
@@ -38,7 +40,6 @@ public class ReceiptAddingActivity extends AppCompatActivity implements AlertDia
 
         setupToolBar();
     }
-
 
 
     @Override
@@ -72,6 +73,118 @@ public class ReceiptAddingActivity extends AppCompatActivity implements AlertDia
         finish(); // close this activity as oppose to navigating up
 
         return false;
+    }
+
+
+    @Override
+    public void onFragmentCallback(ArrayList<Bitmap> bitmaps) {
+        if(bitmaps == null)
+        {
+            finish();
+            return;
+        }
+
+        setProgressView(true);
+
+//        teraz następuje skanowanie
+        ReceiptScaner scan = new ReceiptScaner(this, bitmaps, this, this);
+        scan.proccesImages(new ReceiptScaner.OnCompleteScanningListener() {
+            @Override
+            public void onCompleteScanningListener(ArrayList<Receipt> results) {
+                setProgressView(false);
+
+            }
+        });
+    }
+
+//    private void rezultat skanowanie(){
+//
+////        gdyby sie powidolo lub niepowiodlo chowam tutaj kod
+//
+//        ArrayList<GroupReceipt> receipts;
+//
+//        if(onlySinglePhotoFlag){
+//            if(bitmaps != null){
+//                savedReceipts.get(positionOfReceipt).addPhoto(bitmaps.get(0));
+//                receipts = savedReceipts;
+//                receipts_adding_fragment = AddingReceiptsFragment.newInstance(receipts, this);
+//            }
+////            ((AddingReceiptsFragment)receipts_adding_fragment).updateReceipt(positionOfReceipt, bitmaps.get(0));
+//        }
+//        else {
+//            //        jako ze nie mam skanowania to stworze puste ale z obrazkami
+//
+////            W raize gdyby sie okazalo ze nic nie dostali
+//            if(bitmaps == null){
+//                finish();
+//                return;
+//            }
+//
+//            receipts = new ArrayList<>();
+//            photos = bitmaps;
+//            ArrayList<Bitmap> photos_of_receip;
+//
+//            photos_of_receip = new ArrayList<>();
+//            photos_of_receip.add(bitmaps.get(0));
+//
+//            GroupReceipt receipt_1 = GroupReceipt.buildReceipt("Zakupy nuda",
+//                    2.2f,
+//                    12312L,
+//                    31L,
+//                    null, photos_of_receip);
+//
+//            receipt_1.addTag(new RCTag("Media Ekspert"));
+//            receipt_1.addTag(new RCTag("Pierogi"));
+//            receipt_1.addTag(new RCTag("Masło"));
+//            receipt_1.addTag(new RCTag("Ksiażka"));
+//            receipt_1.addTag(new RCTag("Tanio"));
+//
+//            receipts.add(receipt_1);
+//
+//            for(int i = 1; i < bitmaps.size(); i++){
+////          TODO w tym miejscu następuje skanowanie i tworzenie paragonów
+//
+//                photos_of_receip = new ArrayList<>();
+//                photos_of_receip.add(bitmaps.get(i));
+//
+//                receipt_1 = GroupReceipt.buildReceipt("",
+//                        0f,
+//                        0L,
+//                        0L,
+//                        null, photos_of_receip);
+//
+//                receipts.add(receipt_1);
+//            }
+//
+//            receipts_adding_fragment = AddingReceiptsFragment.newInstance(receipts, this);
+//
+//        }
+//
+//
+//
+//        addFragmentOnTop(receipts_adding_fragment);
+//        progressBar.setVisibility(View.INVISIBLE);
+////        getSupportActionBar().show();
+////        fragmentTransaction.commitAllowingStateLoss();
+//    }
+
+    public void setProgressView(boolean isVisible) {
+        if(isVisible){
+            findViewById(R.id.progressView).setVisibility(View.VISIBLE);
+        }
+        else{
+            findViewById(R.id.progressView).setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void onFailure(@NonNull Exception e) {
+
+    }
+
+    @Override
+    public void onSuccess(FirebaseVisionText firebaseVisionText) {
+
     }
 
     @Override

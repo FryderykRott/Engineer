@@ -4,11 +4,9 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
@@ -16,13 +14,12 @@ import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 
 import com.fryderykrott.receiptcarerfinal.MainActivity;
 import com.fryderykrott.receiptcarerfinal.R;
 import com.fryderykrott.receiptcarerfinal.ReceiptAddingActivity;
-import com.fryderykrott.receiptcarerfinal.Utils;
+import com.fryderykrott.receiptcarerfinal.utils.Utils;
 import com.fryderykrott.receiptcarerfinal.model.Group;
 import com.fryderykrott.receiptcarerfinal.model.User;
 import com.fryderykrott.receiptcarerfinal.services.Database;

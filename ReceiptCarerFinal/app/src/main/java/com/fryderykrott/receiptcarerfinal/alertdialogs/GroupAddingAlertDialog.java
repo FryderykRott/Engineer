@@ -14,7 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.fryderykrott.receiptcarerfinal.R;
-import com.fryderykrott.receiptcarerfinal.Validator;
+import com.fryderykrott.receiptcarerfinal.utils.Validator;
 import com.fryderykrott.receiptcarerfinal.model.Group;
 
 public class GroupAddingAlertDialog extends Dialog implements android.view.View.OnClickListener {

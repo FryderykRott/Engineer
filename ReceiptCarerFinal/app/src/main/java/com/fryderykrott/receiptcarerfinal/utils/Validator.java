@@ -1,4 +1,4 @@
-package com.fryderykrott.receiptcarerfinal;
+package com.fryderykrott.receiptcarerfinal.utils;
 
 import com.fryderykrott.receiptcarerfinal.model.Group;
 

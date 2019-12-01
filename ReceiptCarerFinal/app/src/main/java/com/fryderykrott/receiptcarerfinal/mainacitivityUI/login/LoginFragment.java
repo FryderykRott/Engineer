@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 
-import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,10 +16,7 @@ import android.view.ViewGroup;
 
 import com.fryderykrott.receiptcarerfinal.MainActivity;
 import com.fryderykrott.receiptcarerfinal.R;
-import com.fryderykrott.receiptcarerfinal.Utils;
-import com.fryderykrott.receiptcarerfinal.Validator;
-import com.fryderykrott.receiptcarerfinal.model.User;
-import com.fryderykrott.receiptcarerfinal.services.Database;
+import com.fryderykrott.receiptcarerfinal.utils.Validator;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -35,11 +31,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
-import com.google.firebase.firestore.QuerySnapshot;
-
-import java.util.ArrayList;
 
 public class LoginFragment extends Fragment {
 

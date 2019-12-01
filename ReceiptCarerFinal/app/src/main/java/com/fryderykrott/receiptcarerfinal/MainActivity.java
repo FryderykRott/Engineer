@@ -6,6 +6,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 
+import com.fryderykrott.receiptcarerfinal.utils.Utils;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.FirebaseApp;
@@ -109,7 +110,6 @@ public class MainActivity extends AppCompatActivity implements NavController.OnD
     }
 
     public void showSnackBar(String tekst){
-
         Snackbar snackbar = Snackbar.make(container, tekst, Snackbar.LENGTH_LONG);
 
        FrameLayout.LayoutParams params = (FrameLayout.LayoutParams)

@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.fryderykrott.receiptcarerfinal.MainActivity;
 import com.fryderykrott.receiptcarerfinal.R;
-import com.fryderykrott.receiptcarerfinal.Utils;
+import com.fryderykrott.receiptcarerfinal.utils.Utils;
 import com.fryderykrott.receiptcarerfinal.alertdialogs.GroupAddingAlertDialog;
 import com.fryderykrott.receiptcarerfinal.model.Group;
 import com.fryderykrott.receiptcarerfinal.services.Database;
@@ -28,7 +28,7 @@ public class GroupsAdapter  extends RecyclerView.Adapter<GroupsAdapter.GroupView
     ArrayList<Group> groups;
     Context context;
 
-    GroupsAdapter(Context context){
+    public GroupsAdapter(Context context){
         this.context = context;
         groups = Utils.user.getGroups();
     }

@@ -1,21 +1,14 @@
 package com.fryderykrott.receiptcarerfinal.services;
 
-import androidx.annotation.NonNull;
-
-import com.fryderykrott.receiptcarerfinal.Utils;
+import com.fryderykrott.receiptcarerfinal.utils.Utils;
 import com.fryderykrott.receiptcarerfinal.model.Group;
 import com.fryderykrott.receiptcarerfinal.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
-
-import io.grpc.okhttp.internal.Util;
 
 public class Database{
     FirebaseFirestore db = FirebaseFirestore.getInstance();

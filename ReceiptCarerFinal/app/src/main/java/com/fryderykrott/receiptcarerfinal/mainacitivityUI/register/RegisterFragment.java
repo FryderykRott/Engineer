@@ -14,7 +14,7 @@ import android.view.ViewGroup;
 
 import com.fryderykrott.receiptcarerfinal.MainActivity;
 import com.fryderykrott.receiptcarerfinal.R;
-import com.fryderykrott.receiptcarerfinal.Validator;
+import com.fryderykrott.receiptcarerfinal.utils.Validator;
 import com.fryderykrott.receiptcarerfinal.services.Authentication;
 import com.fryderykrott.receiptcarerfinal.services.Database;
 import com.google.android.gms.tasks.OnCompleteListener;

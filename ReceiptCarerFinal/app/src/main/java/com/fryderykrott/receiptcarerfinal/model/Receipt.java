@@ -1,5 +1,7 @@
 package com.fryderykrott.receiptcarerfinal.model;
 
+import android.graphics.Bitmap;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -7,12 +9,17 @@ public class Receipt implements Serializable {
 
     public String name;
     public float sumTotal;
-    public long dateOfCreation;
-    public long dateOfEndOfWarrant;
+    public String dateOfCreation;
+    public String dateOfEndOfWarrant;
     public int groupID;
     public ArrayList<Integer> tagsID;
+    public ArrayList<String> images_as_base64;
+
+    public ArrayList<Bitmap> images_as_bitmap;
 
     public Receipt(){}
+
+    
 
     public String getName() {
         return name;
@@ -30,19 +37,19 @@ public class Receipt implements Serializable {
         this.sumTotal = sumTotal;
     }
 
-    public long getDateOfCreation() {
+    public String getDateOfCreation() {
         return dateOfCreation;
     }
 
-    public void setDateOfCreation(long dateOfCreation) {
+    public void setDateOfCreation(String dateOfCreation) {
         this.dateOfCreation = dateOfCreation;
     }
 
-    public long getDateOfEndOfWarrant() {
+    public String getDateOfEndOfWarrant() {
         return dateOfEndOfWarrant;
     }
 
-    public void setDateOfEndOfWarrant(long dateOfEndOfWarrant) {
+    public void setDateOfEndOfWarrant(String dateOfEndOfWarrant) {
         this.dateOfEndOfWarrant = dateOfEndOfWarrant;
     }
 
@@ -60,5 +67,12 @@ public class Receipt implements Serializable {
 
     public void setTagsID(ArrayList<Integer> tagsID) {
         this.tagsID = tagsID;
+    }
+
+    public void addTag(String shopName) {
+//        TODO sprawdzanie czy to nowy tag czy stary
+    }
+
+    public ArrayList<Bitmap> getImages_as_bitmap() {
     }
 }
