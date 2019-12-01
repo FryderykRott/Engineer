@@ -2,44 +2,56 @@ package com.fryderykrott.receiptcarerfinal;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
+import androidx.navigation.ui.NavigationUI;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
 
+import com.fryderykrott.receiptcarerfinal.adapters.ImageAdapter;
 import com.fryderykrott.receiptcarerfinal.alertdialogs.AlertDialogFullScreenImageDisplayer;
 import com.fryderykrott.receiptcarerfinal.model.Receipt;
 import com.fryderykrott.receiptcarerfinal.receiptaddingUI.camerapreview.camerapreview.CameraPreviewFragment;
 import com.fryderykrott.receiptcarerfinal.services.ReceiptScaner;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.ml.vision.text.FirebaseVisionText;
 
 import java.util.ArrayList;
 
 public class ReceiptAddingActivity extends AppCompatActivity implements CameraPreviewFragment.OnPhotoTakingListener, OnFailureListener, OnSuccessListener<FirebaseVisionText>, AlertDialogFullScreenImageDisplayer.OnImagePreviewCallbackListener {
+
     private NavController navController;
     private ArrayList<Receipt> receiptsToEdit;
+
+    private ConstraintLayout container;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_receipt_adding);
+        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.receipt_adding_nav_host_fragment);
 
+        container = findViewById(R.id.container);
 //        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
 //                R.id.navigation_groups, R.id.navigation_receipts, R.id.navigation_search)
 //                .build();
+//        navController = navHostFragment.getNavController();
 
         navController = Navigation.findNavController(this, R.id.receipt_adding_nav_host_fragment);
-
+//
 //        navController.navigate(R.id.navigation_camera_preview);
 //        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
-
-        setupToolBar();
+        getSupportActionBar().hide();
+//        setupToolBar();
     }
 
 
@@ -92,13 +104,12 @@ public class ReceiptAddingActivity extends AppCompatActivity implements CameraPr
         scan.proccesImages(new ReceiptScaner.OnCompleteScanningListener() {
             @Override
             public void onCompleteScanningListener(ArrayList<Receipt> results) {
-                setProgressView(false);
                 for(int i = 0; i<bitmaps.size(); i++){
                     results.get(i).addReceiptBitmap(bitmaps.get(i));
                 }
 
                 receiptsToEdit = results;
-                getSupportActionBar().show();
+//                getSupportActionBar().show();
                 navController.navigate(R.id.navigation_adding_receipts);
             }
         });
@@ -132,4 +143,21 @@ public class ReceiptAddingActivity extends AppCompatActivity implements CameraPr
     public ArrayList<Receipt> getReceiptsToEdit() {
         return receiptsToEdit;
     }
+
+    public NavController getNavController() {
+        return navController;
+    }
+
+    public void showSnackBar(String tekst){
+        Snackbar snackbar = Snackbar.make(container, tekst, Snackbar.LENGTH_LONG);
+
+        FrameLayout.LayoutParams params = (FrameLayout.LayoutParams)
+                snackbar.getView().getLayoutParams();
+        params.setMargins(1, 1, 1, 180);
+        snackbar.getView().setLayoutParams(params);
+
+        snackbar.show();
+//        Toast.makeText(this, tekst, Toast.LENGTH_LONG).show();
+    }
+
 }

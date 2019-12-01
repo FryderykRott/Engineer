@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements NavController.OnD
         FirebaseDatabase.getInstance().setPersistenceEnabled(true);
 
         bottomNavigationView = findViewById(R.id.nav_view);
-        // Passing each menu ID as a set of Ids because each
+        // Passing each menu uid as a set of Ids because each
         // menu should be considered as top level destinations.
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.navigation_groups, R.id.navigation_receipts, R.id.navigation_search)

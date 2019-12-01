@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.menu.ActionMenuItemView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.viewpager.widget.ViewPager;
 
 import android.view.LayoutInflater;
@@ -20,7 +21,9 @@ import com.fryderykrott.receiptcarerfinal.R;
 import com.fryderykrott.receiptcarerfinal.ReceiptAddingActivity;
 import com.fryderykrott.receiptcarerfinal.adapters.SectionsPagerAdapter;
 import com.fryderykrott.receiptcarerfinal.model.Receipt;
+import com.fryderykrott.receiptcarerfinal.receiptaddingUI.camerapreview.receiptdetail.ReceiptDetailFragment;
 import com.fryderykrott.receiptcarerfinal.utils.Utils;
+import com.fryderykrott.receiptcarerfinal.utils.Validator;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
@@ -80,26 +83,36 @@ public class ReceiptsAddingFragment extends Fragment {
         else
             tabs.setVisibility(View.GONE);
 
-//        ActionMenuItemView accept_button = view.findViewById(R.id.accept_button);
-//        accept_button.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if(validateData())
-//                    mListener.onReceiptsAddingCallback(null);
-//            }
-//        });
-//
-//        Toolbar toolbar = view.findViewById(R.id.toolbar_adding_receipts);
-//        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-////                TODO co za burdel, zrób coś z tym
-////                wysiwetlanie informaacji czy aby na pewno?
-////                ((ReceiptAddingActivity)getActivity()).onlySinglePhotoFlag = false;
-////                ((ReceiptAddingActivity)getActivity()).onFragmentCallback(null);
-//                ((ReceiptAddingActivity)getActivity()).finish();
-//            }
-//        });
+        Toolbar toolbar = view.findViewById(R.id.toolbar_adding_receipts);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                (getActivity()).finish();
+            }
+        });
+
+
+        ActionMenuItemView accept_button = toolbar.findViewById(R.id.accept);
+        accept_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                Validate
+                boolean pass = true;
+
+                for(ReceiptDetailFragment fragment :sectionsPagerAdapter.getFragments())
+                    if(!fragment.validateFragment())
+                        pass = false;
+
+               if(pass){
+
+               }
+               else
+                   ((ReceiptAddingActivity) getActivity()).showSnackBar("Znaleziono progremy z paragonami!");
+            }
+        });
+
+
+        ((ReceiptAddingActivity) getActivity()).setProgressView(false);
     }
 
 
@@ -112,6 +125,7 @@ public class ReceiptsAddingFragment extends Fragment {
 //            throw new RuntimeException(context.toString()
 //                    + " must implement OnFragmentCallbackListener");
 //        }
+//        Navigation.findNavController(getView()).navigate(R.id.navigation_camera_preview);
     }
 
     @Override
@@ -122,7 +136,6 @@ public class ReceiptsAddingFragment extends Fragment {
     public ArrayList<Receipt> getReceipts() {
         return receipts;
     }
-
 
 //    public void updateReceipt(int positionOfReceipt, Bitmap bitmap) {
 //        receipts.get(positionOfReceipt).addPhoto(bitmap);

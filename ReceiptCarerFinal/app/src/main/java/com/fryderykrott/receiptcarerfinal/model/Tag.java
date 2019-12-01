@@ -3,7 +3,7 @@ package com.fryderykrott.receiptcarerfinal.model;
 import java.io.Serializable;
 
 public class Tag implements Serializable {
-    public int ID;
+    public String uid;
     public String name;
 
     public Tag(){}
@@ -16,11 +16,11 @@ public class Tag implements Serializable {
         this.name = name;
     }
 
-    public int getID() {
-        return ID;
+    public String getUid() {
+        return uid;
     }
 
-    public void setID(int ID) {
-        this.ID = ID;
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 }

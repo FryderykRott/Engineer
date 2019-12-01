@@ -1,7 +1,6 @@
 package com.fryderykrott.receiptcarerfinal.adapters;
 
-import android.app.Activity;
-import android.app.Dialog;
+
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
@@ -11,26 +10,25 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.fryderykrott.receiptcarerfinal.MainActivity;
 import com.fryderykrott.receiptcarerfinal.R;
 import com.fryderykrott.receiptcarerfinal.alertdialogs.GroupChossingAlertDialog;
-import com.fryderykrott.receiptcarerfinal.utils.Utils;
-import com.fryderykrott.receiptcarerfinal.alertdialogs.GroupAddingAlertDialog;
 import com.fryderykrott.receiptcarerfinal.model.Group;
-import com.fryderykrott.receiptcarerfinal.services.Database;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import com.fryderykrott.receiptcarerfinal.utils.Utils;
 
 import java.util.ArrayList;
 
-public class GroupsAdapter  extends RecyclerView.Adapter<GroupsAdapter.GroupViewHolder> {
+public class MiniGroupAdapter extends RecyclerView.Adapter<MiniGroupAdapter.GroupViewHolder> {
 
     ArrayList<Group> groups;
     Context context;
 
-    public GroupsAdapter(Context context){
+    OnGroupChoosen listener;
+    CardView selectedGroup;
+
+    public MiniGroupAdapter(Context context){
         this.context = context;
         groups = Utils.user.getGroups();
     }
@@ -38,58 +36,36 @@ public class GroupsAdapter  extends RecyclerView.Adapter<GroupsAdapter.GroupView
 
     @NonNull
     @Override
-    public GroupsAdapter.GroupViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public MiniGroupAdapter.GroupViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_group, parent, false);
-        GroupsAdapter.GroupViewHolder vh = new GroupsAdapter.GroupViewHolder(v);
+        MiniGroupAdapter.GroupViewHolder vh = new MiniGroupAdapter.GroupViewHolder(v);
 
         return vh;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull GroupsAdapter.GroupViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final MiniGroupAdapter.GroupViewHolder holder, int position) {
         final Group group = groups.get(position);
 
 //        holder.group_image_background.getBackground().setColorFilter(group.getIcon_color(), PorterDuff.Mode.SRC_ATOP);
         setColorOfGroup(holder, group);
         holder.group_name_text_view.setText(group.getName());
         holder.group_number_of_receipts_text_view.setText(String.format("%s paragonów", group.getNumberOfReceipts()));
-        holder.group_sum_price_text_view.setText(String.format("%s PLN", group.getSumOfAllReceipts()));
+        holder.group_sum_price_text_view.setVisibility(View.INVISIBLE);
 
-        holder.group_delete_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                groups.remove(group);
-                reloadGroupsInDatabase();
-                ((MainActivity) context).showSnackBar("Pomyślnię usunięto grupę!");
-            }
-        });
+        holder.group_delete_button.setVisibility(View.GONE);
 
         holder.group_container.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                GroupAddingAlertDialog.OnGroupEditionCallBackListener l_edition = new GroupAddingAlertDialog.OnGroupEditionCallBackListener() {
-                    @Override
-                    public void onGroupEditionCallBackListener(Dialog dialog, Group group) {
-                        reloadGroupsInDatabase();
-                    }
-                };
+//                TODO zaznaczanie grup
+                if(selectedGroup != null)
+                    selectedGroup.setCardBackgroundColor(context.getColor(R.color.colorWhite));
 
-                GroupAddingAlertDialog ad = new GroupAddingAlertDialog(context, null, l_edition);
-                ad.setToEditGroup(group);
-                ad.show();
+                holder.group_container.setCardBackgroundColor(context.getColor(R.color.color_choosen_group));
+                selectedGroup = holder.group_container;
 
-            }
-        });
-    }
-
-    private void reloadGroupsInDatabase() {
-        ((MainActivity) context).setProgressView(true);
-        Database.getInstance().reloadGroupsOfCurrentUser(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                ((MainActivity) context).showSnackBar("Udało się wykonać operację!");
-                ((MainActivity) context).setProgressView(false);
-                notifyDataSetChanged();
+                listener.onGroupChoosen(group);
             }
         });
     }
@@ -120,7 +96,6 @@ public class GroupsAdapter  extends RecyclerView.Adapter<GroupsAdapter.GroupView
                 break;
         }
 
-
     }
 
     @Override
@@ -128,14 +103,17 @@ public class GroupsAdapter  extends RecyclerView.Adapter<GroupsAdapter.GroupView
         return groups.size();
     }
 
-    public void setOnNewGroupClickListener(GroupChossingAlertDialog groupChossingAlertDialog) {
-
+    public void setOnNewGroupClickListener(OnGroupChoosen listener) {
+        this.listener = listener;
     }
 
+    public interface OnGroupChoosen{
+        void onGroupChoosen(Group group);
+    }
 
     public class GroupViewHolder extends RecyclerView.ViewHolder {
         //        Group
-        View group_container;
+        CardView group_container;
 
         ImageView group_image_icon;
         ImageView group_delete_button;
@@ -160,3 +138,4 @@ public class GroupsAdapter  extends RecyclerView.Adapter<GroupsAdapter.GroupView
     }
 
 }
+

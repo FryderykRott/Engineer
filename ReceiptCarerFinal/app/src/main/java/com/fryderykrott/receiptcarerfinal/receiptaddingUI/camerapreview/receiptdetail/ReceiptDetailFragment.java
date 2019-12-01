@@ -8,6 +8,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
 import androidx.viewpager.widget.ViewPager;
 
 import android.text.Editable;
@@ -22,17 +23,28 @@ import android.widget.AutoCompleteTextView;
 import android.widget.ImageButton;
 
 import com.fryderykrott.receiptcarerfinal.R;
+import com.fryderykrott.receiptcarerfinal.ReceiptAddingActivity;
 import com.fryderykrott.receiptcarerfinal.adapters.ImageAdapter;
+import com.fryderykrott.receiptcarerfinal.chips.CalendarChipContainer;
+import com.fryderykrott.receiptcarerfinal.chips.GroupChossingContainer;
+import com.fryderykrott.receiptcarerfinal.chips.PriceChipContainer;
+import com.fryderykrott.receiptcarerfinal.chips.WarrantyChipContainer;
 import com.fryderykrott.receiptcarerfinal.model.Receipt;
+import com.fryderykrott.receiptcarerfinal.model.Tag;
 import com.fryderykrott.receiptcarerfinal.receiptaddingUI.camerapreview.camerapreview.CameraPreviewFragment;
+import com.fryderykrott.receiptcarerfinal.receiptaddingUI.camerapreview.receiptsediting.ReceiptsAddingFragment;
+import com.fryderykrott.receiptcarerfinal.utils.Utils;
+import com.fryderykrott.receiptcarerfinal.utils.Validator;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.util.ArrayList;
+
 import me.relex.circleindicator.CircleIndicator;
 
-public class ReceiptDetailFragment extends Fragment {
+public class ReceiptDetailFragment extends Fragment implements ImageAdapter.OnNewPhotoCallbackListener {
 
     public ReceiptDetailFragment() {
         // Required empty public constructor
@@ -47,12 +59,17 @@ public class ReceiptDetailFragment extends Fragment {
     TextInputEditText receiptNameTextInput;
     TextInputLayout receiptNameTextInputLayout;
 
-    ImageAdapter adapter;
-    ChipGroup tags;
+    ImageAdapter imagesAdapter;
+    ChipGroup tagsChipGroup;
+    ArrayList<String> receiptTags;
     ImageButton acceptIcon;
 
     Activity context;
     int position;
+
+    ArrayAdapter adapterAutoCompliteTagsList;
+    ArrayList<String> tagsToAutoComplite;
+
     private CameraPreviewFragment.OnPhotoTakingListener mListener;
 
     public static ReceiptDetailFragment newInstance(Receipt receipt, Activity context, int position) {
@@ -62,12 +79,7 @@ public class ReceiptDetailFragment extends Fragment {
         fragment.receipt = receipt;
         fragment.position = position;
 
-        fragment.adapter = new ImageAdapter(context, receipt.getImages_as_bitmap(), position, new ImageAdapter.OnNewPhotoCallbackListener() {
-            @Override
-            public void onNewPhotoCallback(int position_off_receipt) {
-
-            }
-        });
+        fragment.imagesAdapter = new ImageAdapter(context, receipt.getImages_as_bitmap(), position, fragment);
         return fragment;
     }
 
@@ -91,18 +103,25 @@ public class ReceiptDetailFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         ViewPager viewpager = view.findViewById(R.id.view_pager_receipts);
-        viewpager.setAdapter(adapter);
+        viewpager.setAdapter(imagesAdapter);
 
         CircleIndicator indicator = view.findViewById(R.id.indicator);
         indicator.setViewPager(viewpager);
-        adapter.registerDataSetObserver(indicator.getDataSetObserver());
+        imagesAdapter.registerDataSetObserver(indicator.getDataSetObserver());
 
         acceptIcon = view.findViewById(R.id.button);
         acceptIcon.setVisibility(View.INVISIBLE);
         acceptIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addChipToGroup(autoCompleteTextView.getText().toString(), tags);
+                String selected = autoCompleteTextView.getText().toString();
+                if(!isTagReapeted(selected)){
+                    receiptTags.add(selected);
+                    tagsToAutoComplite.add(selected);
+                    resetAdapter();
+
+                    addChipToGroup(selected, tagsChipGroup);
+                }
                 autoCompleteTextView.setText("");
                 acceptIcon.setVisibility(View.INVISIBLE);
             }
@@ -120,8 +139,6 @@ public class ReceiptDetailFragment extends Fragment {
                 else
                     acceptIcon.setVisibility(View.VISIBLE);
             }
-
-
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -147,7 +164,14 @@ public class ReceiptDetailFragment extends Fragment {
             receiptNameTextInput.setText(receipt.getName());
 
 
-        tags = view.findViewById(R.id.chip_group_tags);
+        tagsChipGroup = view.findViewById(R.id.chip_group_tags);
+
+        receiptTags = new ArrayList<>();
+
+//        ok dobra, mamy paragon ktory ma tagi
+        if(receipt.getTagsID() != null)
+            addReceiptsTagsToGroup();
+
 
         createBasicChips();
         setAutoCompleteTextOfTags();
@@ -155,25 +179,43 @@ public class ReceiptDetailFragment extends Fragment {
 //        preview.setImageBitmap(RotateBitmap(picture, 90));
     }
 
-    String[] tags_string = new String[]{"ksiazki","ksiazki",
-            "ksiazki","ksiazki","ksiazki","ksiazki","ksiazki","ksiazki","ksiazki","ksiazki","ksiazki"};
+    private void addReceiptsTagsToGroup() {
+        ArrayList<String> tagsID = receipt.getTagsID();
+        ArrayList<Tag> allTags = Utils.user.getTags();
 
+        for(Tag tag: allTags){
+            for(String tagUID: tagsID){
+                if(tag.getUid() == tagUID)
+                    receiptTags.add(tag.getName());
+            }
+        }
+    }
 
     private void setAutoCompleteTextOfTags() {
-        ArrayAdapter adapterr = new ArrayAdapter<>(context, android.R.layout.simple_dropdown_item_1line, tags_string);
+        tagsToAutoComplite = new ArrayList<>();
+        for(Tag tag: Utils.user.getTags()){
+            tagsToAutoComplite.add(tag.getName());
+        }
 
-//        TODO Napisać włąsny adapter do tagów
-        autoCompleteTextView.setAdapter(adapterr);
+        tagsToAutoComplite.add("hejfds");
+        tagsToAutoComplite.add("hejfsd2");
+        tagsToAutoComplite.add("hejfds3");
+
+        resetAdapter();
         autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 autoCompleteTextView.setText("");
                 String selected = (String) parent.getItemAtPosition(position);
 
-                addChipToGroup(selected, tags);
+                if(!isTagReapeted(selected)){
+                    receiptTags.add(selected);
+                    addChipToGroup(selected, tagsChipGroup);
+                }
             }
         });
-//        mView.autoCompleteTextView.setAdapter<ArrayAdapter<String>>(adapter)
+
+//        mView.autoCompleteTextView.setAdapter<ArrayAdapter<String>>(imagesAdapter)
 //                mView.autoCompleteTextView.setOnItemClickListener { parent, arg1, position, arg3 ->
 //                mView.autoCompleteTextView.text = null
 //            val selected = parent.getItemAtPosition(position) as String
@@ -181,38 +223,76 @@ public class ReceiptDetailFragment extends Fragment {
 //        }
     }
 
-    private void addChipToGroup(String selected, final ChipGroup tags) {
-        final Chip chip = new Chip(context);
-        chip.setText("#" + selected);
-//        chip.chipIcon = ContextCompat.getDrawable(requireContext(), baseline_person_black_18)
-        chip.setCloseIconVisible(true);
-//        chip.setChipIconTintResource(R.color.chipIconTint)
+    private boolean isTagReapeted(String selected) {
+        for(String tag: receiptTags)
+            if(selected.equals(tag))
+                return true;
 
-        // necessary to get single selection working
-//        chip.isClickable = true
+        return false;
+    }
+
+    private void addChipToGroup(final String selected, final ChipGroup tags) {
+
+//        adapterAutoCompliteTagsList.notifyDataSetInvalidated();
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+        View myLayout = inflater.inflate(R.layout.chips, null);
+
+//        final Chip chip = new Chip(context);
+        final Chip chip = myLayout.findViewById(R.id.basic_chip);
+
+        if(chip.getParent() != null) {
+            ((ViewGroup) chip.getParent()).removeView(chip); // <- fix
+        }
+
+        chip.setText("#" + selected);
+
+        chip.setCloseIconVisible(true);
+
         chip.setCheckable(false);
         tags.addView(chip);
         chip.setOnCloseIconClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 tags.removeView(chip);
+
+                receiptTags.add(selected);
+                tagsToAutoComplite.remove(selected);
+                resetAdapter();
+                adapterAutoCompliteTagsList.notifyDataSetInvalidated();
             }
         });
     }
 
-    private void createBasicChips() {
-//        CalendarChipContainer calendarChip = new CalendarChipContainer();
-//        CalendarChipContainer rccc = new CalendarChipContainer(context);
-//        PriceChipContainer pcc = new PriceChipContainer(context);
-//        WarrantyChipContainer wcc = new WarrantyChipContainer(context);
-//        GroupChossingContainer gcc = new GroupChossingContainer(context);
-//
-//        tags.addView(rccc.getCalendarChip());
-//        tags.addView(pcc.getPriceChip());
-//        tags.addView(wcc.getWarrantyChip());
-//        tags.addView(gcc.getGroupChip());
+    private void resetAdapter() {
+        adapterAutoCompliteTagsList = new ArrayAdapter<>(context, android.R.layout.simple_dropdown_item_1line, tagsToAutoComplite);
+        autoCompleteTextView.setAdapter(adapterAutoCompliteTagsList);
     }
 
+    private void createBasicChips() {
+//      Data na paragonie
+        CalendarChipContainer rccc = new CalendarChipContainer(context);
+        if(!receipt.getDateOfCreation().isEmpty())
+            rccc.setDate(Utils.formatStringToDate(receipt.getDateOfCreation()));
+        tagsChipGroup.addView(rccc.getCalendarChip());
+
+//        Gwarancja
+        WarrantyChipContainer wcc = new WarrantyChipContainer(context);
+        tagsChipGroup.addView(wcc.getWarrantyChip());
+
+//        Cena na apragonie
+        PriceChipContainer pcc = new PriceChipContainer(context);
+        tagsChipGroup.addView(pcc.getPriceChip());
+
+        if(receipt.getSumTotal() != 0f) {
+            pcc.setPriceOnChip(receipt.getSumTotal());
+        }
+
+//        Grupa i wybieranie grupy
+        GroupChossingContainer gcc = new GroupChossingContainer(context);
+        tagsChipGroup.addView(gcc.getGroupChip());
+
+
+    }
 
     @Override
     public void onAttach(Context context) {
@@ -232,7 +312,26 @@ public class ReceiptDetailFragment extends Fragment {
     }
 
     public void notifyDataSetChanges() {
-        adapter.notifyDataSetChanged();
+        imagesAdapter.notifyDataSetChanged();
     }
 
+    @Override
+    public void onNewPhotoCallback(int position_off_receipt) {
+//        zapisac stan wszysktich paragonów
+//        nakladamy kolejny fragment, zapisac pozycje paragon z listy
+
+    }
+
+    public boolean validateFragment() {
+        String receiptName = receiptNameTextInput.getText().toString();
+
+        if( !Validator.validateReceiptName(receiptName))
+        {
+            String massege = Validator.getMassage();
+            receiptNameTextInputLayout.setError(massege);
+            return false;
+        }
+
+        return true;
+    }
 }

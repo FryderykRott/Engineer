@@ -16,6 +16,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar_adding_receipts"
+            android:layout_width="match_parent"
+            app:navigationIcon="@drawable/ic_close_black_24dp"
+
+            android:layout_height="wrap_content"
+            android:text="Paragony"
+            android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
+            app:menu="@menu/receipt_adding_menu"
+            app:title="Paragony" />
+
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/receipts_tabs"
             android:layout_width="match_parent"

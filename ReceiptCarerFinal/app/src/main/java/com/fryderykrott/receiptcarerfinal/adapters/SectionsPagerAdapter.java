@@ -4,7 +4,6 @@ package com.fryderykrott.receiptcarerfinal.adapters;
 import android.app.Activity;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
@@ -17,7 +16,8 @@ import java.util.ArrayList;
 public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
     private ArrayList<Receipt> receipts;
-    private ArrayList<Fragment> fragments;
+
+    private ArrayList<ReceiptDetailFragment> fragments;
 
     private final Activity mContext;
 
@@ -32,7 +32,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         // getItem is called to instantiate the fragment for the given page.
         // Return a PlaceholderFragment (defined as a static inner class below).
-        Fragment fragment = ReceiptDetailFragment.newInstance(receipts.get(position), mContext, position);
+        ReceiptDetailFragment fragment = ReceiptDetailFragment.newInstance(receipts.get(position), mContext, position);
         fragments.add(fragment);
 
         return fragment;
@@ -52,6 +52,12 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     public int getCount() {
         return receipts.size();
     }
+
+
+    public ArrayList<ReceiptDetailFragment> getFragments() {
+        return fragments;
+    }
+
 }
 
 

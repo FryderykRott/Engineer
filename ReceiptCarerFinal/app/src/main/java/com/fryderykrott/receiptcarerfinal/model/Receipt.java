@@ -11,13 +11,22 @@ public class Receipt implements Serializable {
     public float sumTotal;
     public String dateOfCreation;
     public String dateOfEndOfWarrant;
-    public int groupID;
-    public ArrayList<Integer> tagsID;
+    public String groupID;
+    public ArrayList<String> tagsID;
     public ArrayList<String> images_as_base64;
 
     public ArrayList<Bitmap> images_as_bitmap;
 
-    public Receipt(){}
+    public Receipt(){
+        name = "";
+        sumTotal = 0f;
+        dateOfCreation = "";
+        dateOfEndOfWarrant = "";
+        groupID = "";
+        tagsID = new ArrayList<>();
+        images_as_base64 = new ArrayList<>();
+        images_as_bitmap = new ArrayList<>();
+    }
 
     public ArrayList<String> getImages_as_base64() {
         return images_as_base64;
@@ -59,19 +68,19 @@ public class Receipt implements Serializable {
         this.dateOfEndOfWarrant = dateOfEndOfWarrant;
     }
 
-    public int getGroupID() {
+    public String getGroupID() {
         return groupID;
     }
 
-    public void setGroupID(int groupID) {
+    public void setGroupID(String groupID) {
         this.groupID = groupID;
     }
 
-    public ArrayList<Integer> getTagsID() {
+    public ArrayList<String> getTagsID() {
         return tagsID;
     }
 
-    public void setTagsID(ArrayList<Integer> tagsID) {
+    public void setTagsID(ArrayList<String> tagsID) {
         this.tagsID = tagsID;
     }
 

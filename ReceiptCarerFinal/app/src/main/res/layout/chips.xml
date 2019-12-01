@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent" xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.google.android.material.chip.Chip
+        android:id="@+id/range_calendar_chip"
+        style="@style/Widget.MaterialComponents.Chip.Action"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="od _-_-_ do _-_-_ "
+        app:closeIconTint="@color/colorWhite"
+        android:textColor="@color/colorWhite"
+        app:chipBackgroundColor="@color/calendar_chip_color"
+        app:chipIcon="@drawable/calendar"
+        app:chipIconTint="@color/white"
+        />
+
+    <com.google.android.material.chip.Chip
+        android:id="@+id/warranty_chip"
+        style="@style/Widget.MaterialComponents.Chip.Action"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Brak gwarancji"
+        app:closeIconTint="@color/colorWhite"
+        android:textColor="@color/colorWhite"
+        app:chipBackgroundColor="@color/warranty_chip_color"
+        />
+
+    <com.google.android.material.chip.Chip
+        android:id="@+id/range_price_chip"
+        style="@style/Widget.MaterialComponents.Chip.Action"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="_,_ PLN"
+        app:closeIconTint="@color/colorWhite"
+        android:textColor="@color/colorWhite"
+        app:chipBackgroundColor="@color/price_chip_color"
+        />
+
+    <com.google.android.material.chip.Chip
+        android:id="@+id/group_chip"
+        style="@style/Widget.MaterialComponents.Chip.Action"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Wybierz grupę"
+        app:chipStrokeWidth="1dp"
+        app:chipStrokeColor="#BBBBBB"
+
+        android:textColor="@color/colorBlack"
+        app:chipBackgroundColor="@color/alpha_30_black"
+        app:chipIcon="@drawable/ic_receipt"
+        app:chipIconTint="@color/colorBlack"
+        app:chipIconSize="28dp"
+        app:iconStartPadding="4dp"
+        />
+
+
+    <com.google.android.material.chip.Chip
+        android:id="@+id/basic_chip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="# znacznik"
+        app:chipStrokeColor="@color/colorDefault"
+        app:chipStrokeWidth="1dp"
+        android:textColor="@color/colorDefault"
+        app:chipBackgroundColor="@android:color/transparent" />
+
+    <com.google.android.material.chip.Chip
+        android:id="@+id/basic_chip_mini"
+        style="@style/MaterialComponents_Chip_Thin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="# znacznik"
+        app:chipStrokeColor="@color/colorDefault"
+        app:chipStrokeWidth="1dp"
+        android:textColor="@color/colorDefault"
+        app:chipBackgroundColor="@android:color/transparent" />
+
+</LinearLayout>

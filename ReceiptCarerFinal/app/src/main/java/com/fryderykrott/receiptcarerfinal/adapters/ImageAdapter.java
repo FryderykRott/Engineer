@@ -87,8 +87,6 @@ public class ImageAdapter extends PagerAdapter {
         add_photo_image = view.findViewById(R.id.add_photo_image);
 
         if(position == images.size() ){
-//            Bitmap bitmap = BitmapFactory.decodeResource(context.getResources() ,R.drawable.image_camera_add);
-//            imageView.setImageBitmap(bitmap);
             setVisibilityOfInformationPanel(View.VISIBLE);
         }
         else{

@@ -38,7 +38,7 @@
                 android:text="Wpisz całkowitą kwotę \n z paragonu"
                 android:textAlignment="center"
                 android:textColor="@color/colorDefault"
-                android:textSize="18dp"
+                android:textSize="20dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

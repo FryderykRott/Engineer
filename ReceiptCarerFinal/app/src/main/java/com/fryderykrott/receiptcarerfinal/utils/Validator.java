@@ -113,5 +113,14 @@ public class Validator {
         return true;
     }
 
+    public static boolean validateReceiptName(String receiptString){
+        massage = "";
+        if(receiptString.isEmpty() ){
+            massage += "Trzeba wypełnić pole nazwy paragonu";
+            return false;
+        }
+        return true;
+    }
+
 
 }

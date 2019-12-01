@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape
     xmlns:android="http://schemas.android.com/apk/res/android">
-    <corners android:topLeftRadius="12dp"
-        android:topRightRadius="12dp"/>
+    <corners android:topLeftRadius="@dimen/alert_dialog_corners"
+        android:topRightRadius="@dimen/alert_dialog_corners"/>
 
     <solid android:color="@color/colorLightGrey" />
 

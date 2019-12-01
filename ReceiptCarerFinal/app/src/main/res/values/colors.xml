@@ -26,4 +26,22 @@
     <color name="colorDefault">#5E5E5E</color>
     <color name="colorLightGrey">#F3F3F3</color>
     <color name="colorBlack">#000000</color>
+
+
+    <color name="calendar_chip_color">#EC407A</color>
+    <color name="price_chip_color">#4155BE</color>
+    <color name="basic_chip_color">#BACBEC</color>
+    <color name="warranty_chip_color">#DA5731</color>
+    <color name="group_and_receipt_choose_chip_color" >#388E3C</color>
+
+
+    <color name="pressed">#F57C00</color>
+    <color name="disabled">#99FAFAFA</color>
+    <color name="selected">#252837</color>
+    <color name="alpha_30_black">#1AAAAAAA</color>
+    <color name="transparent">#00FFFFFF</color>
+    <color name="background">#F7F7F7</color>
+    <color name="color_dark_grey">#888888</color>
+
+    <color name="color_choosen_group">#B3B3B3</color>
 </resources>

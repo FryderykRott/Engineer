@@ -19,6 +19,6 @@
     <dimen name="textView_margin">8dp</dimen>
     <dimen name="border">2dp</dimen>
     <dimen name="dimen_0dp">0dp</dimen>
-    <dimen name="alert_dialog_corners">8dp</dimen>
+    <dimen name="alert_dialog_corners">12dp</dimen>
 
 </resources>

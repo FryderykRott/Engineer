@@ -21,11 +21,12 @@ import java.time.format.DateTimeParseException;
 import java.util.Base64;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 public class Utils {
+    public static final int INFINITE = -100;
+    public static final int NONE = -300;
     public static User user;
-
-
 
     public static String date_format = "yyyy-MM-dd";
 
@@ -68,20 +69,32 @@ public class Utils {
     }
 
     public static String formatDateToString(Date date){
-        SimpleDateFormat dateFormat = new SimpleDateFormat(date_format);
+        SimpleDateFormat dateFormat = new SimpleDateFormat(date_format, Locale.US);
         return dateFormat.format(date);
+    }
+    public static Date formatStringToDate(String date){
+        SimpleDateFormat dateFormat = new SimpleDateFormat(date_format, Locale.US);
+        try {
+            return dateFormat.parse(date);
+        } catch (ParseException e) {
+            return null;
+        }
+    }
+
+    public static Date getTodaysDate(){
+        return Calendar.getInstance().getTime();
     }
     //    pierwsza funkcja bedzie przyjmowała int w wartosic od 1-100 i zwracała tekst
     public static String convertWarrantyBarToString(int value){
 
         if (value == 0) {
-            return "No warranty";
+            return "Brak gwarancji";
         }
         else if (value <= 1) {
-            return "1 day";
+            return "1 dzień";
         }
         else if(value <= 31){
-            return value + " days";
+            return value + " dni";
         }
         else if(value <= 70){
             int temp = (int) ((39) / 8);
@@ -89,9 +102,9 @@ public class Utils {
             int temp_2 = (value - 31) / temp;
 
             if(temp_2 <= 1)
-                return "1 week";
+                return "1 tydzien";
             else
-                return temp_2 + " weeks";
+                return temp_2 + " tygodni";
         }
         else if(value < 100){
             int temp = (int) ((30) / 10);
@@ -99,11 +112,11 @@ public class Utils {
             int temp_2 = (value - 70) / temp;
 
             if(temp_2 <= 1)
-                return "1 year";
+                return "1 rok";
             else
-                return temp_2 + " years";
+                return temp_2 + " lata";
         }else if(value == 100){
-            return "Infinite warranty";
+            return "Nieograniczona";
         }
 
         return "";
@@ -112,7 +125,7 @@ public class Utils {
     //    druga funkcja bedzie brać wartosc od 1-100 i zamieniać to na ilosć dni
     public static int convertWarrantyBarToDays(int value){
         if (value == 0) {
-            return -1;
+            return NONE;
         }
         else if (value <= 1) {
             return 1;
@@ -140,7 +153,7 @@ public class Utils {
             else
                 return temp_2 * 365;
         }else if(value == 100){
-            return -2;
+            return INFINITE;
         }
         return 0;
     }
