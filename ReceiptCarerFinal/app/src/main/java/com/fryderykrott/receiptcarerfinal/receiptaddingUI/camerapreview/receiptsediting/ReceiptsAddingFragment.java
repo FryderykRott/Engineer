@@ -104,10 +104,11 @@ public class ReceiptsAddingFragment extends Fragment {
                         pass = false;
 
                if(pass){
-
+                   for(ReceiptDetailFragment fragment :sectionsPagerAdapter.getFragments())
+                      fragment.prepareReceipt();
                }
                else
-                   ((ReceiptAddingActivity) getActivity()).showSnackBar("Znaleziono progremy z paragonami!");
+                   ((ReceiptAddingActivity) getActivity()).showSnackBar("Sprawdż wszystkie paragony!");
             }
         });
 

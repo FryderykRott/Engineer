@@ -151,10 +151,10 @@ public class ReceiptAddingActivity extends AppCompatActivity implements CameraPr
     public void showSnackBar(String tekst){
         Snackbar snackbar = Snackbar.make(container, tekst, Snackbar.LENGTH_LONG);
 
-        FrameLayout.LayoutParams params = (FrameLayout.LayoutParams)
-                snackbar.getView().getLayoutParams();
-        params.setMargins(1, 1, 1, 180);
-        snackbar.getView().setLayoutParams(params);
+//        FrameLayout.LayoutParams params = (FrameLayout.LayoutParams)
+//                snackbar.getView().getLayoutParams();
+//        params.setMargins(1, 1, 1, 180);
+//        snackbar.getView().setLayoutParams(params);
 
         snackbar.show();
 //        Toast.makeText(this, tekst, Toast.LENGTH_LONG).show();

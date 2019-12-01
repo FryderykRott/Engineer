@@ -334,4 +334,12 @@ public class ReceiptDetailFragment extends Fragment implements ImageAdapter.OnNe
 
         return true;
     }
+
+    public void prepareReceipt() {
+//        1. dodaj datę do apragonu
+//        2. updatów nazwę paragonu
+//        3. ustal datę gwarancji paragonu
+//        4. ustal grupę
+//        5. włóż wszystkie znaczniki
+    }
 }
