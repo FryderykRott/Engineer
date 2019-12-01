@@ -44,7 +44,7 @@ public class GroupAddingAlertDialog extends Dialog implements android.view.View.
     Group toEditGroup;
     TextView titleTextView;
 
-    private int layoutID = R.layout.alertdialog_add_new_group;
+    private int layoutID = R.layout.alert_dialog_add_new_group;
     private OnGroupCreationCallBackListener l_creation;
     private OnGroupEditionCallBackListener l_edition;
 

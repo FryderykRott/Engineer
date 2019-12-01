@@ -27,6 +27,8 @@ import com.fryderykrott.receiptcarerfinal.model.Receipt;
 import com.fryderykrott.receiptcarerfinal.receiptaddingUI.camerapreview.camerapreview.CameraPreviewFragment;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 
 import me.relex.circleindicator.CircleIndicator;
 
@@ -41,6 +43,9 @@ public class ReceiptDetailFragment extends Fragment {
 //    public ArrayList<Bitmap> photos;
 
     AutoCompleteTextView autoCompleteTextView;
+
+    TextInputEditText receiptNameTextInput;
+    TextInputLayout receiptNameTextInputLayout;
 
     ImageAdapter adapter;
     ChipGroup tags;
@@ -57,7 +62,12 @@ public class ReceiptDetailFragment extends Fragment {
         fragment.receipt = receipt;
         fragment.position = position;
 
-        fragment.adapter = new ImageAdapter(context, receipt.getImages_as_bitmap(), position, (ImageAdapter.OnNewPhotoCallbackListener) context);
+        fragment.adapter = new ImageAdapter(context, receipt.getImages_as_bitmap(), position, new ImageAdapter.OnNewPhotoCallbackListener() {
+            @Override
+            public void onNewPhotoCallback(int position_off_receipt) {
+
+            }
+        });
         return fragment;
     }
 
@@ -111,6 +121,8 @@ public class ReceiptDetailFragment extends Fragment {
                     acceptIcon.setVisibility(View.VISIBLE);
             }
 
+
+
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 Log.i("ds: ", String.valueOf(count));
@@ -127,6 +139,12 @@ public class ReceiptDetailFragment extends Fragment {
 
             }
         });
+
+        receiptNameTextInput = view.findViewById(R.id.edit_text_receipt_name);
+        receiptNameTextInputLayout = view.findViewById(R.id.edit_text_receipt_name_lauout);
+
+        if(!receipt.getName().isEmpty())
+            receiptNameTextInput.setText(receipt.getName());
 
 
         tags = view.findViewById(R.id.chip_group_tags);

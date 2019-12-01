@@ -1,6 +1,8 @@
 package com.fryderykrott.receiptcarerfinal.adapters;
 
 
+import android.app.Activity;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -17,9 +19,9 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     private ArrayList<Receipt> receipts;
     private ArrayList<Fragment> fragments;
 
-    private final AppCompatActivity mContext;
+    private final Activity mContext;
 
-    public SectionsPagerAdapter(AppCompatActivity context, FragmentManager fm, ArrayList<Receipt> receipts) {
+    public SectionsPagerAdapter(Activity context, FragmentManager fm, ArrayList<Receipt> receipts) {
         super(fm);
         this.receipts = receipts;
         fragments = new ArrayList<>();

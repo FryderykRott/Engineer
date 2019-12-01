@@ -31,7 +31,7 @@ public class ImageAdapter extends PagerAdapter {
         this.isClickable = false;
     }
 
-    public ImageAdapter(Activity context,  ArrayList<Bitmap> images,int receipt_position, OnNewPhotoCallbackListener listener) {
+    public ImageAdapter(Activity context,  ArrayList<Bitmap> images, int receipt_position, OnNewPhotoCallbackListener listener) {
         this.context = context;
         this.images = images;
         this.isClickable = true;

@@ -11,9 +11,9 @@
         android:label="Camera_preview"
         tools:layout="@layout/fragment_camera_preview" />
     <fragment
-        android:id="@+id/receiptsAddingFragment"
+        android:id="@+id/navigation_adding_receipts"
         android:name="com.fryderykrott.receiptcarerfinal.receiptaddingUI.camerapreview.receiptsediting.ReceiptsAddingFragment"
-        android:label="fragment_receipts_adding"
+        android:label="Edytuj paragony"
         tools:layout="@layout/fragment_receipts_adding" />
     <fragment
         android:id="@+id/receiptDetailFragment"

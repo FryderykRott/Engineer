@@ -105,7 +105,7 @@
                         android:layout_marginTop="8dp"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:text="tags"
+                        android:text="znaczniki"
                         android:layout_marginStart="8dp"
                         android:textSize="12sp"
                         app:layout_constraintTop_toTopOf="parent"
@@ -145,7 +145,7 @@
                             android:ems="10"
                             android:paddingLeft="8dp"
 
-                            android:hint="#New tag"
+                            android:hint="#nowy znacznik"
                             android:inputType="textPersonName"
                             />
 
@@ -167,6 +167,7 @@
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/edit_text_receipt_name_lauout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -184,7 +185,7 @@
                     android:id="@+id/edit_text_receipt_name"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:hint="Name of receipt"
+                    android:hint="Nazwa paragonu"
                     android:inputType="textPersonName"
                     />
 

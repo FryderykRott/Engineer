@@ -19,7 +19,13 @@ public class Receipt implements Serializable {
 
     public Receipt(){}
 
-    
+    public ArrayList<String> getImages_as_base64() {
+        return images_as_base64;
+    }
+
+    public void setImages_as_base64(ArrayList<String> images_as_base64) {
+        this.images_as_base64 = images_as_base64;
+    }
 
     public String getName() {
         return name;
@@ -74,5 +80,13 @@ public class Receipt implements Serializable {
     }
 
     public ArrayList<Bitmap> getImages_as_bitmap() {
+        return images_as_bitmap;
+    }
+
+    public void addReceiptBitmap(Bitmap bitmap) {
+        if(images_as_bitmap == null)
+            images_as_bitmap = new ArrayList<Bitmap>();
+
+        images_as_bitmap.add(bitmap);
     }
 }

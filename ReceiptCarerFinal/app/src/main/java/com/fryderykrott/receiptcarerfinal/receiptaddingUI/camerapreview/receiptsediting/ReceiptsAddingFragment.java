@@ -17,11 +17,15 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.fryderykrott.receiptcarerfinal.R;
+import com.fryderykrott.receiptcarerfinal.ReceiptAddingActivity;
 import com.fryderykrott.receiptcarerfinal.adapters.SectionsPagerAdapter;
 import com.fryderykrott.receiptcarerfinal.model.Receipt;
+import com.fryderykrott.receiptcarerfinal.utils.Utils;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
+
+import io.grpc.okhttp.internal.Util;
 
 public class ReceiptsAddingFragment extends Fragment {
 
@@ -59,13 +63,14 @@ public class ReceiptsAddingFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        receipts = ((ReceiptAddingActivity) getActivity()).getReceiptsToEdit();
         if(wasAlreadyCreated){
             return;
         }
 
-        sectionsPagerAdapter = new SectionsPagerAdapter(context, getChildFragmentManager(), receipts);
+        sectionsPagerAdapter = new SectionsPagerAdapter(getActivity(), getChildFragmentManager(), receipts);
 
-        ViewPager viewPager =  context.findViewById(R.id.receipt_view_pager);
+        ViewPager viewPager =  view.findViewById(R.id.receipt_view_pager);
         viewPager.setAdapter(sectionsPagerAdapter);
 
         TabLayout tabs = view.findViewById(R.id.receipts_tabs);

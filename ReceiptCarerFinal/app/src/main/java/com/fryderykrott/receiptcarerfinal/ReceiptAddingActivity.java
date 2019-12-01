@@ -23,6 +23,7 @@ import java.util.ArrayList;
 
 public class ReceiptAddingActivity extends AppCompatActivity implements CameraPreviewFragment.OnPhotoTakingListener, OnFailureListener, OnSuccessListener<FirebaseVisionText>, AlertDialogFullScreenImageDisplayer.OnImagePreviewCallbackListener {
     private NavController navController;
+    private ArrayList<Receipt> receiptsToEdit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +78,7 @@ public class ReceiptAddingActivity extends AppCompatActivity implements CameraPr
 
 
     @Override
-    public void onFragmentCallback(ArrayList<Bitmap> bitmaps) {
+    public void onFragmentCallback(final ArrayList<Bitmap> bitmaps) {
         if(bitmaps == null)
         {
             finish();
@@ -92,81 +93,17 @@ public class ReceiptAddingActivity extends AppCompatActivity implements CameraPr
             @Override
             public void onCompleteScanningListener(ArrayList<Receipt> results) {
                 setProgressView(false);
+                for(int i = 0; i<bitmaps.size(); i++){
+                    results.get(i).addReceiptBitmap(bitmaps.get(i));
+                }
 
+                receiptsToEdit = results;
+                getSupportActionBar().show();
+                navController.navigate(R.id.navigation_adding_receipts);
             }
         });
     }
 
-//    private void rezultat skanowanie(){
-//
-////        gdyby sie powidolo lub niepowiodlo chowam tutaj kod
-//
-//        ArrayList<GroupReceipt> receipts;
-//
-//        if(onlySinglePhotoFlag){
-//            if(bitmaps != null){
-//                savedReceipts.get(positionOfReceipt).addPhoto(bitmaps.get(0));
-//                receipts = savedReceipts;
-//                receipts_adding_fragment = AddingReceiptsFragment.newInstance(receipts, this);
-//            }
-////            ((AddingReceiptsFragment)receipts_adding_fragment).updateReceipt(positionOfReceipt, bitmaps.get(0));
-//        }
-//        else {
-//            //        jako ze nie mam skanowania to stworze puste ale z obrazkami
-//
-////            W raize gdyby sie okazalo ze nic nie dostali
-//            if(bitmaps == null){
-//                finish();
-//                return;
-//            }
-//
-//            receipts = new ArrayList<>();
-//            photos = bitmaps;
-//            ArrayList<Bitmap> photos_of_receip;
-//
-//            photos_of_receip = new ArrayList<>();
-//            photos_of_receip.add(bitmaps.get(0));
-//
-//            GroupReceipt receipt_1 = GroupReceipt.buildReceipt("Zakupy nuda",
-//                    2.2f,
-//                    12312L,
-//                    31L,
-//                    null, photos_of_receip);
-//
-//            receipt_1.addTag(new RCTag("Media Ekspert"));
-//            receipt_1.addTag(new RCTag("Pierogi"));
-//            receipt_1.addTag(new RCTag("Masło"));
-//            receipt_1.addTag(new RCTag("Ksiażka"));
-//            receipt_1.addTag(new RCTag("Tanio"));
-//
-//            receipts.add(receipt_1);
-//
-//            for(int i = 1; i < bitmaps.size(); i++){
-////          TODO w tym miejscu następuje skanowanie i tworzenie paragonów
-//
-//                photos_of_receip = new ArrayList<>();
-//                photos_of_receip.add(bitmaps.get(i));
-//
-//                receipt_1 = GroupReceipt.buildReceipt("",
-//                        0f,
-//                        0L,
-//                        0L,
-//                        null, photos_of_receip);
-//
-//                receipts.add(receipt_1);
-//            }
-//
-//            receipts_adding_fragment = AddingReceiptsFragment.newInstance(receipts, this);
-//
-//        }
-//
-//
-//
-//        addFragmentOnTop(receipts_adding_fragment);
-//        progressBar.setVisibility(View.INVISIBLE);
-////        getSupportActionBar().show();
-////        fragmentTransaction.commitAllowingStateLoss();
-//    }
 
     public void setProgressView(boolean isVisible) {
         if(isVisible){
@@ -190,5 +127,9 @@ public class ReceiptAddingActivity extends AppCompatActivity implements CameraPr
     @Override
     public void imagePreviewCallback(int info) {
 
+    }
+
+    public ArrayList<Receipt> getReceiptsToEdit() {
+        return receiptsToEdit;
     }
 }
