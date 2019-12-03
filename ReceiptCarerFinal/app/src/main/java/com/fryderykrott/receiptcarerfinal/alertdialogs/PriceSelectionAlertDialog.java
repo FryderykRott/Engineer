@@ -6,10 +6,12 @@ import android.app.Dialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.fryderykrott.receiptcarerfinal.R;
 
@@ -44,6 +46,13 @@ public class PriceSelectionAlertDialog extends Dialog implements android.view.Vi
         priceEditText = findViewById(R.id.warranty_bar);
         priceEditText.setText(String.format("%.2f", price));
 
+        priceEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                priceEditText.setText("");
+                return true;
+            }
+        });
         ok = findViewById(R.id.button_ok);
         cancel = findViewById(R.id.button_cancel);
 

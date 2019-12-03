@@ -24,6 +24,8 @@ public class WarrantyChipContainer implements View.OnClickListener, WarrantySele
     private Chip warranty_chip;
     private Activity parent_activity;
 
+    boolean isInfiniteWarranty = false;
+
     public WarrantyChipContainer(final Activity parent_activity) {
         this.parent_activity = parent_activity;
 
@@ -83,22 +85,37 @@ public class WarrantyChipContainer implements View.OnClickListener, WarrantySele
     @Override
     public void onAlertDialogWarrantyCallback(Date date_of_end) {
         this.date_of_end = date_of_end;
+        if(date_of_end == null)
+            return;
+
         int days = Utils.convertDateToDays(date_of_end);
-        if(days == Utils.INFINITE) {
+        if(days >= Utils.INFINITE) {
             warranty_chip.setText("Nieograniczona");
+            isInfiniteWarranty = true;
         }
         else if(days == 1){
             warranty_chip.setText("1 dzień");
+            isInfiniteWarranty = false;
         }
         else if(days == Utils.NONE) {
             resetText();
+            isInfiniteWarranty = false;
         }
         else{
             warranty_chip.setText(days + " dni");
+            isInfiniteWarranty = false;
         }
 
         warranty_chip.setCloseIconVisible(true);
         isDateSet = true;
+    }
+
+    public Date getDate_of_end() {
+        return date_of_end;
+    }
+
+    public boolean isInfiniteWarranty() {
+        return isInfiniteWarranty;
     }
 }
 

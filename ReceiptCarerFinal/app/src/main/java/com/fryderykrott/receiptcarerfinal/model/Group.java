@@ -1,27 +1,44 @@
 package com.fryderykrott.receiptcarerfinal.model;
 
+import com.fryderykrott.receiptcarerfinal.utils.Utils;
+import com.google.firebase.database.Exclude;
+
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.UUID;
+
+import io.grpc.okhttp.internal.Util;
 
 public class Group implements Serializable {
 
+//    czy mozna usunąć
+    public boolean is_deletable;
 //    Static
-    public int groupID;
+    public String groupID;
     public String name;
     public int color;
-    public ArrayList<Receipt> receipts;
+//    public ArrayList<Receipt> receipts;
 
 //    Calculated
+    @Exclude
     public int receiptsNumber;
+
+    @Exclude
     public float sumOfAllReceipts;
 
-    public Group(){}
+    public Group(){
+        this.groupID = UUID.randomUUID().toString();
+//        receipts = new ArrayList<>();
+        is_deletable = true;
+    }
 
     public Group(String name, int color) {
+        this.groupID = UUID.randomUUID().toString();
         this.name = name;
         this.color = color;
 
-        receipts = new ArrayList<>();
+        is_deletable = true;
+//        receipts = new ArrayList<>();
     }
 
     //    Static
@@ -41,35 +58,46 @@ public class Group implements Serializable {
         this.color = color;
     }
 
-    public int getGroupID() {
+    public String  getGroupID() {
         return groupID;
     }
 
-    public void setGroupID(int groupID) {
+    public void setGroupID(String  groupID) {
         this.groupID = groupID;
     }
-
-    public ArrayList<Receipt> getReceipts() {
-        return receipts;
-    }
-
-    public void setReceipts(ArrayList<Receipt> receipts) {
-        this.receipts = receipts;
-    }
+//
+//    public ArrayList<Receipt> getReceipts() {
+//        return receipts;
+//    }
+//
+//    public void setReceipts(ArrayList<Receipt> receipts) {
+//        this.receipts = receipts;
+//    }
 
     public int getNumberOfReceipts(){
-        return receipts.size();
+        int size = 0;
+        if(Utils.user == null)
+            return 0;
+
+        for(Receipt receipt:Utils.user.getReceipts()){
+            if(receipt.getGroupID().equals(groupID))
+                size++;
+        }
+
+        return size;
     }
 
     public float getSumOfAllReceipts(){
         float receiptSum = 0f;
 
-        for(int i = 0; i < receipts.size(); i++)
-            receiptSum += receipts.get(i).getSumTotal();
+        if(Utils.user == null)
+            return 0f;
+
+        for(int i = 0; i < Utils.user.getReceipts().size(); i++)
+            receiptSum += Utils.user.getReceipts().get(i).getSumTotal();
 
         return receiptSum;
     }
-
 
     public int getReceiptsNumber() {
         return receiptsNumber;
@@ -81,5 +109,13 @@ public class Group implements Serializable {
 
     public void setSumOfAllReceipts(float sumOfAllReceipts) {
         this.sumOfAllReceipts = sumOfAllReceipts;
+    }
+
+    public boolean isIs_deletable() {
+        return is_deletable;
+    }
+
+    public void setIs_deletable(boolean is_deletable) {
+        this.is_deletable = is_deletable;
     }
 }

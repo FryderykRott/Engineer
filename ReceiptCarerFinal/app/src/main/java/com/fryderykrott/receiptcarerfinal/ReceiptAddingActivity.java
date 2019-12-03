@@ -6,16 +6,13 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
-import androidx.navigation.ui.NavigationUI;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.FrameLayout;
 
-import com.fryderykrott.receiptcarerfinal.adapters.ImageAdapter;
 import com.fryderykrott.receiptcarerfinal.alertdialogs.AlertDialogFullScreenImageDisplayer;
 import com.fryderykrott.receiptcarerfinal.model.Receipt;
 import com.fryderykrott.receiptcarerfinal.receiptaddingUI.camerapreview.camerapreview.CameraPreviewFragment;
@@ -29,10 +26,12 @@ import java.util.ArrayList;
 
 public class ReceiptAddingActivity extends AppCompatActivity implements CameraPreviewFragment.OnPhotoTakingListener, OnFailureListener, OnSuccessListener<FirebaseVisionText>, AlertDialogFullScreenImageDisplayer.OnImagePreviewCallbackListener {
 
+    private static final int NO_RECEIPT_EDITING = -1;
     private NavController navController;
     private ArrayList<Receipt> receiptsToEdit;
 
     private ConstraintLayout container;
+    private int currentReceiptPhotoTakingPosition = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +67,7 @@ public class ReceiptAddingActivity extends AppCompatActivity implements CameraPr
         switch (id){
             case(R.id.accept):
 //                TODO zrobić stuff akceptowania
+
                 break;
             default:
                 return super.onOptionsItemSelected(item);
@@ -90,10 +90,25 @@ public class ReceiptAddingActivity extends AppCompatActivity implements CameraPr
 
 
     @Override
-    public void onFragmentCallback(final ArrayList<Bitmap> bitmaps) {
+    public void onPhotoTakeingCallback(final ArrayList<Bitmap> bitmaps) {
         if(bitmaps == null)
         {
+
+            if(currentReceiptPhotoTakingPosition != NO_RECEIPT_EDITING){
+                navController.popBackStack();
+                return;
+            }
             finish();
+            return;
+        }
+
+        if(currentReceiptPhotoTakingPosition != NO_RECEIPT_EDITING){
+            ArrayList<Bitmap> currentBitmaplist =(ArrayList< Bitmap>) receiptsToEdit.get(currentReceiptPhotoTakingPosition).somethingDifferentImagesAsBitmap();
+            currentBitmaplist.addAll(bitmaps);
+
+            showSnackBar("Udało się dodać zdjęcia na pozycje: " + currentBitmaplist);
+            navController.popBackStack();
+            currentReceiptPhotoTakingPosition = NO_RECEIPT_EDITING;
             return;
         }
 
@@ -158,6 +173,18 @@ public class ReceiptAddingActivity extends AppCompatActivity implements CameraPr
 
         snackbar.show();
 //        Toast.makeText(this, tekst, Toast.LENGTH_LONG).show();
+    }
+
+    public void setNavController(NavController navController) {
+        this.navController = navController;
+    }
+
+    public int getCurrentReceiptPhotoTakingPosition() {
+        return currentReceiptPhotoTakingPosition;
+    }
+
+    public void setCurrentReceiptPhotoTakingPosition(int currentReceiptPhotoTakingPosition) {
+        this.currentReceiptPhotoTakingPosition = currentReceiptPhotoTakingPosition;
     }
 
 }

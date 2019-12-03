@@ -24,7 +24,7 @@
             android:padding="8dp">
 
             <ImageView
-                android:id="@+id/card_group_icon"
+                android:id="@+id/card_receipt_group_icon"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_marginStart="8dp"
@@ -57,7 +57,7 @@
                 android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/card_group_icon2"
-                app:layout_constraintStart_toEndOf="@+id/card_group_icon"
+                app:layout_constraintStart_toEndOf="@+id/card_receipt_group_icon"
                 app:layout_constraintTop_toTopOf="parent" />
 
 

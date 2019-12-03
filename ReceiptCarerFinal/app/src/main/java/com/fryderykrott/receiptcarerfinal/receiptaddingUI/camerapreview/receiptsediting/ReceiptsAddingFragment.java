@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import androidx.viewpager.widget.ViewPager;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,10 +21,14 @@ import android.view.ViewGroup;
 import com.fryderykrott.receiptcarerfinal.R;
 import com.fryderykrott.receiptcarerfinal.ReceiptAddingActivity;
 import com.fryderykrott.receiptcarerfinal.adapters.SectionsPagerAdapter;
+import com.fryderykrott.receiptcarerfinal.model.Group;
 import com.fryderykrott.receiptcarerfinal.model.Receipt;
 import com.fryderykrott.receiptcarerfinal.receiptaddingUI.camerapreview.receiptdetail.ReceiptDetailFragment;
+import com.fryderykrott.receiptcarerfinal.services.Database;
 import com.fryderykrott.receiptcarerfinal.utils.Utils;
 import com.fryderykrott.receiptcarerfinal.utils.Validator;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
@@ -106,6 +111,22 @@ public class ReceiptsAddingFragment extends Fragment {
                if(pass){
                    for(ReceiptDetailFragment fragment :sectionsPagerAdapter.getFragments())
                       fragment.prepareReceipt();
+
+                   Group group;
+
+                   for(Receipt receipt :receipts){
+//                       group = Utils.findGroupById(receipt.getGroupID());
+                       Utils.user.getReceipts().add(receipt);
+                   }
+                   ((ReceiptAddingActivity)getActivity()).setProgressView(true);
+                   Database.getInstance().updateUser(new OnCompleteListener<Void>() {
+                       @Override
+                       public void onComplete(@NonNull Task<Void> task) {
+                           getActivity().finish();
+                       }
+                   });
+
+                   Log.i("das", "Das");
                }
                else
                    ((ReceiptAddingActivity) getActivity()).showSnackBar("Sprawdż wszystkie paragony!");

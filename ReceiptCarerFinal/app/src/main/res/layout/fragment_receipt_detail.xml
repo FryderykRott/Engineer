@@ -17,7 +17,7 @@
 
 
         <ImageButton
-            android:id="@+id/imageButton"
+            android:id="@+id/card_receipt_delete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
@@ -83,7 +83,7 @@
 
             <com.google.android.material.card.MaterialCardView
                 android:translationZ="3dp"
-                android:id="@+id/chipGroup2"
+                android:id="@+id/card_receipt_chip_group"
                 android:layout_width="0dp"
                 android:padding="16dp"
                 android:layout_height="wrap_content"
@@ -205,7 +205,7 @@
                 android:background="?android:attr/listDivider"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/chipGroup2" />
+                app:layout_constraintTop_toBottomOf="@+id/card_receipt_chip_group" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

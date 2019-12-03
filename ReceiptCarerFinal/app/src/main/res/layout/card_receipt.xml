@@ -29,17 +29,18 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                android:id="@+id/imageView2"
+                android:id="@+id/card_receipt_thumbnail"
                 android:layout_width="80dp"
                 android:layout_height="0dp"
 
+                android:scaleType="centerCrop"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:srcCompat="@tools:sample/avatars" />
 
             <ImageView
-                android:id="@+id/card_group_icon"
+                android:id="@+id/card_receipt_group_icon"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_marginStart="8dp"
@@ -50,7 +51,7 @@
                 app:srcCompat="@drawable/ic_receipt" />
 
             <TextView
-                android:id="@+id/card_group_name"
+                android:id="@+id/card_receipt_name"
                 android:layout_width="180dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
@@ -58,11 +59,11 @@
                 android:text="Ogólne"
                 android:textColor="#303030"
                 android:textSize="14sp"
-                app:layout_constraintStart_toEndOf="@+id/imageView2"
+                app:layout_constraintStart_toEndOf="@+id/card_receipt_thumbnail"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/card_group_number_of_receipts"
+                android:id="@+id/card_receipt_date_of_creation"
                 android:layout_width="180dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
@@ -72,11 +73,11 @@
                 android:textColor="@color/colorPrimaryDark"
                 android:textSize="10sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/imageView2"
-                app:layout_constraintTop_toBottomOf="@+id/chipGroup2" />
+                app:layout_constraintStart_toEndOf="@+id/card_receipt_thumbnail"
+                app:layout_constraintTop_toBottomOf="@+id/card_receipt_chip_group" />
 
             <TextView
-                android:id="@+id/card_group_total_sum"
+                android:id="@+id/card_receipt_total_sum"
                 android:layout_width="85dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
@@ -88,7 +89,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/card_group_total_sum2"
+                android:id="@+id/card_receipt_warranty"
                 android:layout_width="85dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
@@ -97,17 +98,17 @@
                 android:textAlignment="textEnd"
                 android:textSize="10sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/card_group_total_sum" />
+                app:layout_constraintTop_toBottomOf="@+id/card_receipt_total_sum" />
 
             <com.google.android.material.chip.ChipGroup
-                android:id="@+id/chipGroup2"
+                android:id="@+id/card_receipt_chip_group"
                 android:layout_width="180dp"
                 android:layout_height="30dp"
                 android:layout_marginStart="4dp"
                 android:layout_marginTop="4dp"
                 android:minHeight="40dp"
-                app:layout_constraintStart_toEndOf="@+id/imageView2"
-                app:layout_constraintTop_toBottomOf="@+id/card_group_name">
+                app:layout_constraintStart_toEndOf="@+id/card_receipt_thumbnail"
+                app:layout_constraintTop_toBottomOf="@+id/card_receipt_name">
 
                 <com.google.android.material.chip.Chip
                     android:layout_width="wrap_content"
@@ -119,7 +120,7 @@
             </com.google.android.material.chip.ChipGroup>
 
             <ImageButton
-                android:id="@+id/imageButton"
+                android:id="@+id/card_receipt_delete"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_marginEnd="16dp"

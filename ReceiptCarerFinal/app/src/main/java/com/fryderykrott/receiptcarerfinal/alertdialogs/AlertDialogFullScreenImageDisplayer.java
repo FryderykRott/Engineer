@@ -3,9 +3,11 @@ package com.fryderykrott.receiptcarerfinal.alertdialogs;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.database.DataSetObserver;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.media.Image;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,10 +15,12 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ImageButton;
 
+import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager.widget.ViewPager;
 
 import com.fryderykrott.receiptcarerfinal.R;
 import com.fryderykrott.receiptcarerfinal.adapters.ImageAdapter;
+import com.fryderykrott.receiptcarerfinal.receiptaddingUI.camerapreview.camerapreview.CameraPreviewFragment;
 
 import java.util.ArrayList;
 
@@ -26,12 +30,19 @@ public class AlertDialogFullScreenImageDisplayer extends Dialog implements andro
 
     public Activity parent_activity;
     public ImageButton ok;
+    public ImageButton delete;
     private int position;
     ArrayList<Bitmap> bitmaps;
+    ImageAdapter adapter;
+
+    ViewPager viewpager;
+    ViewGroup viewGroup;
+    CircleIndicator indicator;
 
     private int layoutID = R.layout.alert_dialog_full_screen_pictures;
     OnImagePreviewCallbackListener listener;
 
+    boolean isDeletable = true;
     //    public static final int
     public AlertDialogFullScreenImageDisplayer(Activity a, OnImagePreviewCallbackListener listener, ArrayList<Bitmap> bitmaps, int position) {
         super(a);
@@ -42,6 +53,16 @@ public class AlertDialogFullScreenImageDisplayer extends Dialog implements andro
         this.position = position;
     }
 
+    public AlertDialogFullScreenImageDisplayer(FragmentActivity a, OnImagePreviewCallbackListener listener, ArrayList<Bitmap> bitmaps, int position, boolean isDeletable) {
+        super(a);
+        parent_activity = a;
+        this.listener = listener;
+
+        this.bitmaps = bitmaps;
+        this.position = position;
+        this.isDeletable = isDeletable;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,7 +70,7 @@ public class AlertDialogFullScreenImageDisplayer extends Dialog implements andro
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
-        ViewGroup viewGroup = findViewById(android.R.id.content);
+        viewGroup = findViewById(android.R.id.content);
         View layout = LayoutInflater.from(parent_activity).inflate(layoutID, viewGroup, false);
 
         setContentView(layout);
@@ -59,27 +80,72 @@ public class AlertDialogFullScreenImageDisplayer extends Dialog implements andro
         ok = findViewById(R.id.buttonOK);
         ok.setOnClickListener(this);
 
-        ImageAdapter adapter = new ImageAdapter(parent_activity, bitmaps);
+        adapter = new ImageAdapter(parent_activity, bitmaps);
 
-        ViewPager viewpager = findViewById(R.id.view_pager_receipts);
+        viewpager = findViewById(R.id.view_pager_receipts);
         viewpager.setAdapter(adapter);
         viewpager.setCurrentItem(position);
 
-        CircleIndicator indicator = findViewById(R.id.indicator);
+        indicator = findViewById(R.id.indicator);
         indicator.setViewPager(viewpager);
         adapter.registerDataSetObserver(indicator.getDataSetObserver());
+
+        delete = findViewById(R.id.buttonDetele);
+
+        if(!isDeletable){
+            delete.setVisibility(View.GONE);
+        }
+        else if(bitmaps.size() == 1){
+            delete.setVisibility(View.GONE);
+        }
+        delete.setOnClickListener(this);
     }
 
     public static final int NO_RESPONSE = 0;
 
     @Override
     public void onClick(View v) {
-        listener.imagePreviewCallback(NO_RESPONSE);
-        dismiss();
+        switch (v.getId()){
+            case (R.id.buttonOK):
+                dismiss();
+                break;
+            case (R.id.buttonDetele):
+                int current_position = viewpager.getCurrentItem();
+                int new_position = 0;
+
+                if(current_position == 0 && bitmaps.size() > 1)
+                    new_position = 1;
+                else if(current_position > 0)
+                    new_position = current_position - 1;
+
+                viewpager.setCurrentItem(new_position);
+
+                bitmaps.remove(current_position);
+//                adapter.destroyItem(viewGroup, current_position, null);
+                adapter.notifyDataSetChanged();
+
+                adapter = new ImageAdapter(parent_activity, bitmaps);
+                viewpager.setAdapter(adapter);
+
+                adapter.registerDataSetObserver(indicator.getDataSetObserver());
+                adapter.notifyDataSetChanged();
+
+                if(!isDeletable){
+                    delete.setVisibility(View.GONE);
+                }
+                else if(bitmaps.size() == 1){
+                    delete.setVisibility(View.GONE);
+                }
+
+                listener.imagePreviewCallback(NO_RESPONSE);
+                break;
+        }
+
     }
 
     public interface OnImagePreviewCallbackListener {
         public void imagePreviewCallback(int info);
     }
+
 }
 

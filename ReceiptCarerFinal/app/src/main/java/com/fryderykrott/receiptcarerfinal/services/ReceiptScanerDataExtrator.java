@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 public class ReceiptScanerDataExtrator {
 
-    public static String[] shops = {"Lidl","Zabka", "Żabka", "Media Expert", "Mediaexpert"};
+    public static String[] shops = {"Lidl","Zabka", "Żabka", "Media Expert", "Mediaexpert", "HERT"};
 
     static boolean shopNameFlag;
     static boolean dateFlag;
@@ -212,9 +212,10 @@ public class ReceiptScanerDataExtrator {
         next = next.toLowerCase();
 
         String suma_word = "suma";
+        String suma_word_2 = "suma:";
         String pln_word = "pln";
 
-        if(word.contains(suma_word))
+        if(word.contains(suma_word) || word.contains(suma_word_2))
             return previous.contains(pln_word) || next.contains(pln_word);
 
 //        double similatiry = similarityOfWords(word, suma_word);

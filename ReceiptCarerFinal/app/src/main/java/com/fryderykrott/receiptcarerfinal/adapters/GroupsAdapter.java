@@ -1,6 +1,5 @@
 package com.fryderykrott.receiptcarerfinal.adapters;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
@@ -55,14 +54,18 @@ public class GroupsAdapter  extends RecyclerView.Adapter<GroupsAdapter.GroupView
         holder.group_number_of_receipts_text_view.setText(String.format("%s paragonów", group.getNumberOfReceipts()));
         holder.group_sum_price_text_view.setText(String.format("%s PLN", group.getSumOfAllReceipts()));
 
-        holder.group_delete_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                groups.remove(group);
-                reloadGroupsInDatabase();
-                ((MainActivity) context).showSnackBar("Pomyślnię usunięto grupę!");
-            }
-        });
+        if(group.is_deletable){
+            holder.group_delete_button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    groups.remove(group);
+                    reloadGroupsInDatabase();
+                    ((MainActivity) context).showSnackBar("Pomyślnię usunięto grupę!");
+                }
+            });
+        }
+        else
+            holder.group_delete_button.setVisibility(View.GONE);
 
         holder.group_container.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -150,12 +153,12 @@ public class GroupsAdapter  extends RecyclerView.Adapter<GroupsAdapter.GroupView
 
             group_container = itemView.findViewById(R.id.card_group_container);
 
-            group_image_icon = itemView.findViewById(R.id.card_group_icon);
+            group_image_icon = itemView.findViewById(R.id.card_receipt_group_icon);
             group_delete_button = itemView.findViewById(R.id.delete_group_image_view);
 
-            group_name_text_view = itemView.findViewById(R.id.card_group_name);
-            group_sum_price_text_view = itemView.findViewById(R.id.card_group_total_sum);
-            group_number_of_receipts_text_view = itemView.findViewById(R.id.card_group_number_of_receipts);
+            group_name_text_view = itemView.findViewById(R.id.card_receipt_name);
+            group_sum_price_text_view = itemView.findViewById(R.id.card_receipt_total_sum);
+            group_number_of_receipts_text_view = itemView.findViewById(R.id.card_receipt_date_of_creation);
         }
     }
 

@@ -1,12 +1,20 @@
 package com.fryderykrott.receiptcarerfinal.model;
 
 import java.io.Serializable;
+import java.util.UUID;
 
 public class Tag implements Serializable {
     public String uid;
     public String name;
 
-    public Tag(){}
+    public Tag(){
+        uid = UUID.randomUUID().toString();
+    }
+
+    public Tag(String tagName) {
+        uid = UUID.randomUUID().toString();
+        name = tagName;
+    }
 
     public String getName() {
         return name;

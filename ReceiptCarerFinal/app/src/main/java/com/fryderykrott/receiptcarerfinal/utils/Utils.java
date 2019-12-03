@@ -8,7 +8,11 @@ import android.graphics.Matrix;
 import android.net.Uri;
 import android.provider.MediaStore;
 
+import com.fryderykrott.receiptcarerfinal.model.Group;
+import com.fryderykrott.receiptcarerfinal.model.Receipt;
+import com.fryderykrott.receiptcarerfinal.model.Tag;
 import com.fryderykrott.receiptcarerfinal.model.User;
+import com.fryderykrott.receiptcarerfinal.receiptaddingUI.camerapreview.receiptsediting.ReceiptsAddingFragment;
 
 import java.io.ByteArrayOutputStream;
 import java.text.DateFormat;
@@ -18,14 +22,16 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
 public class Utils {
-    public static final int INFINITE = -100;
-    public static final int NONE = -300;
+    public static final String BASIC_GROUP_NAME = "Ogólne";
+    public static final int INFINITE = 100000;
+    public static final int NONE = -1;
     public static User user;
 
     public static String date_format = "yyyy-MM-dd";
@@ -177,11 +183,53 @@ public class Utils {
 
     //    czwarta funcja będzie brać ilosc dni i zwracała date
     public static Date convertDaysToDate(int days){
+        if(days == NONE)
+            return null;
 
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.DATE, days);
         return calendar.getTime();
     }
 
+    public static Group findGroupByString(String basicGroupName) {
+        ArrayList<Group> groups = user.getGroups();
 
+        for (Group group: groups){
+            if(group.getName().equals(basicGroupName))
+                return group;
+        }
+
+        return null;
+    }
+
+    public static Group findGroupById(String UID){
+        ArrayList<Group> groups = user.getGroups();
+
+        for (Group group: groups){
+            if(group.getGroupID().equals(UID))
+                return group;
+        }
+
+        return null;
+    }
+
+    public static Tag findTagById(String UID){
+        ArrayList<Tag> tags = user.getTags();
+
+        for (Tag tag: tags){
+            if(tag.getUid().equals(UID))
+                return tag;
+        }
+
+        return null;
+    }
+
+    public static ArrayList<Receipt> finReceiptsOfGroup(Group group) {
+        ArrayList<Receipt> receipts = new ArrayList<>();
+        for(Receipt receipt: Utils.user.getReceipts()){
+            if(group.getGroupID().equals(receipt.groupID))
+                receipts.add(receipt);
+        }
+            return receipts;
+    }
 }

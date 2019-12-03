@@ -26,6 +26,20 @@
             app:layout_constraintTop_toTopOf="@+id/view_pager_receipts"
             app:srcCompat="@drawable/ic_fullscreen_exit" />
 
+
+        <ImageButton
+            android:id="@+id/buttonDetele"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:translationZ="1dp"
+            android:background="@android:color/transparent"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/view_pager_receipts"
+            app:srcCompat="@drawable/ic_delete_forever_black_24dp"
+            android:tint="@color/white"/>
+
         <androidx.viewpager.widget.ViewPager
             android:id="@+id/view_pager_receipts"
             android:layout_width="match_parent"

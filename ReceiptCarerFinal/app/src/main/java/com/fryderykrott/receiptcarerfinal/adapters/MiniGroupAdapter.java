@@ -14,7 +14,6 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.fryderykrott.receiptcarerfinal.R;
-import com.fryderykrott.receiptcarerfinal.alertdialogs.GroupChossingAlertDialog;
 import com.fryderykrott.receiptcarerfinal.model.Group;
 import com.fryderykrott.receiptcarerfinal.utils.Utils;
 
@@ -128,12 +127,12 @@ public class MiniGroupAdapter extends RecyclerView.Adapter<MiniGroupAdapter.Grou
 
             group_container = itemView.findViewById(R.id.card_group_container);
 
-            group_image_icon = itemView.findViewById(R.id.card_group_icon);
+            group_image_icon = itemView.findViewById(R.id.card_receipt_group_icon);
             group_delete_button = itemView.findViewById(R.id.delete_group_image_view);
 
-            group_name_text_view = itemView.findViewById(R.id.card_group_name);
-            group_sum_price_text_view = itemView.findViewById(R.id.card_group_total_sum);
-            group_number_of_receipts_text_view = itemView.findViewById(R.id.card_group_number_of_receipts);
+            group_name_text_view = itemView.findViewById(R.id.card_receipt_name);
+            group_sum_price_text_view = itemView.findViewById(R.id.card_receipt_total_sum);
+            group_number_of_receipts_text_view = itemView.findViewById(R.id.card_receipt_date_of_creation);
         }
     }
 

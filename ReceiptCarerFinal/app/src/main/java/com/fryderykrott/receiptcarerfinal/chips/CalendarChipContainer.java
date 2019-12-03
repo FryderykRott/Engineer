@@ -49,8 +49,6 @@ public class CalendarChipContainer implements View.OnClickListener, CalendarSing
         da.show();
     }
 
-
-
     public Date getDate() {
         return date;
     }
@@ -58,24 +56,15 @@ public class CalendarChipContainer implements View.OnClickListener, CalendarSing
     public void setDate(Date date) {
         this.date = date;
     }
-    public void chooseDate(Date chosenDate){
-        if(chosenDate == null){
-            return;
-        }
-
-        this.date = chosenDate;
-        date_chip.setText(Utils.formatDateToString(chosenDate));
-    }
 
     public Chip getCalendarChip(){
         return date_chip;
     }
 
     private void resetText(){
-        Date today = Calendar.getInstance().getTime();
-        date_chip.setText(Utils.formatDateToString(today));
+        date = Calendar.getInstance().getTime();
+        date_chip.setText(Utils.formatDateToString(date));
     }
-
 
     @Override
     public void onAlertDialogDateListener(Dialog dialog, Date chosenDate) {
@@ -85,6 +74,5 @@ public class CalendarChipContainer implements View.OnClickListener, CalendarSing
 
         this.date = chosenDate;
         date_chip.setText(Utils.formatDateToString(chosenDate));
-
     }
 }

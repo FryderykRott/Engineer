@@ -3,12 +3,12 @@ package com.fryderykrott.receiptcarerfinal.receiptaddingUI.camerapreview.receipt
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
 import androidx.viewpager.widget.ViewPager;
 
 import android.text.Editable;
@@ -32,7 +32,6 @@ import com.fryderykrott.receiptcarerfinal.chips.WarrantyChipContainer;
 import com.fryderykrott.receiptcarerfinal.model.Receipt;
 import com.fryderykrott.receiptcarerfinal.model.Tag;
 import com.fryderykrott.receiptcarerfinal.receiptaddingUI.camerapreview.camerapreview.CameraPreviewFragment;
-import com.fryderykrott.receiptcarerfinal.receiptaddingUI.camerapreview.receiptsediting.ReceiptsAddingFragment;
 import com.fryderykrott.receiptcarerfinal.utils.Utils;
 import com.fryderykrott.receiptcarerfinal.utils.Validator;
 import com.google.android.material.chip.Chip;
@@ -61,7 +60,7 @@ public class ReceiptDetailFragment extends Fragment implements ImageAdapter.OnNe
 
     ImageAdapter imagesAdapter;
     ChipGroup tagsChipGroup;
-    ArrayList<String> receiptTags;
+
     ImageButton acceptIcon;
 
     Activity context;
@@ -69,8 +68,18 @@ public class ReceiptDetailFragment extends Fragment implements ImageAdapter.OnNe
 
     ArrayAdapter adapterAutoCompliteTagsList;
     ArrayList<String> tagsToAutoComplite;
+    ArrayList<String> receiptTags;
 
+    ViewPager viewpager;
+    CircleIndicator indicator;
+
+    boolean isAlreadyCreted = false;
     private CameraPreviewFragment.OnPhotoTakingListener mListener;
+
+    private GroupChossingContainer groupChossingContainerChip;
+    private CalendarChipContainer calendarChipConteiner;
+    private WarrantyChipContainer warrantyChipConteiner;
+    private PriceChipContainer priceChipConteiner;
 
     public static ReceiptDetailFragment newInstance(Receipt receipt, Activity context, int position) {
         ReceiptDetailFragment fragment = new ReceiptDetailFragment();
@@ -79,7 +88,7 @@ public class ReceiptDetailFragment extends Fragment implements ImageAdapter.OnNe
         fragment.receipt = receipt;
         fragment.position = position;
 
-        fragment.imagesAdapter = new ImageAdapter(context, receipt.getImages_as_bitmap(), position, fragment);
+        fragment.imagesAdapter = new ImageAdapter(context, (ArrayList< Bitmap>)receipt.somethingDifferentImagesAsBitmap(), position, fragment);
         return fragment;
     }
 
@@ -95,17 +104,17 @@ public class ReceiptDetailFragment extends Fragment implements ImageAdapter.OnNe
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_receipt_detail, container, false);
     }
-
-
-
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        ViewPager viewpager = view.findViewById(R.id.view_pager_receipts);
+        if(isAlreadyCreted)
+            return;
+
+        viewpager = view.findViewById(R.id.view_pager_receipts);
         viewpager.setAdapter(imagesAdapter);
 
-        CircleIndicator indicator = view.findViewById(R.id.indicator);
+        indicator = view.findViewById(R.id.indicator);
         indicator.setViewPager(viewpager);
         imagesAdapter.registerDataSetObserver(indicator.getDataSetObserver());
 
@@ -169,12 +178,12 @@ public class ReceiptDetailFragment extends Fragment implements ImageAdapter.OnNe
         receiptTags = new ArrayList<>();
 
 //        ok dobra, mamy paragon ktory ma tagi
-        if(receipt.getTagsID() != null)
-            addReceiptsTagsToGroup();
-
 
         createBasicChips();
         setAutoCompleteTextOfTags();
+
+        addReceiptsTagsToGroup();
+        isAlreadyCreted = true;
 //        preview = view.findViewById(R.id.image_view_photo_preview);
 //        preview.setImageBitmap(RotateBitmap(picture, 90));
     }
@@ -185,8 +194,10 @@ public class ReceiptDetailFragment extends Fragment implements ImageAdapter.OnNe
 
         for(Tag tag: allTags){
             for(String tagUID: tagsID){
-                if(tag.getUid() == tagUID)
+                if(tag.getUid().equals(tagUID)){
                     receiptTags.add(tag.getName());
+                    addChipToGroup(tag.getName(), tagsChipGroup);
+                }
             }
         }
     }
@@ -196,10 +207,6 @@ public class ReceiptDetailFragment extends Fragment implements ImageAdapter.OnNe
         for(Tag tag: Utils.user.getTags()){
             tagsToAutoComplite.add(tag.getName());
         }
-
-        tagsToAutoComplite.add("hejfds");
-        tagsToAutoComplite.add("hejfsd2");
-        tagsToAutoComplite.add("hejfds3");
 
         resetAdapter();
         autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -268,28 +275,41 @@ public class ReceiptDetailFragment extends Fragment implements ImageAdapter.OnNe
         autoCompleteTextView.setAdapter(adapterAutoCompliteTagsList);
     }
 
+    public void resetImageAdapter(){
+        imagesAdapter.notifyDataSetChanged();
+
+        imagesAdapter = new ImageAdapter(getActivity(), (ArrayList< Bitmap>)receipt.somethingDifferentImagesAsBitmap());
+        viewpager.setAdapter(imagesAdapter);
+
+        imagesAdapter.registerDataSetObserver(indicator.getDataSetObserver());
+        imagesAdapter.notifyDataSetChanged();
+    }
+
+
     private void createBasicChips() {
 //      Data na paragonie
-        CalendarChipContainer rccc = new CalendarChipContainer(context);
-        if(!receipt.getDateOfCreation().isEmpty())
-            rccc.setDate(Utils.formatStringToDate(receipt.getDateOfCreation()));
-        tagsChipGroup.addView(rccc.getCalendarChip());
+        calendarChipConteiner = new CalendarChipContainer(context);
+        if(!receipt.getDateOfCreation().isEmpty()){
+            calendarChipConteiner.setDate(Utils.formatStringToDate(receipt.getDateOfCreation()));
+            calendarChipConteiner.getCalendarChip().setText(receipt.getDateOfCreation());
+        }
+        tagsChipGroup.addView(calendarChipConteiner.getCalendarChip());
 
 //        Gwarancja
-        WarrantyChipContainer wcc = new WarrantyChipContainer(context);
-        tagsChipGroup.addView(wcc.getWarrantyChip());
+      warrantyChipConteiner = new WarrantyChipContainer(context);
+        tagsChipGroup.addView(warrantyChipConteiner.getWarrantyChip());
 
 //        Cena na apragonie
-        PriceChipContainer pcc = new PriceChipContainer(context);
-        tagsChipGroup.addView(pcc.getPriceChip());
+        priceChipConteiner = new PriceChipContainer(context);
+        tagsChipGroup.addView(priceChipConteiner.getPriceChip());
 
         if(receipt.getSumTotal() != 0f) {
-            pcc.setPriceOnChip(receipt.getSumTotal());
+            priceChipConteiner.setPriceOnChip(receipt.getSumTotal());
         }
 
 //        Grupa i wybieranie grupy
-        GroupChossingContainer gcc = new GroupChossingContainer(context);
-        tagsChipGroup.addView(gcc.getGroupChip());
+        groupChossingContainerChip = new GroupChossingContainer(context);
+        tagsChipGroup.addView(groupChossingContainerChip.getGroupChip());
 
 
     }
@@ -319,21 +339,38 @@ public class ReceiptDetailFragment extends Fragment implements ImageAdapter.OnNe
     public void onNewPhotoCallback(int position_off_receipt) {
 //        zapisac stan wszysktich paragonów
 //        nakladamy kolejny fragment, zapisac pozycje paragon z listy
+//        mamy aktywnosc i jestes we fragmencie i mozemy wrzucić na wierzch fragment ktory cofając się wrzuci nas do aktywnosci, a w aktywnosic sa paragony, wiec trzeba powiedziae
+//        ktory paragon jest akutalnie robione
+        ReceiptAddingActivity a = ((ReceiptAddingActivity) getActivity());
+        a.setCurrentReceiptPhotoTakingPosition(position);
+        a.getNavController().navigate(R.id.navigation_camera_preview);
 
     }
 
     public boolean validateFragment() {
         String receiptName = receiptNameTextInput.getText().toString();
+        boolean pass = true;
 
         if( !Validator.validateReceiptName(receiptName))
         {
             String massege = Validator.getMassage();
             receiptNameTextInputLayout.setError(massege);
-            return false;
+            pass = false;
         }
 
-        return true;
+        if(!Validator.validateGroupChoosingChip(groupChossingContainerChip))
+        {
+            groupChossingContainerChip.setError();
+            pass = false;
+        }
+
+        return pass;
     }
+
+//    groupChossingContainerChip;
+//    private CalendarChipContainer calendarChipConteiner;
+//    private WarrantyChipContainer warrantyChipConteiner;
+//    private PriceChipContainer priceChipConteiner;
 
     public void prepareReceipt() {
 //        1. dodaj datę do apragonu
@@ -341,5 +378,30 @@ public class ReceiptDetailFragment extends Fragment implements ImageAdapter.OnNe
 //        3. ustal datę gwarancji paragonu
 //        4. ustal grupę
 //        5. włóż wszystkie znaczniki
+        String receiptName = receiptNameTextInput.getText().toString();
+        String dateOfCreation = Utils.formatDateToString(calendarChipConteiner.getDate());
+
+        String dateWarantyDateEnd = "";
+        if(warrantyChipConteiner.getDate_of_end() != null)
+            if(warrantyChipConteiner.isInfiniteWarranty())
+                receipt.setInfiniteWarranty(true);
+            else
+                dateWarantyDateEnd = Utils.formatDateToString(warrantyChipConteiner.getDate_of_end());
+
+        String groupUID = groupChossingContainerChip.getGroup().getGroupID();
+        float total = (float) priceChipConteiner.getPrice();
+
+        receipt.setDateOfCreation(dateOfCreation);
+        receipt.setName(receiptName);
+        receipt.setDateOfEndOfWarrant(dateWarantyDateEnd);
+        receipt.setGroupID(groupUID);
+        receipt.setSumTotal(total);
+
+        for(String tag: receiptTags){
+            receipt.addTag(tag);
+        }
+
+        Log.i("dsa", "dsa");
     }
+
 }

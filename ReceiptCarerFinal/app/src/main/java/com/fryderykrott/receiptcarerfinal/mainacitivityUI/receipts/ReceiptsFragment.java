@@ -15,10 +15,14 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.fryderykrott.receiptcarerfinal.MainActivity;
 import com.fryderykrott.receiptcarerfinal.R;
 import com.fryderykrott.receiptcarerfinal.ReceiptAddingActivity;
+import com.fryderykrott.receiptcarerfinal.adapters.GroupsAdapter;
+import com.fryderykrott.receiptcarerfinal.adapters.ReceiptsAdapter;
 import com.fryderykrott.receiptcarerfinal.utils.Utils;
 import com.fryderykrott.receiptcarerfinal.model.Group;
 import com.fryderykrott.receiptcarerfinal.model.User;
@@ -35,6 +39,7 @@ public class ReceiptsFragment extends Fragment {
 
     private FirebaseAuth mAuth;
     CardView add_new_receipt;
+    ReceiptsAdapter receiptAdapter;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -68,7 +73,7 @@ public class ReceiptsFragment extends Fragment {
 
             }
         });
-
+        setRecycleViewAndAdapter();
         checkCameraPermissions();
     }
 
@@ -115,17 +120,18 @@ public class ReceiptsFragment extends Fragment {
                         Database.getInstance().saveUser(user.getUid(), new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
-                                Group group = new Group();
-                                group.setName("Ogólne");
-                                group.setColor(-1);
+//                                                             Group group = new Group();
+//                                group.setName("Ogólne");
+//                                group.setColor(-1);
 
-                                Database.getInstance().saveGroupOfCurrentUser(group, new OnCompleteListener<Void>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Void> task) {
-
-
-                                    }
-                                });
+//                                Database.getInstance().saveGroupOfCurrentUser(group, new OnCompleteListener<Void>() {
+//                                    @Override
+//                                    public void onComplete(@NonNull Task<Void> task) {
+//
+//
+//                                    }
+//                                });
+                                setRecycleViewAndAdapter();
                                 ((MainActivity) getActivity()).setProgressView(false);
                             }
                         });
@@ -133,6 +139,7 @@ public class ReceiptsFragment extends Fragment {
                     else {
                         Utils.user = usersButOneUser.get(0);
                         ((MainActivity) getActivity()).setProgressView(false);
+                        setRecycleViewAndAdapter();
                     }
 
 
@@ -142,5 +149,18 @@ public class ReceiptsFragment extends Fragment {
 
     }
 
+    private void setRecycleViewAndAdapter(){
+        receiptAdapter = new ReceiptsAdapter(getView().getContext());
+        RecyclerView recyclerView = getView().findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
 
+        recyclerView.setAdapter(receiptAdapter);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(receiptAdapter != null)
+            setRecycleViewAndAdapter();
+    }
 }

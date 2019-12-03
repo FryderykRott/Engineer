@@ -129,4 +129,5 @@ public class MainActivity extends AppCompatActivity implements NavController.OnD
             findViewById(R.id.progressView).setVisibility(View.GONE);
         }
     }
+
 }

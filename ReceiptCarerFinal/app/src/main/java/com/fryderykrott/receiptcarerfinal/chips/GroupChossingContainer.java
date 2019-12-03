@@ -3,6 +3,8 @@ package com.fryderykrott.receiptcarerfinal.chips;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +14,10 @@ import com.fryderykrott.receiptcarerfinal.R;
 import com.fryderykrott.receiptcarerfinal.adapters.MiniGroupAdapter;
 import com.fryderykrott.receiptcarerfinal.alertdialogs.GroupChossingAlertDialog;
 import com.fryderykrott.receiptcarerfinal.model.Group;
+import com.fryderykrott.receiptcarerfinal.utils.Utils;
 import com.google.android.material.chip.Chip;
+
+import io.grpc.okhttp.internal.Util;
 
 public class GroupChossingContainer implements View.OnClickListener, GroupChossingAlertDialog.OnAlertDialogOnGroupChossing {
 
@@ -23,6 +28,9 @@ public class GroupChossingContainer implements View.OnClickListener, GroupChossi
     private Chip group_chossing_chip;
     private Activity parent_activity;
     String basic_text;
+    ColorStateList strokeError;
+    ColorStateList strokeBasic;
+
 
     public GroupChossingContainer(final Activity parent_activity) {
         this.parent_activity = parent_activity;
@@ -35,7 +43,7 @@ public class GroupChossingContainer implements View.OnClickListener, GroupChossi
         if(group_chossing_chip.getParent() != null) {
             ((ViewGroup) group_chossing_chip.getParent()).removeView(group_chossing_chip); // <- fix
         }
-        basic_text = group_chossing_chip.getText().toString();
+        basic_text = Utils.BASIC_GROUP_NAME;
 
         group_chossing_chip.setOnClickListener(this);
         group_chossing_chip.setOnCloseIconClickListener(new View.OnClickListener() {
@@ -43,10 +51,29 @@ public class GroupChossingContainer implements View.OnClickListener, GroupChossi
             public void onClick(View v) {
                 isGroupSet = false;
                 group_chossing_chip.setCloseIconVisible(false);
+
                 resetText();
             }
         });
         resetChip();
+
+        int[][] states = new int[][] {
+                new int[] { android.R.attr.state_enabled}, // enabled
+                new int[] {-android.R.attr.state_enabled}, // disabled
+                new int[] {-android.R.attr.state_checked}, // unchecked
+                new int[] { android.R.attr.state_pressed}  // pressed
+        };
+
+        int[] colors = new int[] {
+                parent_activity.getColor(R.color.red),
+                parent_activity.getColor(R.color.red),
+                parent_activity.getColor(R.color.red),
+                parent_activity.getColor(R.color.red)
+        };
+
+        strokeError = new ColorStateList(states, colors);
+        strokeBasic = group_chossing_chip.getChipStrokeColor();
+
     }
 
 
@@ -76,15 +103,21 @@ public class GroupChossingContainer implements View.OnClickListener, GroupChossi
 
     public void resetChip(){
         isGroupSet = false;
-        group = null;
+
+        group = Utils.findGroupByString(Utils.BASIC_GROUP_NAME );
         resetText();
     }
 
 
     @Override
     public void onGroupChossingCallback(Group group) {
-        if(group == null)
+        if(group == null){
+            resetStroke();
             return;
+        }
+        if(this.group == group)
+            return;
+
         this.group = group;
 
         group_chossing_chip.setText(group.getName());
@@ -92,6 +125,7 @@ public class GroupChossingContainer implements View.OnClickListener, GroupChossi
         setColorOfGroup(group);
         group_chossing_chip.setCloseIconVisible(true);
         isGroupSet = true;
+        resetStroke();
     }
 
     private void setColorOfGroup(Group group) {
@@ -121,6 +155,16 @@ public class GroupChossingContainer implements View.OnClickListener, GroupChossi
                 break;
         }
 
+    }
+
+
+
+    public void setError(){
+        group_chossing_chip.setChipStrokeColor(strokeError);
+    }
+
+    public void resetStroke(){
+        group_chossing_chip.setChipStrokeColor(strokeBasic);
     }
 }
 

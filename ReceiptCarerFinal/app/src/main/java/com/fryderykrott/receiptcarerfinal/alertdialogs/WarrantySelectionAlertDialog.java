@@ -64,9 +64,10 @@ public class WarrantySelectionAlertDialog extends Dialog implements View.OnClick
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.button_ok:
-//                TODO setting date of warranty from seekbar
-                int days = Utils.convertWarrantyBarToDays(warrantySeekBar.getProgress());
+
+                int days = Utils.convertWarrantyBarToDays(warrantySeekBar.getProgress()) + 1;
                 dateOfWarrantyEnding = Utils.convertDaysToDate(days);
+
                 ls.onAlertDialogWarrantyCallback(dateOfWarrantyEnding);
                 break;
             case R.id.button_cancel:

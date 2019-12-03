@@ -8,15 +8,17 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.PagerAdapter;
 
 import com.fryderykrott.receiptcarerfinal.R;
 import com.fryderykrott.receiptcarerfinal.ReceiptAddingActivity;
 import com.fryderykrott.receiptcarerfinal.alertdialogs.AlertDialogFullScreenImageDisplayer;
+import com.fryderykrott.receiptcarerfinal.receiptaddingUI.camerapreview.receiptdetail.ReceiptDetailFragment;
 
 import java.util.ArrayList;
 
-public class ImageAdapter extends PagerAdapter {
+public class ImageAdapter extends PagerAdapter implements AlertDialogFullScreenImageDisplayer.OnImagePreviewCallbackListener {
     private int receipt_position;
     private Activity context;
     ArrayList<Bitmap> images;
@@ -24,6 +26,7 @@ public class ImageAdapter extends PagerAdapter {
     private boolean isClickable;
 
     OnNewPhotoCallbackListener listener;
+    Fragment fragment;
 
     public ImageAdapter(Activity context,  ArrayList<Bitmap> images) {
         this.context = context;
@@ -31,13 +34,23 @@ public class ImageAdapter extends PagerAdapter {
         this.isClickable = false;
     }
 
-    public ImageAdapter(Activity context,  ArrayList<Bitmap> images, int receipt_position, OnNewPhotoCallbackListener listener) {
+    public ImageAdapter(Activity context, ArrayList<Bitmap> images, int receipt_position, OnNewPhotoCallbackListener listener) {
         this.context = context;
         this.images = images;
         this.isClickable = true;
         this.receipt_position = receipt_position;
         this.listener = listener;
 
+//        resizeImages();
+    }
+
+    public ImageAdapter(Activity context, ArrayList<Bitmap> images, int receipt_position, OnNewPhotoCallbackListener listener, Fragment fragment) {
+        this.context = context;
+        this.images = images;
+        this.isClickable = true;
+        this.receipt_position = receipt_position;
+        this.listener = listener;
+        this.fragment = fragment;
 //        resizeImages();
     }
 
@@ -58,8 +71,8 @@ public class ImageAdapter extends PagerAdapter {
     @Override
     public Object instantiateItem(ViewGroup container, final int position) {
         View view = LayoutInflater.from(context).inflate(R.layout.image_pager_item, container, false);
-
         ImageView imageView = view.findViewById(R.id.image);
+        final ImageAdapter adapter = this;
         if(isClickable){
             if(position == images.size() ) {
                 imageView.setOnClickListener(new View.OnClickListener() {
@@ -74,7 +87,7 @@ public class ImageAdapter extends PagerAdapter {
                 imageView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        AlertDialogFullScreenImageDisplayer ad = new AlertDialogFullScreenImageDisplayer(context, (ReceiptAddingActivity) context, images, position);
+                        AlertDialogFullScreenImageDisplayer ad = new AlertDialogFullScreenImageDisplayer(context, adapter, images, position);
                         ad.show();
 
                     }
@@ -108,10 +121,7 @@ public class ImageAdapter extends PagerAdapter {
     This callback is responsible for destroying a page. Since we are using view only as the
     object key we just directly remove the view from parent container
     */
-    @Override
-    public void destroyItem(ViewGroup container, int position, Object view) {
-        container.removeView((View) view);
-    }
+
     /*
     Returns the count of the total pages
     */
@@ -134,6 +144,19 @@ public class ImageAdapter extends PagerAdapter {
 
     private Bitmap getImageAt(int position) {
         return images.get(position);
+    }
+
+
+    @Override
+    public void destroyItem(ViewGroup container, int position, Object object) {
+        container.removeView(container.getChildAt(position));
+    }
+
+    @Override
+    public void imagePreviewCallback(int info) {
+        notifyDataSetChanged();
+        if(fragment != null)
+            ((ReceiptDetailFragment)fragment).resetImageAdapter();
     }
 
     public interface OnNewPhotoCallbackListener {

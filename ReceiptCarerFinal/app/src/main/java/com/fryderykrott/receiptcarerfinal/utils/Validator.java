@@ -1,5 +1,6 @@
 package com.fryderykrott.receiptcarerfinal.utils;
 
+import com.fryderykrott.receiptcarerfinal.chips.GroupChossingContainer;
 import com.fryderykrott.receiptcarerfinal.model.Group;
 
 import java.util.ArrayList;
@@ -123,4 +124,7 @@ public class Validator {
     }
 
 
+    public static boolean validateGroupChoosingChip(GroupChossingContainer groupChossingContainerChip) {
+        return groupChossingContainerChip.getGroup() != null;
+    }
 }

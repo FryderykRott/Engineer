@@ -132,6 +132,7 @@ public class CameraPreviewFragment extends Fragment implements View.OnClickListe
         closeImagePreview = view.findViewById(R.id.fab_close_image_preview);
         closeImagePreview.setOnClickListener(this);
         closeImagePreview.hide();
+
         cardViewPreviewOfImages = view.findViewById(R.id.card_view_image);
 //        cardViewPreviewOfImages.setOnClickListener(this);
 
@@ -309,7 +310,10 @@ public class CameraPreviewFragment extends Fragment implements View.OnClickListe
                 commitStateChanges();
                 break;
             case (R.id.fab_send_next):
-                mListener.onFragmentCallback(bitmaps);
+                ArrayList<Bitmap> copy_bitmaps = new ArrayList<>(bitmaps);
+                mListener.onPhotoTakeingCallback(copy_bitmaps);
+                bitmaps.clear();
+                number_of_images = 0;
                 break;
             case (R.id.fab_close_image_preview):
                 number_of_images--;
@@ -336,7 +340,7 @@ public class CameraPreviewFragment extends Fragment implements View.OnClickListe
                 break;
             case (R.id.image_preview):
                 mCamera.stopPreview();
-                AlertDialogFullScreenImageDisplayer ad = new AlertDialogFullScreenImageDisplayer(getActivity(), this, bitmaps, 0);
+                AlertDialogFullScreenImageDisplayer ad = new AlertDialogFullScreenImageDisplayer(getActivity(), this, bitmaps, 0, false);
                 ad.show();
 
                 break;
@@ -363,16 +367,20 @@ public class CameraPreviewFragment extends Fragment implements View.OnClickListe
 
     private void exitButtonClicked() {
         if (mListener != null) {
-            mListener.onFragmentCallback(null);
+            mListener.onPhotoTakeingCallback(null);
+            bitmaps.clear();
+            number_of_images = 0;
         }
     }
 
     @Override
     public void imagePreviewCallback(int info) {
-        mCamera.startPreview();
+//        mCamera.startPreview();
+        commitStateChanges();
     }
 
     public interface OnPhotoTakingListener {
-        void onFragmentCallback(ArrayList<Bitmap> bitmaps);
+        void onPhotoTakeingCallback(ArrayList<Bitmap> bitmaps);
     }
+
 }
