@@ -55,7 +55,22 @@
         app:iconStartPadding="4dp"
         />
 
+    <com.google.android.material.chip.Chip
+        android:id="@+id/mini_group_chip"
+        style="@style/MaterialComponents_Chip_Thin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Wybierz grupę"
+        app:chipStrokeWidth="1dp"
+        app:chipStrokeColor="#BBBBBB"
+        android:textColor="@color/colorBlack"
+        app:chipBackgroundColor="@color/alpha_30_black"
+        app:chipIcon="@drawable/ic_receipt"
+        app:chipIconTint="@color/colorBlack"
+        app:chipIconSize="20dp"
+        app:iconStartPadding="4dp"
 
+        />
     <com.google.android.material.chip.Chip
         android:id="@+id/basic_chip"
         android:layout_width="wrap_content"

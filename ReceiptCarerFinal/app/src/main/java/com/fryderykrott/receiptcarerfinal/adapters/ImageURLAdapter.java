@@ -13,7 +13,6 @@ import androidx.viewpager.widget.PagerAdapter;
 
 import com.fryderykrott.receiptcarerfinal.MainActivity;
 import com.fryderykrott.receiptcarerfinal.R;
-import com.fryderykrott.receiptcarerfinal.ReceiptAddingActivity;
 import com.fryderykrott.receiptcarerfinal.alertdialogs.AlertDialogFullScreenImageDisplayer;
 import com.fryderykrott.receiptcarerfinal.model.Receipt;
 import com.fryderykrott.receiptcarerfinal.receiptaddingUI.camerapreview.receiptdetail.ReceiptDetailFragment;
@@ -21,67 +20,29 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-public class ImageAdapter extends PagerAdapter implements AlertDialogFullScreenImageDisplayer.OnImagePreviewCallbackListener {
-    private int receipt_position;
+public class ImageURLAdapter extends PagerAdapter implements AlertDialogFullScreenImageDisplayer.OnImagePreviewCallbackListener {
     private Activity context;
-    ArrayList<Bitmap> images;
+    ArrayList<String> images;
     Receipt receipt;
     private boolean isClickable;
 
-    OnNewPhotoCallbackListener listener;
+    ImageAdapter.OnNewPhotoCallbackListener listener;
     Fragment fragment;
 
-    public ImageAdapter(Activity context, Receipt receipt) {
+    public ImageURLAdapter(Activity context, Receipt receipt) {
+        this.receipt = receipt;
         this.context = context;
-        this.images = receipt.somethingDifferentImagesAsBitmap();
+        this.images = receipt.getImages_as_base64();
         this.isClickable = false;
     }
 
-    public ImageAdapter(Activity context, Receipt receipt, int receipt_position, OnNewPhotoCallbackListener listener) {
+    public ImageURLAdapter(Activity context, Receipt receipt, ImageAdapter.OnNewPhotoCallbackListener listener, Fragment fragment) {
         this.receipt = receipt;
         this.context = context;
-        this.images = receipt.somethingDifferentImagesAsBitmap();
+        this.images = receipt.getImages_as_base64();
         this.isClickable = true;
-        this.receipt_position = receipt_position;
-        this.listener = listener;
-
-//        resizeImages();
-    }
-
-    public ImageAdapter(Activity context, Receipt receipt, int receipt_position, OnNewPhotoCallbackListener listener, Fragment fragment) {
-        this.receipt = receipt;
-        this.context = context;
-        this.images = receipt.somethingDifferentImagesAsBitmap();
-        this.isClickable = true;
-        this.receipt_position = receipt_position;
         this.listener = listener;
         this.fragment = fragment;
-//        resizeImages();
-    }
-
-    public ImageAdapter(MainActivity context, Receipt receipt) {
-        this.receipt = receipt;
-        this.context = context;
-        this.images = receipt.somethingDifferentImagesAsBitmap();
-        this.receipt_position = 0;
-    }
-
-    public ImageAdapter(Activity context, ArrayList<Bitmap> bitmaps) {
-        this.context = context;
-        this.images = bitmaps;
-        this.receipt_position = 0;
-    }
-
-
-    private void resizeImages() {
-        Bitmap bitmap;
-        Bitmap new_bitmap;
-        for (int i = 0; i < images.size(); i++){
-            bitmap = images.get(i);
-            new_bitmap = Bitmap.createScaledBitmap(
-                    bitmap, bitmap.getWidth() / 2 , bitmap.getHeight() /2, false);
-            images.set(i, new_bitmap);
-        }
     }
 
     TextView information;
@@ -91,14 +52,13 @@ public class ImageAdapter extends PagerAdapter implements AlertDialogFullScreenI
     public Object instantiateItem(ViewGroup container, final int position) {
         View view = LayoutInflater.from(context).inflate(R.layout.image_pager_item, container, false);
         ImageView imageView = view.findViewById(R.id.image);
-        final ImageAdapter adapter = this;
+        final ImageURLAdapter adapter = this;
         if(isClickable){
             if(position == images.size() ) {
                 imageView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-//                     Możliwość dodania kolejnego zdjęcia lub paru
-                        listener.onNewPhotoCallback(receipt_position);
+                        listener.onNewPhotoCallback(position);
                     }
                 });
             }
@@ -106,7 +66,8 @@ public class ImageAdapter extends PagerAdapter implements AlertDialogFullScreenI
                 imageView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        AlertDialogFullScreenImageDisplayer ad = new AlertDialogFullScreenImageDisplayer(context, adapter, receipt, position);
+//                        FragmentActivity a, OnImagePreviewCallbackListener listener,Receipt receipt, int position, boolean isDeletable) {
+                        AlertDialogFullScreenImageDisplayer ad = new AlertDialogFullScreenImageDisplayer(context, adapter, receipt, position, false);
                         ad.show();
 
                     }
@@ -123,14 +84,11 @@ public class ImageAdapter extends PagerAdapter implements AlertDialogFullScreenI
         }
         else{
             setVisibilityOfInformationPanel(View.INVISIBLE);
-            if(receipt != null && !receipt.getImages_as_base64().isEmpty()){
-                Picasso.get()
-                        .load(receipt.getImages_as_base64().get(position))
-                        .centerCrop()
-                        .into(imageView);
-            }
-            else
-                imageView.setImageBitmap(getImageAt(position));
+
+            Picasso.get()
+                    .load(receipt.getImages_as_base64().get(position))
+                    .into(imageView);
+
         }
 
 //        imageView.setImageDrawable(context.getDrawable(getImageAt(position)));
@@ -145,27 +103,16 @@ public class ImageAdapter extends PagerAdapter implements AlertDialogFullScreenI
 
     @Override
     public int getCount() {
-
-        if (isClickable) {
-            if (receipt != null && !receipt.getImages_as_base64().isEmpty())
-                return receipt.getImages_as_base64().size() + 1;
+        if(isClickable)
             return images.size() + 1;
-        } else {
-            if (receipt != null && !receipt.getImages_as_base64().isEmpty())
-                return receipt.getImages_as_base64().size();
-            return images.size();
-        }
+
+        return images.size();
     }
 
     @Override
     public boolean isViewFromObject(View view, Object object) {
         return object == view;
     }
-
-    private Bitmap getImageAt(int position) {
-        return images.get(position);
-    }
-
 
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {

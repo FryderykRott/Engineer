@@ -1,5 +1,6 @@
 package com.fryderykrott.receiptcarerfinal.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
@@ -10,6 +11,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.NavigationUI;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.fryderykrott.receiptcarerfinal.MainActivity;
@@ -23,30 +27,35 @@ import com.fryderykrott.receiptcarerfinal.services.Database;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.chip.ChipGroup;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import io.grpc.okhttp.internal.Util;
 
-public class ReceiptsAdapter  extends RecyclerView.Adapter<ReceiptsAdapter.ReceiptViewHolder> {
+public class ReceiptsAdapter extends RecyclerView.Adapter<ReceiptsAdapter.ReceiptViewHolder> {
 
     ArrayList<Receipt> receipts;
-    Context context;
+    MainActivity context;
+    NavController navControler;
 
-    public ReceiptsAdapter(Context context){
+    public ReceiptsAdapter(MainActivity context, NavController navControler){
+
         this.context = context;
-//        ArrayList<Group> groups = Utils.user.getGroups();
-//
-//        ArrayList<Receipt> receiptsGroup;
         if(Utils.user == null)
             receipts = new ArrayList<>();
         else
             receipts = Utils.user.getReceipts();
-//
-//        for(int i = 0; i < groups.size(); i++){
-//            receiptsGroup = groups.get(i).getReceipts();
-//               receipts.addAll(receiptsGroup);
-//        }
+
+        this.navControler = navControler;
+    }
+
+    public ReceiptsAdapter(MainActivity activity, NavController navController, ArrayList<Receipt> filtredReceipts) {
+        this.context = activity;
+
+        receipts = filtredReceipts;
+        this.navControler = navController;
     }
 
 
@@ -64,7 +73,7 @@ public class ReceiptsAdapter  extends RecyclerView.Adapter<ReceiptsAdapter.Recei
         final Receipt receipt = receipts.get(position);
 
 //        holder.group_image_background.getBackground().setColorFilter(group.getIcon_color(), PorterDuff.Mode.SRC_ATOP);
-        setColorOfGroup(holder, Utils.findGroupById(receipt.getGroupID()));
+        holder.tagsChipGroup.removeAllViews();
 
         holder.receipt_name.setText(receipt.getName());
         holder.receipt_date_of_creation.setText(receipt.getDateOfCreation());
@@ -73,44 +82,77 @@ public class ReceiptsAdapter  extends RecyclerView.Adapter<ReceiptsAdapter.Recei
         holder.receipt_delete_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Utils.findGroupById(receipt.getGroupID()).getReceipts().remove(receipt);
-//
-//                reloadGroupsInDatabase();
-//                ((MainActivity) context).showSnackBar("Pomyślnię usunięto paragon!");
+
+                Utils.user.getReceipts().remove(receipt);
+                Database.getInstance().reloadGroupsOfCurrentUser(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        context.showSnackBar("Pomyślnie usunięto paragon");
+                    }
+                });
+                notifyDataSetChanged();
             }
         });
 
         holder.receipt_container.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                GroupAddingAlertDialog.OnGroupEditionCallBackListener l_edition = new GroupAddingAlertDialog.OnGroupEditionCallBackListener() {
-//                    @Override
-//                    public void onGroupEditionCallBackListener(Dialog dialog, Group group) {
-//                        reloadGroupsInDatabase();
-//                    }
-//                };
-//
-//                GroupAddingAlertDialog ad = new GroupAddingAlertDialog(context, null, l_edition);
-//                ad.setToEditGroup(receipt);
-//                ad.show();
 
+                context.setReceiptToEdit(receipt);
+                navControler.navigate(R.id.navigation_editing_receipt);
             }
         });
+        setWarrantyDate(holder, receipt);
 
-        holder.receipt_warranty_date.setText(receipt.getDateOfEndOfWarrant());
+//        dodaj chip grupy
+        Group group = Utils.findGroupById(receipt.getGroupID());
+        MiniBasicChipContainer miniGroupChipContainer = new MiniBasicChipContainer(context, group);
+        holder.tagsChipGroup.addView(miniGroupChipContainer.getMiniChip());
 
+//        dodaj chipy tagów
         ArrayList<String> tagsID = receipt.getTagsID();
         Tag tag;
         MiniBasicChipContainer miniBasicChipContainer;
 
         for(int i = 0; i < tagsID.size(); i++){
             tag = Utils.findTagById(tagsID.get(i));
-            miniBasicChipContainer = new MiniBasicChipContainer(context, tag.getName());
+            miniBasicChipContainer = new MiniBasicChipContainer(context, "#" + tag.getName());
             holder.tagsChipGroup.addView(miniBasicChipContainer.getMiniChip());
         }
 
-        Bitmap thumbnailBitmap = receipt.somethingDifferentImagesAsBitmap().get(0);
-        holder.receipt_thumbnail.setImageBitmap(thumbnailBitmap);
+//        Bitmap thumbnailBitmap = receipt.somethingDifferentImagesAsBitmap().get(0);
+//        holder.receipt_thumbnail.setImageBitmap(thumbnailBitmap);
+
+        if(!receipt.getImages_as_base64().isEmpty()){
+            Picasso.get()
+                    .load(receipt.getImages_as_base64().get(0))
+                    .resize(400, 400)
+                    .centerCrop()
+                    .into(holder.receipt_thumbnail);
+        }
+
+    }
+
+    private void setWarrantyDate(ReceiptViewHolder holder, Receipt receipt) {
+        Date dateOfWarrantyEnd = Utils.formatStringToDate(receipt.getDateOfEndOfWarrant());
+        if(dateOfWarrantyEnd == null){
+            holder.receipt_warranty_date.setText("Brak gwarancji");
+            return;
+        }
+        int daysToWarrantyEnd = Utils.convertDateToDays(dateOfWarrantyEnd);
+
+        if(daysToWarrantyEnd >= 4000)
+            holder.receipt_warranty_date.setText("Nieograniczona");
+        else
+            holder.receipt_warranty_date.setText(daysToWarrantyEnd + " dni pozostało");
+
+        if(daysToWarrantyEnd <= 7)
+        {
+            holder.receipt_warranty_date.setTextColor(context.getColor(R.color.red));
+        }
+        else
+            holder.receipt_warranty_date.setTextColor(context.getColor(R.color.green));
+
     }
 
     private void reloadGroupsInDatabase() {
@@ -125,35 +167,6 @@ public class ReceiptsAdapter  extends RecyclerView.Adapter<ReceiptsAdapter.Recei
         });
     }
 
-    private void setColorOfGroup(ReceiptViewHolder holder, Group group) {
-        Drawable icon = holder.receipt_group_icon.getDrawable();
-        switch (group.getColor()){
-            case(1):
-                icon.setTint(context.getResources().getColor(R.color.folder_icon_color_1));
-                break;
-            case (2):
-                icon.setTint(context.getResources().getColor(R.color.folder_icon_color_2));
-                break;
-            case (3):
-                icon.setTint(context.getResources().getColor(R.color.folder_icon_color_3));
-                break;
-            case (4):
-                icon.setTint(context.getResources().getColor(R.color.folder_icon_color_4));
-                break;
-            case (5):
-                icon.setTint(context.getResources().getColor(R.color.folder_icon_color_5));
-                break;
-            case (6):
-                icon.setTint(context.getResources().getColor(R.color.folder_icon_color_6));
-                break;
-            default:
-                icon.setTint(context.getResources().getColor(R.color.folder_icon_color_basic));
-                break;
-        }
-
-
-    }
-
     @Override
     public int getItemCount() {
         return receipts.size();
@@ -166,7 +179,6 @@ public class ReceiptsAdapter  extends RecyclerView.Adapter<ReceiptsAdapter.Recei
         View receipt_container;
 
         ImageView receipt_thumbnail;
-        ImageView receipt_group_icon;
         ImageView receipt_delete_button;
 
         TextView receipt_name;
@@ -182,7 +194,6 @@ public class ReceiptsAdapter  extends RecyclerView.Adapter<ReceiptsAdapter.Recei
 
             receipt_container = itemView.findViewById(R.id.card_group_container);
             receipt_thumbnail = itemView.findViewById(R.id.card_receipt_thumbnail);
-            receipt_group_icon = itemView.findViewById(R.id.card_receipt_group_icon);
             receipt_delete_button = itemView.findViewById(R.id.card_receipt_delete);
 
             receipt_name = itemView.findViewById(R.id.card_receipt_name);

@@ -1,5 +1,8 @@
 package com.fryderykrott.receiptcarerfinal.services;
 
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.storage.StorageManager;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -18,11 +21,17 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.WriteBatch;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class Database{
     FirebaseFirestore db = FirebaseFirestore.getInstance();
+    FirebaseStorage store = FirebaseStorage.getInstance();
 
     private static final  Database ourInstance = new  Database();
 
@@ -54,7 +63,7 @@ public class Database{
 
     public void updateUser(final OnCompleteListener<Void>  listener) {
         final String userDocRef = Utils.user.getDocRefUser();
-        updateAllArrays(userDocRef, listener);
+        updateAllArrays(listener);
 //        db.document(Utils.user.getDocRefUser()).set(Utils.user).addOnCompleteListener(listener);
     }
 
@@ -68,10 +77,57 @@ public class Database{
 
     public void reloadGroupsOfCurrentUser(OnCompleteListener<Void> voidOnCompleteListener) {
         String userDocRef = Utils.user.getDocRefUser();
-        updateAllArrays(userDocRef, voidOnCompleteListener);
+        updateAllArrays(voidOnCompleteListener);
     }
 
-    private void updateAllArrays(final String userDocRef, final OnCompleteListener<Void> listener){
+    public void uploadAndUpgradeReceipts(final ArrayList<Receipt> receipts, final OnCompleteListener<Void> listener){
+        final String userDocRef = Utils.user.getDocRefUser();
+
+        ArrayList<Bitmap> bitmaps;
+        ByteArrayOutputStream baos;
+        byte[] data;
+        String path;
+        StorageReference receiptImageRef;
+
+        for (int i = 0; i < receipts.size(); i++) {
+            final Receipt receipt = receipts.get(i);
+            bitmaps = receipt.somethingDifferentImagesAsBitmap();
+            for (Bitmap bitmap : bitmaps) {
+                baos = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+                data = baos.toByteArray();
+
+                path = "receiptimages/" + UUID.randomUUID() + ".png";
+                receiptImageRef = store.getReference(path);
+
+                UploadTask uploadTask = receiptImageRef.putBytes(data);
+                final String finalPath = path;
+
+                final int finalI = i;
+                uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        Task<Uri> uri = taskSnapshot.getStorage().getDownloadUrl();
+                        while(!uri.isComplete());
+                        Uri url = uri.getResult();
+                        receipt.getImages_as_base64().add(url.toString());
+
+                        if (finalI == receipts.size() - 1) {
+                            updateAllArrays(listener);
+                        }
+
+                    }});
+
+
+
+            }
+        }
+    }
+
+
+    public void updateAllArrays(final OnCompleteListener<Void> listener){
+
+        final String userDocRef = Utils.user.getDocRefUser();
         final ArrayList<Group> groups = Utils.user.getGroups();
         final ArrayList<Tag> tags = Utils.user.getTags();
         final ArrayList<Receipt> receipts = Utils.user.getReceipts();
@@ -102,38 +158,6 @@ public class Database{
             }
         });
 
-        
-//        db.document(userDocRef).update("groups", groups).addOnCompleteListener(listener);
-//        db.document(userDocRef).set(receipts);
-//        db.document(userDocRef).update("tags", tags);
-//        db.document(userDocRef).set(receiptImages).addOnCompleteListener(listener);
-//        Utils.user.loadBitmapImages();
     }
 
-//
-//    private void updateAllArrays(final String userDocRef, final OnCompleteListener<Void> listener){
-//        final ArrayList<Group> groups = Utils.user.getGroups();
-//        final ArrayList<Tag> tags = Utils.user.getTags();
-//        final ArrayList<Receipt> receipts = Utils.user.getReceipts();
-//        final ArrayList<ReceiptImage> receiptImages = Utils.user.getReceiptImages();
-//
-//        db.document(userDocRef).update("groups", groups).addOnCompleteListener(new OnCompleteListener<Void>() {
-//            @Override
-//            public void onComplete(@NonNull Task<Void> task) {
-//                db.document(userDocRef).set(tags).addOnCompleteListener(new OnCompleteListener<Void>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<Void> task) {
-//                        db.document(userDocRef).set(receipts).addOnCompleteListener(new OnCompleteListener<Void>() {
-//                            @Override
-//                            public void onComplete(@NonNull Task<Void> task) {
-//                                db.document(userDocRef).set(receiptImages).addOnCompleteListener(listener);
-//                            }
-//                        });
-//                    }
-//                });
-//
-//            }
-//        });
-////        Utils.user.loadBitmapImages();
-//    }
 }

@@ -11,16 +11,16 @@
     >
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="300dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="@dimen/dimen_0dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:context=".SingleReceiptAdd">
+
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/view2"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:background="@drawable/alert_dialog_top_title"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -31,31 +31,37 @@
                 android:id="@+id/title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"
-                android:text="Wpisz całkowitą kwotę \n z paragonu"
-                android:textAlignment="center"
+                android:layout_marginStart="16dp"
+                android:text="Wybierz przedział dat"
                 android:textColor="@color/colorDefault"
-                android:textSize="20dp"
+                android:textSize="20sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/imageView"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="16dp"
+                android:tint="@color/colorDefault"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/calendar" />
         </androidx.constraintlayout.widget.ConstraintLayout>
+
 
         <Button
             android:id="@+id/button_cancel"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            android:layout_width="100dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             android:outlineProvider="none"
-            android:text="cofnij"
+            android:text="@string/cancel"
             android:textColor="@color/colorBlack"
             android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -66,10 +72,10 @@
         <Button
             android:id="@+id/button_ok"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            android:layout_width="100dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
             android:text="@string/ok"
             android:textColor="@color/colorBlack"
@@ -79,42 +85,40 @@
             app:layout_constraintTop_toBottomOf="@+id/divider3"
             app:strokeWidth="@dimen/dimen_0dp" />
 
-        <com.google.android.material.textfield.TextInputEditText
+        <com.archit.calendardaterangepicker.customviews.DateRangeCalendarView
             android:id="@+id/warranty_bar"
-            android:layout_width="150dp"
+            android:layout_width="320dp"
             android:layout_height="wrap_content"
+
             android:layout_centerInParent="true"
-            android:layout_marginTop="8dp"
-            android:hint="0.0 PLN"
-            android:inputType="numberDecimal"
+
+            app:calendar_tag="Test"
+            app:disable_date_color="#ABABAB"
+            app:editable="true"
+
+            app:enable_past_date="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/warranty_text_view" />
+            app:layout_constraintTop_toBottomOf="@+id/view2"
+
+            app:range_color="@color/colorAccent"
+            app:selected_date_circle_color="@color/colorAccent"
+            app:title_color="@color/colorAccent"
+            app:week_offset="0"></com.archit.calendardaterangepicker.customviews.DateRangeCalendarView>
+
 
         <View
             android:id="@+id/divider3"
             android:layout_width="0dp"
             android:layout_height="1dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginEnd="16dp"
-            android:background="@color/mainSeparatorColor"
+            android:layout_marginStart="1dp"
+            android:layout_marginEnd="1dp"
+            android:background="@color/colorLightGrey"
             android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.437"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/warranty_bar" />
-
-        <TextView
-            android:id="@+id/warranty_text_view"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Price:"
-            android:textSize="12sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/view2" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

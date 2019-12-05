@@ -157,14 +157,23 @@ public class GroupChossingContainer implements View.OnClickListener, GroupChossi
 
     }
 
-
-
     public void setError(){
         group_chossing_chip.setChipStrokeColor(strokeError);
     }
 
     public void resetStroke(){
         group_chossing_chip.setChipStrokeColor(strokeBasic);
+    }
+
+    public void setGroup(Group group) {
+        this.group = group;
+
+        group_chossing_chip.setText(group.getName());
+//        TODO ustawianie ikony takieej jaka jest w grupie
+        setColorOfGroup(group);
+        group_chossing_chip.setCloseIconVisible(true);
+        isGroupSet = true;
+        resetStroke();
     }
 }
 

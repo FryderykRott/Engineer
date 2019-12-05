@@ -72,9 +72,9 @@ public class ReceiptsAddingFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         receipts = ((ReceiptAddingActivity) getActivity()).getReceiptsToEdit();
-        if(wasAlreadyCreated){
-            return;
-        }
+//        if(wasAlreadyCreated){
+//            return;
+//        }
 
         sectionsPagerAdapter = new SectionsPagerAdapter(getActivity(), getChildFragmentManager(), receipts);
 
@@ -118,8 +118,9 @@ public class ReceiptsAddingFragment extends Fragment {
 //                       group = Utils.findGroupById(receipt.getGroupID());
                        Utils.user.getReceipts().add(receipt);
                    }
+
                    ((ReceiptAddingActivity)getActivity()).setProgressView(true);
-                   Database.getInstance().updateUser(new OnCompleteListener<Void>() {
+                   Database.getInstance().uploadAndUpgradeReceipts(receipts, new OnCompleteListener<Void>() {
                        @Override
                        public void onComplete(@NonNull Task<Void> task) {
                            getActivity().finish();

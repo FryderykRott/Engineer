@@ -16,10 +16,14 @@ import android.view.Window;
 import android.widget.ImageButton;
 
 import androidx.fragment.app.FragmentActivity;
+import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import com.fryderykrott.receiptcarerfinal.MainActivity;
 import com.fryderykrott.receiptcarerfinal.R;
 import com.fryderykrott.receiptcarerfinal.adapters.ImageAdapter;
+import com.fryderykrott.receiptcarerfinal.adapters.ImageURLAdapter;
+import com.fryderykrott.receiptcarerfinal.model.Receipt;
 import com.fryderykrott.receiptcarerfinal.receiptaddingUI.camerapreview.camerapreview.CameraPreviewFragment;
 
 import java.util.ArrayList;
@@ -29,11 +33,12 @@ import me.relex.circleindicator.CircleIndicator;
 public class AlertDialogFullScreenImageDisplayer extends Dialog implements android.view.View.OnClickListener {
 
     public Activity parent_activity;
+    Receipt receipt;
     public ImageButton ok;
     public ImageButton delete;
     private int position;
     ArrayList<Bitmap> bitmaps;
-    ImageAdapter adapter;
+    PagerAdapter adapter;
 
     ViewPager viewpager;
     ViewGroup viewGroup;
@@ -44,20 +49,29 @@ public class AlertDialogFullScreenImageDisplayer extends Dialog implements andro
 
     boolean isDeletable = true;
     //    public static final int
-    public AlertDialogFullScreenImageDisplayer(Activity a, OnImagePreviewCallbackListener listener, ArrayList<Bitmap> bitmaps, int position) {
+    public AlertDialogFullScreenImageDisplayer(Activity a, OnImagePreviewCallbackListener listener, Receipt receipt, int position) {
         super(a);
         parent_activity = a;
         this.listener = listener;
-
-        this.bitmaps = bitmaps;
+        this.receipt = receipt;
+        this.bitmaps = receipt.somethingDifferentImagesAsBitmap();
         this.position = position;
     }
 
-    public AlertDialogFullScreenImageDisplayer(FragmentActivity a, OnImagePreviewCallbackListener listener, ArrayList<Bitmap> bitmaps, int position, boolean isDeletable) {
+    public AlertDialogFullScreenImageDisplayer(Activity a, OnImagePreviewCallbackListener listener,Receipt receipt, int position, boolean isDeletable) {
         super(a);
         parent_activity = a;
         this.listener = listener;
+        this.receipt = receipt;
+        this.bitmaps = receipt.somethingDifferentImagesAsBitmap();
+        this.position = position;
+        this.isDeletable = isDeletable;
+    }
 
+    public AlertDialogFullScreenImageDisplayer(Activity a, OnImagePreviewCallbackListener listener,ArrayList<Bitmap> bitmaps, int position, boolean isDeletable) {
+        super(a);
+        parent_activity = a;
+        this.listener = listener;
         this.bitmaps = bitmaps;
         this.position = position;
         this.isDeletable = isDeletable;
@@ -80,7 +94,10 @@ public class AlertDialogFullScreenImageDisplayer extends Dialog implements andro
         ok = findViewById(R.id.buttonOK);
         ok.setOnClickListener(this);
 
-        adapter = new ImageAdapter(parent_activity, bitmaps);
+        if(!receipt.getImages_as_base64().isEmpty())
+            adapter = new ImageURLAdapter(parent_activity, receipt);
+        else
+            adapter = new ImageAdapter(parent_activity, bitmaps);
 
         viewpager = findViewById(R.id.view_pager_receipts);
         viewpager.setAdapter(adapter);
@@ -120,11 +137,18 @@ public class AlertDialogFullScreenImageDisplayer extends Dialog implements andro
 
                 viewpager.setCurrentItem(new_position);
 
-                bitmaps.remove(current_position);
+                if(!receipt.getImages_as_base64().isEmpty())
+                    receipt.getImages_as_base64().remove(current_position);
+                else
+                    bitmaps.remove(current_position);
 //                adapter.destroyItem(viewGroup, current_position, null);
                 adapter.notifyDataSetChanged();
 
-                adapter = new ImageAdapter(parent_activity, bitmaps);
+                if(!receipt.getImages_as_base64().isEmpty())
+                    adapter = new ImageURLAdapter(parent_activity, receipt);
+                else
+                    adapter = new ImageAdapter(parent_activity, bitmaps);
+
                 viewpager.setAdapter(adapter);
 
                 adapter.registerDataSetObserver(indicator.getDataSetObserver());

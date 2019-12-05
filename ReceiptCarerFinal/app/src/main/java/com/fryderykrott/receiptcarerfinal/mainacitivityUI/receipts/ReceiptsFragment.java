@@ -150,7 +150,7 @@ public class ReceiptsFragment extends Fragment {
     }
 
     private void setRecycleViewAndAdapter(){
-        receiptAdapter = new ReceiptsAdapter(getView().getContext());
+        receiptAdapter = new ReceiptsAdapter((MainActivity)getActivity(), ((MainActivity)getActivity()).getNavController());
         RecyclerView recyclerView = getView().findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
 

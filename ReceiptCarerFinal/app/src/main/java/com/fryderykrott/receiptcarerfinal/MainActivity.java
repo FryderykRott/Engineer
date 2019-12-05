@@ -6,6 +6,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 
+import com.fryderykrott.receiptcarerfinal.model.Receipt;
 import com.fryderykrott.receiptcarerfinal.utils.Utils;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.snackbar.Snackbar;
@@ -25,7 +26,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 public class MainActivity extends AppCompatActivity implements NavController.OnDestinationChangedListener {
-
+    Receipt receiptToEdit;
     private NavController navController;
     private BottomNavigationView bottomNavigationView;
     private ConstraintLayout container;
@@ -83,17 +84,17 @@ public class MainActivity extends AppCompatActivity implements NavController.OnD
 
     @Override
     public void onDestinationChanged(@NonNull NavController controller, @NonNull NavDestination destination, @Nullable Bundle arguments) {
-        if(destination.getId() == R.id.navigation_login || destination.getId() == R.id.navigation_register){
+        if(destination.getId() == R.id.navigation_login || destination.getId() == R.id.navigation_register || destination.getId() == R.id.navigation_editing_receipt){
             setNavigationVisibility(false);
         }
         else
             setNavigationVisibility(true);
 
-        if(destination.getId() == R.id.navigation_search)
-            getSupportActionBar().hide();
+//        if(destination.getId() == R.id.navigation_search)
+//            getSupportActionBar().hide();
     }
 
-    private void setNavigationVisibility(boolean isShown) {
+    public void setNavigationVisibility(boolean isShown) {
         if(isShown){
             bottomNavigationView.setVisibility(View.VISIBLE);
             getSupportActionBar().show();
@@ -130,4 +131,17 @@ public class MainActivity extends AppCompatActivity implements NavController.OnD
         }
     }
 
+    public NavController getNavController() {
+        return navController;
+    }
+
+
+    public void setReceiptToEdit(Receipt receipt){
+        receiptToEdit = receipt;
+    }
+
+
+    public Receipt getReceiptToEdit(){
+        return receiptToEdit;
+    }
 }

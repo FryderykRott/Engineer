@@ -93,8 +93,15 @@ public class Group implements Serializable {
         if(Utils.user == null)
             return 0f;
 
-        for(int i = 0; i < Utils.user.getReceipts().size(); i++)
-            receiptSum += Utils.user.getReceipts().get(i).getSumTotal();
+        Receipt receipt;
+        ArrayList<Receipt> receipts = Utils.user.getReceipts();
+        for(int i = 0; i < receipts.size(); i++){
+            receipt = receipts.get(i);
+
+            if(receipt.getGroupID().equals(groupID))
+                receiptSum += receipts.get(i).getSumTotal();
+
+        }
 
         return receiptSum;
     }

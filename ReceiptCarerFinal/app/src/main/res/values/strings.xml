@@ -97,7 +97,7 @@
     <string name="saveSuccess">Exercise added successfully!</string>
     <string name="removeSuccess">Exercise was removed successfully.</string>
     <string name="noDatesChosen">At least one planned date for workout has to be chosen.</string>
-    <string name="cancel">CANCEL</string>
+    <string name="cancel">cofnij</string>
     <string name="chooseExercise">Choose the exercise</string>
     <string name="addWorkoutLabel">Add</string>
     <string name="addExerciseToWorkout">Add exercise to workout</string>

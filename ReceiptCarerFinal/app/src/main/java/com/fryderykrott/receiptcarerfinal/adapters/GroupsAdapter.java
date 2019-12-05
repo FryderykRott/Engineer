@@ -2,6 +2,7 @@ package com.fryderykrott.receiptcarerfinal.adapters;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,38 +52,64 @@ public class GroupsAdapter  extends RecyclerView.Adapter<GroupsAdapter.GroupView
 //        holder.group_image_background.getBackground().setColorFilter(group.getIcon_color(), PorterDuff.Mode.SRC_ATOP);
         setColorOfGroup(holder, group);
         holder.group_name_text_view.setText(group.getName());
-        holder.group_number_of_receipts_text_view.setText(String.format("%s paragonów", group.getNumberOfReceipts()));
+        int numberOfReceipts = group.getNumberOfReceipts();
+        holder.group_number_of_receipts_text_view.setText(String.format("%s paragonów", numberOfReceipts));
         holder.group_sum_price_text_view.setText(String.format("%s PLN", group.getSumOfAllReceipts()));
 
         if(group.is_deletable){
-            holder.group_delete_button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    groups.remove(group);
-                    reloadGroupsInDatabase();
-                    ((MainActivity) context).showSnackBar("Pomyślnię usunięto grupę!");
-                }
-            });
+            if(numberOfReceipts != 0) {
+                holder.group_delete_button.setClickable(false);
+                int[][] states = new int[][] {
+                        new int[] { android.R.attr.state_enabled}, // enabled
+                        new int[] {-android.R.attr.state_enabled}, // disabled
+                        new int[] {-android.R.attr.state_checked}, // unchecked
+                        new int[] { android.R.attr.state_pressed}  // pressed
+                };
+
+                int[] colors = new int[] {
+                        context.getColor(R.color.colorLightGrey),
+                        context.getColor(R.color.colorLightGrey),
+                        context.getColor(R.color.colorLightGrey),
+                        context.getColor(R.color.colorLightGrey)
+                };
+
+                ColorStateList strokeError = new ColorStateList(states, colors);
+                holder.group_delete_button.setImageTintList(strokeError);
+            }
+            else
+            {
+                holder.group_delete_button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        groups.remove(group);
+                        reloadGroupsInDatabase();
+                        ((MainActivity) context).showSnackBar("Pomyślnię usunięto grupę!");
+                    }
+                });
+            }
         }
         else
             holder.group_delete_button.setVisibility(View.GONE);
 
-        holder.group_container.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                GroupAddingAlertDialog.OnGroupEditionCallBackListener l_edition = new GroupAddingAlertDialog.OnGroupEditionCallBackListener() {
-                    @Override
-                    public void onGroupEditionCallBackListener(Dialog dialog, Group group) {
-                        reloadGroupsInDatabase();
-                    }
-                };
+        if(group.is_deletable){
+            holder.group_container.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    GroupAddingAlertDialog.OnGroupEditionCallBackListener l_edition = new GroupAddingAlertDialog.OnGroupEditionCallBackListener() {
+                        @Override
+                        public void onGroupEditionCallBackListener(Dialog dialog, Group group) {
+                            reloadGroupsInDatabase();
+                        }
+                    };
 
-                GroupAddingAlertDialog ad = new GroupAddingAlertDialog(context, null, l_edition);
-                ad.setToEditGroup(group);
-                ad.show();
+                    GroupAddingAlertDialog ad = new GroupAddingAlertDialog(context, null, l_edition);
+                    ad.setToEditGroup(group);
+                    ad.show();
 
-            }
-        });
+                }
+            });
+
+        }
     }
 
     private void reloadGroupsInDatabase() {

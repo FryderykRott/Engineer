@@ -37,4 +37,9 @@
         android:name="com.fryderykrott.receiptcarerfinal.mainacitivityUI.register.RegisterFragment"
         android:label="fragment_register"
         tools:layout="@layout/fragment_register" />
+    <fragment
+        android:id="@+id/navigation_editing_receipt"
+        android:name="com.fryderykrott.receiptcarerfinal.EditingReceiptFragment"
+        android:label="Edytuj paragon"
+        tools:layout="@layout/fragment_editing_receipt" />
 </navigation>

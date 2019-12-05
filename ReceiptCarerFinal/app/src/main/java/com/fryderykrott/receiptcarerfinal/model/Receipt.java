@@ -36,7 +36,20 @@ public class Receipt implements Serializable {
         groupID = "";
         tagsID = new ArrayList<>();
         images_as_bitmap = new ArrayList<>();
+        images_as_base64 = new ArrayList<>();
         isInfiniteWarranty = false;
+    }
+
+    public Receipt(Receipt receipt) {
+        name = receipt.name;
+        sumTotal = receipt.sumTotal;
+        dateOfCreation = receipt.dateOfCreation;
+        dateOfEndOfWarrant = receipt.dateOfEndOfWarrant;
+        groupID = receipt.groupID;
+        tagsID = new ArrayList<>(receipt.tagsID);
+        images_as_bitmap = new ArrayList<>(receipt.images_as_bitmap);
+        images_as_base64 = new ArrayList<>(receipt.images_as_base64);
+        isInfiniteWarranty = receipt.isInfiniteWarranty;
     }
 
     public String getReceiptUID() {
@@ -130,13 +143,13 @@ public class Receipt implements Serializable {
         if(images_as_bitmap == null)
             images_as_bitmap = new ArrayList<>();
 
-        if(images_as_base64 == null)
-            images_as_base64 = new ArrayList<>();
-
-        images_as_base64.add(Utils.bitmapToBase64(bitmap));
-
-        String imageAsBase64 = Utils.bitmapToBase64(bitmap);
-        Utils.user.getReceiptImages().add(new ReceiptImage(receiptUID, imageAsBase64));
+//        if(images_as_base64 == null)
+//            images_as_base64 = new ArrayList<>();
+//
+//        images_as_base64.add(Utils.bitmapToBase64(bitmap));
+//
+//        String imageAsBase64 = Utils.bitmapToBase64(bitmap);
+//        Utils.user.getReceiptImages().add(new ReceiptImage(receiptUID, imageAsBase64));
         images_as_bitmap.add(bitmap);
     }
 
