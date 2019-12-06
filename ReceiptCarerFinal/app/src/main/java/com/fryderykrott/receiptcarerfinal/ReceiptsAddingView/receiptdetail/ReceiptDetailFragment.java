@@ -1,7 +1,15 @@
-package com.fryderykrott.receiptcarerfinal;
+package com.fryderykrott.receiptcarerfinal.ReceiptsAddingView.receiptdetail;
 
+
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
+
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -13,16 +21,9 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageButton;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.view.menu.ActionMenuItemView;
-import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.Fragment;
-import androidx.viewpager.widget.ViewPager;
-
+import com.fryderykrott.receiptcarerfinal.R;
+import com.fryderykrott.receiptcarerfinal.ReceiptAddingActivity;
 import com.fryderykrott.receiptcarerfinal.adapters.ImageAdapter;
-import com.fryderykrott.receiptcarerfinal.adapters.ImageURLAdapter;
-import com.fryderykrott.receiptcarerfinal.alertdialogs.ShareAlertDialog;
 import com.fryderykrott.receiptcarerfinal.chips.CalendarChipContainer;
 import com.fryderykrott.receiptcarerfinal.chips.GroupChossingContainer;
 import com.fryderykrott.receiptcarerfinal.chips.PriceChipContainer;
@@ -30,11 +31,8 @@ import com.fryderykrott.receiptcarerfinal.chips.WarrantyChipContainer;
 import com.fryderykrott.receiptcarerfinal.Model.Receipt;
 import com.fryderykrott.receiptcarerfinal.Model.Tag;
 import com.fryderykrott.receiptcarerfinal.ReceiptsAddingView.camerapreview.CameraPreviewFragment;
-import com.fryderykrott.receiptcarerfinal.Services.Database;
 import com.fryderykrott.receiptcarerfinal.utils.Utils;
 import com.fryderykrott.receiptcarerfinal.utils.Validator;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.textfield.TextInputEditText;
@@ -44,9 +42,12 @@ import java.util.ArrayList;
 
 import me.relex.circleindicator.CircleIndicator;
 
-public class EditingReceiptFragment extends Fragment implements ImageAdapter.OnNewPhotoCallbackListener, ShareAlertDialog.OnShareListener {
+public class ReceiptDetailFragment extends Fragment implements ImageAdapter.OnNewPhotoCallbackListener {
 
-    Receipt receiptToEdit;
+    public ReceiptDetailFragment() {
+        // Required empty public constructor
+    }
+
     Receipt receipt;
 
 //    public ArrayList<Bitmap> photos;
@@ -56,12 +57,12 @@ public class EditingReceiptFragment extends Fragment implements ImageAdapter.OnN
     TextInputEditText receiptNameTextInput;
     TextInputLayout receiptNameTextInputLayout;
 
-    ImageURLAdapter imagesAdapter;
+    ImageAdapter imagesAdapter;
     ChipGroup tagsChipGroup;
 
     ImageButton acceptIcon;
 
-    MainActivity context;
+    Activity context;
     int position;
 
     ArrayAdapter adapterAutoCompliteTagsList;
@@ -79,9 +80,17 @@ public class EditingReceiptFragment extends Fragment implements ImageAdapter.OnN
     private WarrantyChipContainer warrantyChipConteiner;
     private PriceChipContainer priceChipConteiner;
 
-    public EditingReceiptFragment(){
+    public static ReceiptDetailFragment newInstance(Receipt receipt, Activity context, int position) {
+        ReceiptDetailFragment fragment = new ReceiptDetailFragment();
+        fragment.context = context;
 
+        fragment.receipt = receipt;
+        fragment.position = position;
+
+        fragment.imagesAdapter = new ImageAdapter(context, receipt, position, fragment);
+        return fragment;
     }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -92,13 +101,7 @@ public class EditingReceiptFragment extends Fragment implements ImageAdapter.OnN
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        context = (MainActivity) getActivity();
-
-        receiptToEdit = context.getReceiptToEdit();
-        receipt = new Receipt(receiptToEdit);
-        imagesAdapter = new ImageURLAdapter(context, receipt, this, this);
-
-        return inflater.inflate(R.layout.fragment_editing_receipt, container, false);
+        return inflater.inflate(R.layout.fragment_receipt_detail, container, false);
     }
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -131,7 +134,6 @@ public class EditingReceiptFragment extends Fragment implements ImageAdapter.OnN
                 acceptIcon.setVisibility(View.INVISIBLE);
             }
         });
-
 
         autoCompleteTextView = view.findViewById(R.id.edit_text_tag_true);
         autoCompleteTextView.addTextChangedListener(new TextWatcher() {
@@ -183,58 +185,6 @@ public class EditingReceiptFragment extends Fragment implements ImageAdapter.OnN
         isAlreadyCreted = true;
 //        preview = view.findViewById(R.id.image_view_photo_preview);
 //        preview.setImageBitmap(RotateBitmap(picture, 90));
-
-        setToolbar(view);
-    }
-
-    private void setToolbar(View view) {
-        Toolbar toolbar = view.findViewById(R.id.toolbar_adding_receipts);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((MainActivity)getActivity()).getNavController().popBackStack();
-            }
-        });
-
-
-        ActionMenuItemView accept_button = toolbar.findViewById(R.id.accept);
-        accept_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                Validate
-                boolean pass = true;
-
-                if(!validateFragment())
-                    pass = false;
-
-                if(pass){
-                    ((MainActivity)getActivity()).setProgressView(true);
-                    prepareReceipt();
-                    Database.getInstance().updateAllArrays( new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            ((MainActivity)getActivity()).getNavController().popBackStack();
-                            ((MainActivity)getActivity()).setProgressView(false);
-                            ((MainActivity)getActivity()).showSnackBar("Pomyślnie poprawiono paragon");
-
-                        }
-                    });
-                }
-                else
-                    ((ReceiptAddingActivity) getActivity()).showSnackBar("Sprawdż wszystkie dane na paragonach!");
-            }
-        });
-
-        ActionMenuItemView share_button = toolbar.findViewById(R.id.share);
-        final EditingReceiptFragment fragment = this;
-        share_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ShareAlertDialog ad = new ShareAlertDialog(getActivity(), fragment, receipt);
-                ad.show();
-            }
-        });
-
     }
 
     private void addReceiptsTagsToGroup() {
@@ -314,6 +264,7 @@ public class EditingReceiptFragment extends Fragment implements ImageAdapter.OnN
                 tagsToAutoComplite.remove(selected);
                 receiptTags.remove(selected);
                 resetAdapter();
+
                 adapterAutoCompliteTagsList.notifyDataSetInvalidated();
             }
         });
@@ -327,12 +278,13 @@ public class EditingReceiptFragment extends Fragment implements ImageAdapter.OnN
     public void resetImageAdapter(){
         imagesAdapter.notifyDataSetChanged();
 
-        new ImageURLAdapter(context, receipt, null, this);
+        imagesAdapter = new ImageAdapter(getActivity(), receipt);
         viewpager.setAdapter(imagesAdapter);
 
         imagesAdapter.registerDataSetObserver(indicator.getDataSetObserver());
         imagesAdapter.notifyDataSetChanged();
     }
+
 
     private void createBasicChips() {
 //      Data na paragonie
@@ -344,11 +296,7 @@ public class EditingReceiptFragment extends Fragment implements ImageAdapter.OnN
         tagsChipGroup.addView(calendarChipConteiner.getCalendarChip());
 
 //        Gwarancja
-        warrantyChipConteiner = new WarrantyChipContainer(context);
-        if(!receipt.getDateOfEndOfWarrant().isEmpty()){
-            warrantyChipConteiner.setWarranty(Utils.formatStringToDate(receipt.getDateOfEndOfWarrant()));
-        }
-
+      warrantyChipConteiner = new WarrantyChipContainer(context);
         tagsChipGroup.addView(warrantyChipConteiner.getWarrantyChip());
 
 //        Cena na apragonie
@@ -361,10 +309,8 @@ public class EditingReceiptFragment extends Fragment implements ImageAdapter.OnN
 
 //        Grupa i wybieranie grupy
         groupChossingContainerChip = new GroupChossingContainer(context);
-       if(!receipt.getGroupID().isEmpty())
-           groupChossingContainerChip.setGroup(Utils.findGroupById(receipt.getGroupID()));
-
         tagsChipGroup.addView(groupChossingContainerChip.getGroupChip());
+
 
     }
 
@@ -374,8 +320,8 @@ public class EditingReceiptFragment extends Fragment implements ImageAdapter.OnN
         if (context instanceof CameraPreviewFragment.OnPhotoTakingListener) {
             mListener = (CameraPreviewFragment.OnPhotoTakingListener) context;
         } else {
-//            throw new RuntimeException(context.toString()
-//                    + " must implement OnFragmentCallbackListener");
+            throw new RuntimeException(context.toString()
+                    + " must implement OnFragmentCallbackListener");
         }
     }
 
@@ -391,7 +337,14 @@ public class EditingReceiptFragment extends Fragment implements ImageAdapter.OnN
 
     @Override
     public void onNewPhotoCallback(int position_off_receipt) {
-//        ((MainActivity)getActivity()).getNavController().navigate(R.id.navigation_camera_preview);
+//        zapisac stan wszysktich paragonów
+//        nakladamy kolejny fragment, zapisac pozycje paragon z listy
+//        mamy aktywnosc i jestes we fragmencie i mozemy wrzucić na wierzch fragment ktory cofając się wrzuci nas do aktywnosci, a w aktywnosic sa paragony, wiec trzeba powiedziae
+//        ktory paragon jest akutalnie robione
+        ReceiptAddingActivity a = ((ReceiptAddingActivity) getActivity());
+        a.setCurrentReceiptPhotoTakingPosition(position);
+        a.getNavController().navigate(R.id.navigation_camera_preview);
+
     }
 
     public boolean validateFragment() {
@@ -414,36 +367,41 @@ public class EditingReceiptFragment extends Fragment implements ImageAdapter.OnN
         return pass;
     }
 
+//    groupChossingContainerChip;
+//    private CalendarChipContainer calendarChipConteiner;
+//    private WarrantyChipContainer warrantyChipConteiner;
+//    private PriceChipContainer priceChipConteiner;
+
     public void prepareReceipt() {
+//        1. dodaj datę do apragonu
+//        2. updatów nazwę paragonu
+//        3. ustal datę gwarancji paragonu
+//        4. ustal grupę
+//        5. włóż wszystkie znaczniki
         String receiptName = receiptNameTextInput.getText().toString();
         String dateOfCreation = Utils.formatDateToString(calendarChipConteiner.getDate());
 
         String dateWarantyDateEnd = "";
         if(warrantyChipConteiner.getDate_of_end() != null)
             if(warrantyChipConteiner.isInfiniteWarranty())
-                receiptToEdit.setInfiniteWarranty(true);
+                receipt.setInfiniteWarranty(true);
             else
                 dateWarantyDateEnd = Utils.formatDateToString(warrantyChipConteiner.getDate_of_end());
 
         String groupUID = groupChossingContainerChip.getGroup().getGroupID();
         float total = (float) priceChipConteiner.getPrice();
 
-        receiptToEdit.setDateOfCreation(dateOfCreation);
-        receiptToEdit.setName(receiptName);
-        receiptToEdit.setDateOfEndOfWarrant(dateWarantyDateEnd);
-        receiptToEdit.setGroupID(groupUID);
-        receiptToEdit.setSumTotal(total);
+        receipt.setDateOfCreation(dateOfCreation);
+        receipt.setName(receiptName);
+        receipt.setDateOfEndOfWarrant(dateWarantyDateEnd);
+        receipt.setGroupID(groupUID);
+        receipt.setSumTotal(total);
 
-        receiptToEdit.getTagsID().clear();
         for(String tag: receiptTags){
-            receiptToEdit.addTag(tag);
+            receipt.addTag(tag);
         }
 
         Log.i("dsa", "dsa");
     }
 
-    @Override
-    public void onshareCallback() {
-        ((MainActivity)getActivity()).showSnackBar("Wysłano maila z paragonem");
-    }
 }

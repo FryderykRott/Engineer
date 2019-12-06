@@ -1,7 +1,7 @@
 package com.fryderykrott.receiptcarerfinal.utils;
 
 import com.fryderykrott.receiptcarerfinal.chips.GroupChossingContainer;
-import com.fryderykrott.receiptcarerfinal.model.Group;
+import com.fryderykrott.receiptcarerfinal.Model.Group;
 
 import java.util.ArrayList;
 

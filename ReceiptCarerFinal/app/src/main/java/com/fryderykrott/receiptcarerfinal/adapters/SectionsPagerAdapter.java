@@ -8,8 +8,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
-import com.fryderykrott.receiptcarerfinal.model.Receipt;
-import com.fryderykrott.receiptcarerfinal.receiptaddingUI.camerapreview.receiptdetail.ReceiptDetailFragment;
+import com.fryderykrott.receiptcarerfinal.Model.Receipt;
+import com.fryderykrott.receiptcarerfinal.ReceiptsAddingView.receiptdetail.ReceiptDetailFragment;
 
 import java.util.ArrayList;
 

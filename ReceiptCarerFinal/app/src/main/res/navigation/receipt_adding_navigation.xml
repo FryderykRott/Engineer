@@ -7,17 +7,17 @@
 
     <fragment
         android:id="@+id/navigation_camera_preview"
-        android:name="com.fryderykrott.receiptcarerfinal.receiptaddingUI.camerapreview.camerapreview.CameraPreviewFragment"
+        android:name="com.fryderykrott.receiptcarerfinal.ReceiptsAddingView.camerapreview.CameraPreviewFragment"
         android:label="Camera_preview"
         tools:layout="@layout/fragment_camera_preview" />
     <fragment
         android:id="@+id/navigation_adding_receipts"
-        android:name="com.fryderykrott.receiptcarerfinal.receiptaddingUI.camerapreview.receiptsediting.ReceiptsAddingFragment"
+        android:name="com.fryderykrott.receiptcarerfinal.ReceiptsAddingView.receiptsediting.ReceiptsAddingFragment"
         android:label="Edytuj paragony"
         tools:layout="@layout/fragment_receipts_adding" />
     <fragment
         android:id="@+id/receiptDetailFragment"
-        android:name="com.fryderykrott.receiptcarerfinal.receiptaddingUI.camerapreview.receiptdetail.ReceiptDetailFragment"
+        android:name="com.fryderykrott.receiptcarerfinal.ReceiptsAddingView.receiptdetail.ReceiptDetailFragment"
         android:label="fragment_receipt_detail"
         tools:layout="@layout/fragment_receipt_detail" />
 </navigation>

@@ -3,11 +3,9 @@ package com.fryderykrott.receiptcarerfinal.alertdialogs;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.database.DataSetObserver;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.media.Image;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,16 +13,13 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ImageButton;
 
-import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
-import com.fryderykrott.receiptcarerfinal.MainActivity;
 import com.fryderykrott.receiptcarerfinal.R;
 import com.fryderykrott.receiptcarerfinal.adapters.ImageAdapter;
 import com.fryderykrott.receiptcarerfinal.adapters.ImageURLAdapter;
-import com.fryderykrott.receiptcarerfinal.model.Receipt;
-import com.fryderykrott.receiptcarerfinal.receiptaddingUI.camerapreview.camerapreview.CameraPreviewFragment;
+import com.fryderykrott.receiptcarerfinal.Model.Receipt;
 
 import java.util.ArrayList;
 

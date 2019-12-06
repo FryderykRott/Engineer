@@ -1,9 +1,5 @@
 package com.fryderykrott.receiptcarerfinal.adapters;
 
-import android.app.Activity;
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,18 +8,16 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.NavigationUI;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.fryderykrott.receiptcarerfinal.MainActivity;
 import com.fryderykrott.receiptcarerfinal.R;
 import com.fryderykrott.receiptcarerfinal.chips.MiniBasicChipContainer;
-import com.fryderykrott.receiptcarerfinal.model.Receipt;
-import com.fryderykrott.receiptcarerfinal.model.Tag;
+import com.fryderykrott.receiptcarerfinal.Model.Receipt;
+import com.fryderykrott.receiptcarerfinal.Model.Tag;
 import com.fryderykrott.receiptcarerfinal.utils.Utils;
-import com.fryderykrott.receiptcarerfinal.model.Group;
-import com.fryderykrott.receiptcarerfinal.services.Database;
+import com.fryderykrott.receiptcarerfinal.Model.Group;
+import com.fryderykrott.receiptcarerfinal.Services.Database;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.chip.ChipGroup;
@@ -31,8 +25,6 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Date;
-
-import io.grpc.okhttp.internal.Util;
 
 public class ReceiptsAdapter extends RecyclerView.Adapter<ReceiptsAdapter.ReceiptViewHolder> {
 

@@ -1,7 +1,6 @@
 package com.fryderykrott.receiptcarerfinal.chips;
 
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
@@ -9,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.fryderykrott.receiptcarerfinal.R;
-import com.fryderykrott.receiptcarerfinal.model.Group;
+import com.fryderykrott.receiptcarerfinal.Model.Group;
 import com.google.android.material.chip.Chip;
 
 public class MiniBasicChipContainer {

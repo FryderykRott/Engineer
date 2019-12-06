@@ -13,10 +13,9 @@ import androidx.viewpager.widget.PagerAdapter;
 
 import com.fryderykrott.receiptcarerfinal.MainActivity;
 import com.fryderykrott.receiptcarerfinal.R;
-import com.fryderykrott.receiptcarerfinal.ReceiptAddingActivity;
 import com.fryderykrott.receiptcarerfinal.alertdialogs.AlertDialogFullScreenImageDisplayer;
-import com.fryderykrott.receiptcarerfinal.model.Receipt;
-import com.fryderykrott.receiptcarerfinal.receiptaddingUI.camerapreview.receiptdetail.ReceiptDetailFragment;
+import com.fryderykrott.receiptcarerfinal.Model.Receipt;
+import com.fryderykrott.receiptcarerfinal.ReceiptsAddingView.receiptdetail.ReceiptDetailFragment;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;

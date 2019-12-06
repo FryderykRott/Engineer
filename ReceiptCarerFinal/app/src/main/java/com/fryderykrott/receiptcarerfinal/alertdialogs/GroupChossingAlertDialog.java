@@ -13,10 +13,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.fryderykrott.receiptcarerfinal.R;
-import com.fryderykrott.receiptcarerfinal.adapters.GroupsAdapter;
 import com.fryderykrott.receiptcarerfinal.adapters.MiniGroupAdapter;
-import com.fryderykrott.receiptcarerfinal.model.Group;
-import com.fryderykrott.receiptcarerfinal.utils.Utils;
+import com.fryderykrott.receiptcarerfinal.Model.Group;
 
 public class GroupChossingAlertDialog extends Dialog implements View.OnClickListener, MiniGroupAdapter.OnGroupChoosen {
 

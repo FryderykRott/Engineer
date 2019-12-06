@@ -2,22 +2,17 @@ package com.fryderykrott.receiptcarerfinal.chips;
 
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.res.ColorStateList;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.fryderykrott.receiptcarerfinal.R;
-import com.fryderykrott.receiptcarerfinal.adapters.MiniGroupAdapter;
 import com.fryderykrott.receiptcarerfinal.alertdialogs.GroupChossingAlertDialog;
-import com.fryderykrott.receiptcarerfinal.model.Group;
+import com.fryderykrott.receiptcarerfinal.Model.Group;
 import com.fryderykrott.receiptcarerfinal.utils.Utils;
 import com.google.android.material.chip.Chip;
-
-import io.grpc.okhttp.internal.Util;
 
 public class GroupChossingContainer implements View.OnClickListener, GroupChossingAlertDialog.OnAlertDialogOnGroupChossing {
 

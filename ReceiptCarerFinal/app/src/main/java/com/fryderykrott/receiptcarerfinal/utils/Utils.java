@@ -8,20 +8,14 @@ import android.graphics.Matrix;
 import android.net.Uri;
 import android.provider.MediaStore;
 
-import com.fryderykrott.receiptcarerfinal.model.Group;
-import com.fryderykrott.receiptcarerfinal.model.Receipt;
-import com.fryderykrott.receiptcarerfinal.model.Tag;
-import com.fryderykrott.receiptcarerfinal.model.User;
-import com.fryderykrott.receiptcarerfinal.receiptaddingUI.camerapreview.receiptsediting.ReceiptsAddingFragment;
+import com.fryderykrott.receiptcarerfinal.Model.Group;
+import com.fryderykrott.receiptcarerfinal.Model.Receipt;
+import com.fryderykrott.receiptcarerfinal.Model.Tag;
+import com.fryderykrott.receiptcarerfinal.Model.User;
 
 import java.io.ByteArrayOutputStream;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Calendar;

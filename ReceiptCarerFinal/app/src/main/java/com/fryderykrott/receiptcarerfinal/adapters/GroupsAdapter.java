@@ -18,8 +18,8 @@ import com.fryderykrott.receiptcarerfinal.R;
 import com.fryderykrott.receiptcarerfinal.alertdialogs.GroupChossingAlertDialog;
 import com.fryderykrott.receiptcarerfinal.utils.Utils;
 import com.fryderykrott.receiptcarerfinal.alertdialogs.GroupAddingAlertDialog;
-import com.fryderykrott.receiptcarerfinal.model.Group;
-import com.fryderykrott.receiptcarerfinal.services.Database;
+import com.fryderykrott.receiptcarerfinal.Model.Group;
+import com.fryderykrott.receiptcarerfinal.Services.Database;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 

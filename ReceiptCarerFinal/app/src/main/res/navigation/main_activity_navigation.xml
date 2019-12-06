@@ -7,24 +7,24 @@
 
     <fragment
         android:id="@+id/navigation_receipts"
-        android:name="com.fryderykrott.receiptcarerfinal.mainacitivityUI.receipts.ReceiptsFragment"
+        android:name="com.fryderykrott.receiptcarerfinal.MainView.receipts.ReceiptsFragment"
         android:label="Paragony"
         tools:layout="@layout/fragment_receipts" />
 
     <fragment
         android:id="@+id/navigation_groups"
-        android:name="com.fryderykrott.receiptcarerfinal.mainacitivityUI.groups.GroupsFragment"
+        android:name="com.fryderykrott.receiptcarerfinal.MainView.groups.GroupsFragment"
         android:label="Grupy paragonów"
         tools:layout="@layout/fragment_groups" />
 
     <fragment
         android:id="@+id/navigation_search"
-        android:name="com.fryderykrott.receiptcarerfinal.mainacitivityUI.search.SearchFragment"
+        android:name="com.fryderykrott.receiptcarerfinal.MainView.search.SearchFragment"
         android:label="Wyszukaj paragony"
         tools:layout="@layout/fragment_search" />
     <fragment
         android:id="@+id/navigation_login"
-        android:name="com.fryderykrott.receiptcarerfinal.mainacitivityUI.login.LoginFragment"
+        android:name="com.fryderykrott.receiptcarerfinal.MainView.login.LoginFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login" >
         <action
@@ -34,7 +34,7 @@
     </fragment>
     <fragment
         android:id="@+id/navigation_register"
-        android:name="com.fryderykrott.receiptcarerfinal.mainacitivityUI.register.RegisterFragment"
+        android:name="com.fryderykrott.receiptcarerfinal.MainView.register.RegisterFragment"
         android:label="fragment_register"
         tools:layout="@layout/fragment_register" />
     <fragment
