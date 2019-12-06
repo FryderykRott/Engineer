@@ -129,8 +129,6 @@ public class Database{
         final ArrayList<Group> groups = Utils.user.getGroups();
         final ArrayList<Tag> tags = Utils.user.getTags();
         final ArrayList<Receipt> receipts = Utils.user.getReceipts();
-        final ArrayList<ReceiptImage> receiptImages = Utils.user.getReceiptImages();
-
 
         // Get a new write batch
         WriteBatch batch = db.batch();
