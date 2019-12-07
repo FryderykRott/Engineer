@@ -89,10 +89,12 @@ public class AlertDialogFullScreenImageDisplayer extends Dialog implements andro
         ok = findViewById(R.id.buttonOK);
         ok.setOnClickListener(this);
 
-        if(!receipt.getImages_as_base64().isEmpty())
+
+        if(receipt != null && !receipt.getImages_as_base64().isEmpty())
             adapter = new ImageURLAdapter(parent_activity, receipt);
         else
             adapter = new ImageAdapter(parent_activity, bitmaps);
+
 
         viewpager = findViewById(R.id.view_pager_receipts);
         viewpager.setAdapter(adapter);

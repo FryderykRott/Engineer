@@ -136,11 +136,14 @@ public class ReceiptsAdapter extends RecyclerView.Adapter<ReceiptsAdapter.Receip
         if(daysToWarrantyEnd >= 4000)
             holder.receipt_warranty_date.setText("Nieograniczona");
         else
-            holder.receipt_warranty_date.setText(daysToWarrantyEnd + " dni pozostało");
+            holder.receipt_warranty_date.setText("Pozostało: " +daysToWarrantyEnd + " dni");
 
         if(daysToWarrantyEnd <= 7)
         {
             holder.receipt_warranty_date.setTextColor(context.getColor(R.color.red));
+        }
+        else if(daysToWarrantyEnd <= 31){
+            holder.receipt_warranty_date.setTextColor(context.getColor(R.color.orange));
         }
         else
             holder.receipt_warranty_date.setTextColor(context.getColor(R.color.green));

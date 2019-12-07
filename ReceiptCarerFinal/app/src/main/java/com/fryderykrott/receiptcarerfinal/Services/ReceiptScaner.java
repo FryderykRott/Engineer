@@ -19,6 +19,7 @@ import com.google.firebase.ml.vision.text.FirebaseVisionText;
 import com.google.firebase.ml.vision.text.FirebaseVisionTextRecognizer;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ReceiptScaner implements OnSuccessListener<FirebaseVisionText>, OnFailureListener {
    Activity a;
@@ -28,6 +29,7 @@ public class ReceiptScaner implements OnSuccessListener<FirebaseVisionText>, OnF
 
    int receiptsRemained;
    ArrayList<String> results;
+    ArrayList<List<FirebaseVisionText.TextBlock>> resultsTextBlocks;
 
     public ReceiptScaner(Activity a, ArrayList<Bitmap> receiptsImages, OnSuccessListener<FirebaseVisionText> successListener, OnFailureListener failureListener) {
         this.a = a;
@@ -40,6 +42,8 @@ public class ReceiptScaner implements OnSuccessListener<FirebaseVisionText>, OnF
 
     public void proccesImages(OnCompleteScanningListener onCompleteListener){
         results = new ArrayList<>();
+        resultsTextBlocks = new ArrayList<>();
+
         receiptsRemained = receiptsImages.size();
 
         this.onCompleteListener = onCompleteListener;
@@ -88,11 +92,15 @@ public class ReceiptScaner implements OnSuccessListener<FirebaseVisionText>, OnF
                 .addOnFailureListener(this);
     }
 
+
     @Override
     public void onSuccess(FirebaseVisionText firebaseVisionText) {
 
         String result =  firebaseVisionText.getText();
         results.add(result);
+        List<FirebaseVisionText.TextBlock> resultsTextblok =  firebaseVisionText.getTextBlocks();
+
+        resultsTextBlocks.add(resultsTextblok);
 
         Log.i("skanowanie", firebaseVisionText.getText());
 
@@ -108,8 +116,10 @@ public class ReceiptScaner implements OnSuccessListener<FirebaseVisionText>, OnF
 
     private void extrahtDataFromReceipts() {
         ArrayList<Receipt> receipts = new ArrayList<>(results.size());
-        for(String result: results){
-            receipts.add(ReceiptScanerDataExtrator.extrahtDataFromReceipt(result));
+        for (int i = 0; i < results.size(); i++) {
+            String result = results.get(i);
+            List<FirebaseVisionText.TextBlock> resultTextBlock = resultsTextBlocks.get(i);
+            receipts.add(ReceiptScanerDataExtrator.extrahtDataFromReceipt(result, resultTextBlock));
         }
 
         onCompleteListener.onCompleteScanningListener(receipts);

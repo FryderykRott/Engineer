@@ -220,8 +220,7 @@ public class EditingReceiptFragment extends Fragment implements ImageAdapter.OnN
                         }
                     });
                 }
-                else
-                    ((ReceiptAddingActivity) getActivity()).showSnackBar("Sprawdż wszystkie dane na paragonach!");
+
             }
         });
 
@@ -311,14 +310,21 @@ public class EditingReceiptFragment extends Fragment implements ImageAdapter.OnN
             public void onClick(View v) {
                 tags.removeView(chip);
 
-                tagsToAutoComplite.remove(selected);
+                if(!isTagGlobal(selected))
+                    tagsToAutoComplite.remove(selected);
                 receiptTags.remove(selected);
                 resetAdapter();
                 adapterAutoCompliteTagsList.notifyDataSetInvalidated();
             }
         });
     }
-
+    private boolean isTagGlobal(String selected) {
+        for(Tag tag: Utils.user.getTags()){
+            if(selected.equals(tag.name))
+                return true;
+        }
+        return false;
+    }
     private void resetAdapter() {
         adapterAutoCompliteTagsList = new ArrayAdapter<>(context, android.R.layout.simple_dropdown_item_1line, tagsToAutoComplite);
         autoCompleteTextView.setAdapter(adapterAutoCompliteTagsList);

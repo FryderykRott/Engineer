@@ -98,7 +98,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.button.MaterialButton
-                android:text="@string/registerFragment_signUpButtonText"
+                android:text="Załóż konto"
                 android:layout_marginTop="@dimen/button_top_margin"
                 android:layout_width="@dimen/button_big_width"
                 android:layout_gravity="center_horizontal"

@@ -1,17 +1,27 @@
 package com.fryderykrott.receiptcarerfinal.Services;
 
+import android.graphics.Point;
 import android.util.Log;
 
 import com.fryderykrott.receiptcarerfinal.Model.Receipt;
+import com.google.firebase.ml.vision.text.FirebaseVisionText;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 public class ReceiptScanerDataExtrator {
 
-    public static String[] shops = {"Lidl","Zabka", "Żabka", "Media Expert", "Mediaexpert", "HERT"};
+    public static String[] shops = {"Lidl","Zabka", "Żabka", "Media Expert", "Mediaexpert", "HERT", "Kaufland", "Biedronka", "Rossmann"};
+
+    public static String[] formats = {"yyyy-MM-dd","dd-MM-yyyy"};
+    public static String[] regexes = {"^\\d{4}-\\d{2}-\\d{2}$", "^\\d{2}-\\d{2}-\\d{4}$"};
 
     static boolean shopNameFlag;
     static boolean dateFlag;
@@ -19,9 +29,11 @@ public class ReceiptScanerDataExtrator {
 
     static String shopName;
     static String date = "";
-    static float price;
+    static float price = 0f;
 
-    static Receipt extrahtDataFromReceipt(String result) {
+    static DateFormat sdf;
+
+    static Receipt extrahtDataFromReceipt(String result, List<FirebaseVisionText.TextBlock> result_blocks) {
         Receipt receipt = new Receipt();
 
         shopNameFlag = true;
@@ -37,29 +49,40 @@ public class ReceiptScanerDataExtrator {
         String currentWord;
         String nextWord;
 
-
-        ArrayList<String> words_surrending_SUMA;
+        ArrayList<FirebaseVisionText.TextBlock> words_surrending_SUMA = new ArrayList<>();
         int number_Of_surrending_words = 3;
+
+        FirebaseVisionText.TextBlock block;
+        for (int i = 0; i < result_blocks.size(); i++) {
+            block = result_blocks.get(i);
+
+            if (block.getText().toLowerCase().contains("pln")) {
+
+                for (int j = 1; j <= number_Of_surrending_words; j++) {
+                    words_surrending_SUMA.add(result_blocks.get(i + j));
+                    words_surrending_SUMA.add(result_blocks.get(i - j));
+                }
+
+                findIfPriceIsThere(block, words_surrending_SUMA);
+                break;
+            }
+
+        }
+
         for (int i = 0; i < currentWords.length; i++) {
             currentWord = currentWords[i];
+
+            if(!shopNameFlag && !dateFlag)
+                break;
 
 //            szukamy sklepu z aktualnej lini
             if (shopNameFlag) {
                 findShopNameOf(currentWord);
             }
 //            szukamy czy to to data
-            else if (dateFlag) {
-                findIfStringIsData(currentWord);
-            }
-//            szukamy czy kwota
-            else if (priceFlag && i > number_Of_surrending_words && i < currentWords.length - number_Of_surrending_words) {
-                words_surrending_SUMA = new ArrayList<>();
-                for(int j = 1; j <= number_Of_surrending_words; j++){
-                    words_surrending_SUMA.add(currentWords[i + j]);
-                    words_surrending_SUMA.add(currentWords[i - j]);
-                }
 
-                findIfPriceIsThere(currentWord, words_surrending_SUMA);
+            if (dateFlag) {
+                findIfStringIsData(currentWord);
             }
         }
 
@@ -72,6 +95,8 @@ public class ReceiptScanerDataExtrator {
             receipt.setName("Paragon ze sklepu " + shopName);
             receipt.addTag(shopName);
         }
+        else
+            receipt.setName("Paragon");
 
         if(!date.equals(""))
             receipt.setDateOfCreation(date);
@@ -81,43 +106,50 @@ public class ReceiptScanerDataExtrator {
         return receipt;
     }
 
-    private static void findIfPriceIsThere(String currentWord, ArrayList<String> surrending_words) {
-        String previous = surrending_words.get(0);
-        String next = surrending_words.get(1);
-        if(ReceiptScanerDataExtrator.isTherePriceTag(currentWord, previous, next )){
-            ArrayList<Float> possible_numbers = new ArrayList<>(surrending_words.size());
-            float number;
-            for(int i = 0; i < surrending_words.size(); i++){
-                number = ReceiptScanerDataExtrator.isItFloat(surrending_words.get(i));
-                if(number != 0f)
-                    possible_numbers.add(number);
+    private static void findIfPriceIsThere(FirebaseVisionText.TextBlock currentWord, ArrayList<FirebaseVisionText.TextBlock> surrending_words) {
+        float point = currentWord.getCornerPoints()[0].y;
+        String currentWordString = currentWord.getText();
+
+        String delimiter1 = " ";
+        String delimiter2 = "\n";
+        currentWordString = currentWordString.replaceAll(delimiter2, delimiter1);
+
+        String[] words = currentWordString.split(delimiter1);
+        String word;
+        for(int i = 0; i < words.length; i++){
+            word = words[i];
+            price = isItFloat(word);
+            if(price != 0){
+                return;
+            }
+        }
+
+        float number;
+        for(int i = 0; i < surrending_words.size(); i++){
+            number = surrending_words.get(i).getCornerPoints()[0].y;
+
+            if( Math.abs(point - number) <= 50){
+                price = isItFloat(surrending_words.get(i).getText());
+                priceFlag = false;
+                break;
             }
 
-            if(possible_numbers.isEmpty())
-                price = 0f;
-            else
-                price = largest(possible_numbers);
-
-            priceFlag = false;
         }
-    }
+//        ArrayList<Float> possible_numbers = new ArrayList<>(surrending_words.size());
+//        float number;
+//        for(int i = 0; i < surrending_words.size(); i++){
+//            number = ReceiptScanerDataExtrator.isItFloat(surrending_words.get(i));
+//            if(number != 0f)
+//                possible_numbers.add(number);
+//        }
 
-    static float largest(ArrayList<Float> arr)
-    {
-        float max = arr.get(0);
-
-        for (int i = 1; i < arr.size(); i++)
-            if (arr.get(i) > max)
-                max = arr.get(i);
-
-        return max;
     }
 
     private static void findIfStringIsData(String currentword) {
-        if( ReceiptScanerDataExtrator.findIfStringIsDate(currentword)){
-            date = currentword;
+        if( findIfStringIsDateOfFormat(currentword)){
             dateFlag = false;
         }
+
     }
 
     private static void findShopNameOf(String currentLine) {
@@ -189,19 +221,41 @@ public class ReceiptScanerDataExtrator {
         return costs[s2.length()];
     }
 
-    static DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-    public static boolean findIfStringIsDate(String date){
-        String regex = "^\\d{4}-\\d{2}-\\d{2}$";
-        if(!date.matches(regex))
-            return false;
+    public static boolean findIfStringIsDateOfFormat(String date){
 
-        try {
-            sdf.parse(date);
-        } catch (ParseException e) {
-            return false;
+        for(int i = 0; i < formats.length; i++){
+            if(!date.matches(regexes[i]))
+                return false;
+
+            sdf = new SimpleDateFormat(formats[i]);
+            try {
+                Date dateDat = sdf.parse(date);
+                DateFormat targetFormat = new SimpleDateFormat(formats[0]);
+
+                ReceiptScanerDataExtrator.date = targetFormat.format(dateDat);  // 20120821
+                return true;
+
+            } catch (ParseException e) {
+                return false;
+            }
         }
 
-        return true;
+        return false;
+    }
+
+    private static String convertDate(String strDate, String origalPatern)
+    {
+        //for strdate = 2017 July 25
+
+        DateTimeFormatter f = new DateTimeFormatterBuilder().appendPattern(origalPatern)
+                .toFormatter();
+
+        LocalDate parsedDate = LocalDate.parse(strDate, f);
+        DateTimeFormatter f2 = DateTimeFormatter.ofPattern(formats[0]);
+
+        String newDate = parsedDate.format(f2);
+
+        return newDate;
     }
 
     public static boolean isTherePriceTag(String word, String previous, String next){

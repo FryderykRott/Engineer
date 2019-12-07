@@ -98,7 +98,7 @@ public class ReceiptsAddingFragment extends Fragment {
             public void onClick(View v) {
 //                Validate
                 boolean pass = true;
-
+                ((ReceiptAddingActivity)getActivity()).setProgressView(true);
                 for(ReceiptDetailFragment fragment :sectionsPagerAdapter.getFragments())
                     if(!fragment.validateFragment())
                         pass = false;
@@ -114,7 +114,7 @@ public class ReceiptsAddingFragment extends Fragment {
                        Utils.user.getReceipts().add(receipt);
                    }
 
-                   ((ReceiptAddingActivity)getActivity()).setProgressView(true);
+
                    Database.getInstance().uploadAndUpgradeReceipts(receipts, new OnCompleteListener<Void>() {
                        @Override
                        public void onComplete(@NonNull Task<Void> task) {

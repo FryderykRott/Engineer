@@ -114,7 +114,7 @@ public class ImageAdapter extends PagerAdapter implements AlertDialogFullScreenI
 
         }
 
-        information = view.findViewById(R.id.Information);
+
         add_photo_image = view.findViewById(R.id.add_photo_image);
 
         if(position == images.size() ){
@@ -138,7 +138,6 @@ public class ImageAdapter extends PagerAdapter implements AlertDialogFullScreenI
     }
 
     private void setVisibilityOfInformationPanel(int visibility){
-        information.setVisibility(visibility);
         add_photo_image.setVisibility(visibility);
     }
 

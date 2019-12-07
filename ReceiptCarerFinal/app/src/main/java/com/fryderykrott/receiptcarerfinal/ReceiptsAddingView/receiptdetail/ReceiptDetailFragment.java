@@ -261,13 +261,23 @@ public class ReceiptDetailFragment extends Fragment implements ImageAdapter.OnNe
             public void onClick(View v) {
                 tags.removeView(chip);
 
-                tagsToAutoComplite.remove(selected);
+                if(!isTagGlobal(selected))
+                    tagsToAutoComplite.remove(selected);
+
                 receiptTags.remove(selected);
                 resetAdapter();
 
                 adapterAutoCompliteTagsList.notifyDataSetInvalidated();
             }
         });
+    }
+
+    private boolean isTagGlobal(String selected) {
+        for(Tag tag: Utils.user.getTags()){
+            if(selected.equals(tag.name))
+                return true;
+        }
+        return false;
     }
 
     private void resetAdapter() {

@@ -74,7 +74,6 @@ public class ImageURLAdapter extends PagerAdapter implements AlertDialogFullScre
 
         }
 
-        information = view.findViewById(R.id.Information);
         add_photo_image = view.findViewById(R.id.add_photo_image);
 
         if(position == images.size() ){

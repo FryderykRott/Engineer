@@ -16,17 +16,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/Information"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="32dp"
-        android:text="Click here to tadd new picture"
-        app:layout_constraintBottom_toBottomOf="@+id/image"
-        app:layout_constraintEnd_toEndOf="@+id/image"
-        app:layout_constraintStart_toEndOf="@+id/add_photo_image"
-        app:layout_constraintTop_toTopOf="@+id/image" />
-
     <ImageView
         android:id="@+id/add_photo_image"
         android:layout_width="100dp"
@@ -35,7 +24,6 @@
         android:layout_marginBottom="40dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.17"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/camera_add_image" />

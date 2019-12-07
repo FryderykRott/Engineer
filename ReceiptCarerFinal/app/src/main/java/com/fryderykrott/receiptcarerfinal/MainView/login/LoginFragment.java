@@ -147,7 +147,7 @@ public class LoginFragment extends Fragment {
                                 goHome();
                             }
                             else
-                                parent.showSnackBar("Wystąpił błąd przy logowaniu");
+                                parent.showSnackBar("Użytkownik o podanym email nie istnieje!");
 
                             parent.setProgressView(false);
                         }

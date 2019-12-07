@@ -185,11 +185,8 @@ public class CameraPreviewFragment extends Fragment implements View.OnClickListe
         acceptButton.show();
         currentImageView.setImageBitmap(bitmap);
 
-        if(number_of_images >= 2){
-            closeImagePreview.show();
-        }
-        else
-            closeImagePreview.hide();
+        cardViewPreviewOfImages.setVisibility(View.VISIBLE);
+        closeImagePreview.show();
 
     }
 
@@ -316,19 +313,24 @@ public class CameraPreviewFragment extends Fragment implements View.OnClickListe
                 break;
             case (R.id.fab_close_image_preview):
                 number_of_images--;
-                text_view_number_of_images.setText(number_of_images + "");
+
 //                gdy sa dwa zdjeica to w liscie jest 0-zdjecie i 1-zdjecie
 //                number ma wartosc 2 wiec ma wartosc 1
-
                 bitmaps.remove(number_of_images);
+                text_view_number_of_images.setText(number_of_images + "");
 
-                currentImageView.setImageBitmap(bitmaps.get(number_of_images - 1));
-
-                if(number_of_images >= 2){
-                    closeImagePreview.show();
-                }
-                else
+                if(number_of_images == 0){
+                    cardViewPreviewOfImages.setVisibility(View.INVISIBLE);
                     closeImagePreview.hide();
+                    text_view_number_of_images.setVisibility(View.INVISIBLE);
+                }
+                else{
+                    cardViewPreviewOfImages.setVisibility(View.VISIBLE);
+                    closeImagePreview.show();
+                    text_view_number_of_images.setVisibility(View.VISIBLE);
+                    currentImageView.setImageBitmap(bitmaps.get(number_of_images - 1));
+
+                }
 
                 break;
             case (R.id.button_menu_or_go_back_left_upper_corner):
