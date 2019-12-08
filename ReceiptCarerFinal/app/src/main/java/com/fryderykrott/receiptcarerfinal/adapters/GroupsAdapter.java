@@ -13,7 +13,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.fryderykrott.receiptcarerfinal.MainActivity;
+import com.fryderykrott.receiptcarerfinal.MainView.MainActivity;
 import com.fryderykrott.receiptcarerfinal.R;
 import com.fryderykrott.receiptcarerfinal.alertdialogs.GroupChossingAlertDialog;
 import com.fryderykrott.receiptcarerfinal.utils.Utils;

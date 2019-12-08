@@ -76,7 +76,7 @@ public class ReceiptScanerDataExtrator {
                 break;
 
 //            szukamy sklepu z aktualnej lini
-            if (shopNameFlag) {
+            if (shopNameFlag && i < 20) {
                 findShopNameOf(currentWord);
             }
 //            szukamy czy to to data
@@ -225,7 +225,7 @@ public class ReceiptScanerDataExtrator {
 
         for(int i = 0; i < formats.length; i++){
             if(!date.matches(regexes[i]))
-                return false;
+                continue;
 
             sdf = new SimpleDateFormat(formats[i]);
             try {

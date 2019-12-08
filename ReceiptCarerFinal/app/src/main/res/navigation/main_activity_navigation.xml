@@ -39,7 +39,7 @@
         tools:layout="@layout/fragment_register" />
     <fragment
         android:id="@+id/navigation_editing_receipt"
-        android:name="com.fryderykrott.receiptcarerfinal.EditingReceiptFragment"
+        android:name="com.fryderykrott.receiptcarerfinal.MainView.EditingReceiptFragment"
         android:label="Edytuj paragon"
         tools:layout="@layout/fragment_editing_receipt" />
 </navigation>

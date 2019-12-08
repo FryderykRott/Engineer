@@ -18,9 +18,9 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.fryderykrott.receiptcarerfinal.MainActivity;
+import com.fryderykrott.receiptcarerfinal.MainView.MainActivity;
 import com.fryderykrott.receiptcarerfinal.R;
-import com.fryderykrott.receiptcarerfinal.ReceiptAddingActivity;
+import com.fryderykrott.receiptcarerfinal.ReceiptsAddingView.ReceiptAddingActivity;
 import com.fryderykrott.receiptcarerfinal.adapters.ReceiptsAdapter;
 import com.fryderykrott.receiptcarerfinal.utils.Utils;
 import com.fryderykrott.receiptcarerfinal.Model.User;

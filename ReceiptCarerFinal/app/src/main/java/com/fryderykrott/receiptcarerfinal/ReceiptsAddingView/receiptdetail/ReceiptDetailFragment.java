@@ -22,7 +22,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.ImageButton;
 
 import com.fryderykrott.receiptcarerfinal.R;
-import com.fryderykrott.receiptcarerfinal.ReceiptAddingActivity;
+import com.fryderykrott.receiptcarerfinal.ReceiptsAddingView.ReceiptAddingActivity;
 import com.fryderykrott.receiptcarerfinal.adapters.ImageAdapter;
 import com.fryderykrott.receiptcarerfinal.chips.CalendarChipContainer;
 import com.fryderykrott.receiptcarerfinal.chips.GroupChossingContainer;

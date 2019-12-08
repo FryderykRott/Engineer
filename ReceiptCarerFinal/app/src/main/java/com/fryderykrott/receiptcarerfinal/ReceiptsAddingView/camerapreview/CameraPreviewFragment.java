@@ -23,7 +23,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.fryderykrott.receiptcarerfinal.R;
-import com.fryderykrott.receiptcarerfinal.ReceiptAddingActivity;
+import com.fryderykrott.receiptcarerfinal.ReceiptsAddingView.ReceiptAddingActivity;
 import com.fryderykrott.receiptcarerfinal.utils.Utils;
 import com.fryderykrott.receiptcarerfinal.alertdialogs.AlertDialogFullScreenImageDisplayer;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;

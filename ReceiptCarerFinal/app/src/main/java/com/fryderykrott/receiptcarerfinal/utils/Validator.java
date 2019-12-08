@@ -38,14 +38,16 @@ public class Validator {
             return false;
         }
 
-        if(!isUniqGroup(name)){
+        if(isUniqGroup(name)){
             if(!name.equals(orginal_name)){
-                massage += "Istnieje już grupa o podanej nazwie";
-                return false;
-            }
+                return true;
+            }else
+                massage += "Grupa musi miec inną nazwę niż orginał";
         }
+        else
+            massage += "Istnieje już grupa o podanej nazwie";
 
-        return true;
+        return false;
     }
 
     public static boolean validateGroupName(String name) {
@@ -60,12 +62,12 @@ public class Validator {
             return false;
         }
 
-        if(!isUniqGroup(name)){
-            massage += "Istnieje już grupa o podanej nazwie";
-            return false;
+        if(isUniqGroup(name)){
+            return true;
         }
 
-        return true;
+        massage += "Istnieje już grupa o podanej nazwie";
+        return false;
     }
 
     private static boolean isUniqGroup(String name) {

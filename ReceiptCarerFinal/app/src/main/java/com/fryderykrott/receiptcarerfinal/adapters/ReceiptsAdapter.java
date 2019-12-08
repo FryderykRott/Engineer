@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.navigation.NavController;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.fryderykrott.receiptcarerfinal.MainActivity;
+import com.fryderykrott.receiptcarerfinal.MainView.MainActivity;
 import com.fryderykrott.receiptcarerfinal.R;
 import com.fryderykrott.receiptcarerfinal.chips.MiniBasicChipContainer;
 import com.fryderykrott.receiptcarerfinal.Model.Receipt;
@@ -43,11 +43,13 @@ public class ReceiptsAdapter extends RecyclerView.Adapter<ReceiptsAdapter.Receip
         this.navControler = navControler;
     }
 
+    boolean isSerchable = false;
     public ReceiptsAdapter(MainActivity activity, NavController navController, ArrayList<Receipt> filtredReceipts) {
         this.context = activity;
 
         receipts = filtredReceipts;
         this.navControler = navController;
+        isSerchable = true;
     }
 
 
@@ -71,19 +73,22 @@ public class ReceiptsAdapter extends RecyclerView.Adapter<ReceiptsAdapter.Receip
         holder.receipt_date_of_creation.setText(receipt.getDateOfCreation());
         holder.receipt_total_sum.setText(receipt.getSumTotal() + " PLN");
 
-        holder.receipt_delete_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        if(isSerchable)
+            holder.receipt_delete_button.setVisibility(View.GONE);
+        else
+            holder.receipt_delete_button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
-                Utils.user.getReceipts().remove(receipt);
-                Database.getInstance().reloadGroupsOfCurrentUser(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        context.showSnackBar("Pomyślnie usunięto paragon");
-                    }
-                });
-                notifyDataSetChanged();
-            }
+                    Utils.user.getReceipts().remove(receipt);
+                    Database.getInstance().reloadGroupsOfCurrentUser(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            context.showSnackBar("Pomyślnie usunięto paragon");
+                        }
+                    });
+                    notifyDataSetChanged();
+                }
         });
 
         holder.receipt_container.setOnClickListener(new View.OnClickListener() {

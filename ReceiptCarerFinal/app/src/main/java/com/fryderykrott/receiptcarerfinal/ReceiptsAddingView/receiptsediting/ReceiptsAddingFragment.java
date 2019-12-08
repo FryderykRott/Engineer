@@ -17,7 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.fryderykrott.receiptcarerfinal.R;
-import com.fryderykrott.receiptcarerfinal.ReceiptAddingActivity;
+import com.fryderykrott.receiptcarerfinal.ReceiptsAddingView.ReceiptAddingActivity;
 import com.fryderykrott.receiptcarerfinal.adapters.SectionsPagerAdapter;
 import com.fryderykrott.receiptcarerfinal.Model.Group;
 import com.fryderykrott.receiptcarerfinal.Model.Receipt;

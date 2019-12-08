@@ -14,7 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.fryderykrott.receiptcarerfinal.MainActivity;
+import com.fryderykrott.receiptcarerfinal.MainView.MainActivity;
 import com.fryderykrott.receiptcarerfinal.R;
 import com.fryderykrott.receiptcarerfinal.utils.Validator;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;

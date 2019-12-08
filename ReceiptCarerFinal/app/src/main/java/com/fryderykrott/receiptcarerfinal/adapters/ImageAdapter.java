@@ -11,7 +11,7 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.PagerAdapter;
 
-import com.fryderykrott.receiptcarerfinal.MainActivity;
+import com.fryderykrott.receiptcarerfinal.MainView.MainActivity;
 import com.fryderykrott.receiptcarerfinal.R;
 import com.fryderykrott.receiptcarerfinal.alertdialogs.AlertDialogFullScreenImageDisplayer;
 import com.fryderykrott.receiptcarerfinal.Model.Receipt;

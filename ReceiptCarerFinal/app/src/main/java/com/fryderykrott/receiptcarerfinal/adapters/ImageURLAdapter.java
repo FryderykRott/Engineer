@@ -94,7 +94,6 @@ public class ImageURLAdapter extends PagerAdapter implements AlertDialogFullScre
     }
 
     private void setVisibilityOfInformationPanel(int visibility){
-        information.setVisibility(visibility);
         add_photo_image.setVisibility(visibility);
     }
 

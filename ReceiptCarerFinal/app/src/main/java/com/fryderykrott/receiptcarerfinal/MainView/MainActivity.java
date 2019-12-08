@@ -1,4 +1,4 @@
-package com.fryderykrott.receiptcarerfinal;
+package com.fryderykrott.receiptcarerfinal.MainView;
 
 import android.os.Bundle;
 import android.view.Menu;
@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 import com.fryderykrott.receiptcarerfinal.Model.Receipt;
+import com.fryderykrott.receiptcarerfinal.R;
 import com.fryderykrott.receiptcarerfinal.utils.Utils;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.snackbar.Snackbar;

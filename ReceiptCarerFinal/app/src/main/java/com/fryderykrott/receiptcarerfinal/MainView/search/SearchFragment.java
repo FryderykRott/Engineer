@@ -15,7 +15,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.fryderykrott.receiptcarerfinal.MainActivity;
+import com.fryderykrott.receiptcarerfinal.MainView.MainActivity;
 import com.fryderykrott.receiptcarerfinal.R;
 import com.fryderykrott.receiptcarerfinal.adapters.ReceiptsAdapter;
 import com.fryderykrott.receiptcarerfinal.chips.OnChipAnwserListener;
@@ -53,7 +53,7 @@ public class SearchFragment extends Fragment implements OnChipAnwserListener {
     WarrantyChipContainer warrantyChipConteiner;
     View progresView;
     TextView notFoundText;
-
+    TextView tagsText;
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_search, container, false);
@@ -79,7 +79,7 @@ public class SearchFragment extends Fragment implements OnChipAnwserListener {
 
         progresView = view.findViewById(R.id.progressView);
         notFoundText = view.findViewById(R.id.notFoundTextView);
-
+        tagsText = view.findViewById(R.id.notags);
     }
 
     private void declareSearchView() {
@@ -166,12 +166,17 @@ public class SearchFragment extends Fragment implements OnChipAnwserListener {
 
         chip.setCheckable(false);
         chipGroupTags.addView(chip);
+        if(chipGroupTags.getChildCount() != 0)
+            tagsText.setVisibility(View.INVISIBLE);
+
         chip.setOnCloseIconClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 chipGroupTags.removeView(chip);
                 tagsToSearch.remove(selected);
                 findReceipts();
+                if(chipGroupTags.getChildCount() == 0)
+                    tagsText.setVisibility(View.VISIBLE);
 //                resetAdapter();
             }
         });
@@ -245,6 +250,9 @@ public class SearchFragment extends Fragment implements OnChipAnwserListener {
                     continue;
                 }
             }
+            else if(!receipt.getDateOfEndOfWarrant().equals("")){
+                continue;
+            }
 
 //        sprawdz tagi
 
@@ -274,7 +282,11 @@ public class SearchFragment extends Fragment implements OnChipAnwserListener {
             receiptTags.add(Utils.findTagById(tagsID).getName().toLowerCase());
         }
 
-        receiptTags.add(Utils.findGroupById(receipt.getGroupID()).getName().toLowerCase());
+        Group group = Utils.findGroupById(receipt.getGroupID());
+        if(group == null)
+            receipt.setGroupID(Utils.user.getGroups().get(0).getGroupID());
+
+        receiptTags.add(group.getName().toLowerCase());
         receiptTags.add(receipt.getName().toLowerCase());
 
 //        teraz jak mam wsyztkie tagi to mogę porownanie zrobić
@@ -311,6 +323,12 @@ public class SearchFragment extends Fragment implements OnChipAnwserListener {
     }
 
     private boolean receiptInWarrantyRange(Receipt receipt) {
+        if(receipt.isInfiniteWarranty)
+            return true;
+
+        if(receipt.getDateOfEndOfWarrant().equals(""))
+            return false;
+
         Date warranty = Utils.formatStringToDate(receipt.getDateOfEndOfWarrant());
         Date warrantyLimit = warrantyChipConteiner.getDate_of_end();
 

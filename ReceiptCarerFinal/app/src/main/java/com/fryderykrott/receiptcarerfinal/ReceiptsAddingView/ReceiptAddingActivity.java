@@ -1,4 +1,4 @@
-package com.fryderykrott.receiptcarerfinal;
+package com.fryderykrott.receiptcarerfinal.ReceiptsAddingView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.fryderykrott.receiptcarerfinal.R;
 import com.fryderykrott.receiptcarerfinal.alertdialogs.AlertDialogFullScreenImageDisplayer;
 import com.fryderykrott.receiptcarerfinal.Model.Receipt;
 import com.fryderykrott.receiptcarerfinal.ReceiptsAddingView.camerapreview.CameraPreviewFragment;

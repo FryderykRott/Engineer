@@ -1,4 +1,4 @@
-package com.fryderykrott.receiptcarerfinal;
+package com.fryderykrott.receiptcarerfinal.MainView;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -20,6 +20,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
+import com.fryderykrott.receiptcarerfinal.R;
 import com.fryderykrott.receiptcarerfinal.adapters.ImageAdapter;
 import com.fryderykrott.receiptcarerfinal.adapters.ImageURLAdapter;
 import com.fryderykrott.receiptcarerfinal.alertdialogs.ShareAlertDialog;
