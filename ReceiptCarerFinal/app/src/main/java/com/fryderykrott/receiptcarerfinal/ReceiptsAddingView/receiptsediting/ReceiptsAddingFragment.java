@@ -74,6 +74,7 @@ public class ReceiptsAddingFragment extends Fragment {
         sectionsPagerAdapter = new SectionsPagerAdapter(getActivity(), getChildFragmentManager(), receipts);
 
         ViewPager viewPager =  view.findViewById(R.id.receipt_view_pager);
+        viewPager.setOffscreenPageLimit(100);
         viewPager.setAdapter(sectionsPagerAdapter);
 
         TabLayout tabs = view.findViewById(R.id.receipts_tabs);

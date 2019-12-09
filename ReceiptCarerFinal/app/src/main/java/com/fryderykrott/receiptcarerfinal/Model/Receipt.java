@@ -138,6 +138,12 @@ public class Receipt implements Serializable {
         return images_as_bitmap;
     }
 
+    @Exclude
+    public void somethingDifferentSetImagesAsBitmap(ArrayList<Bitmap> bitmaps) {
+        images_as_bitmap = bitmaps;
+    }
+
+
     public void addReceiptBitmap(Bitmap bitmap) {
         if(images_as_bitmap == null)
             images_as_bitmap = new ArrayList<>();

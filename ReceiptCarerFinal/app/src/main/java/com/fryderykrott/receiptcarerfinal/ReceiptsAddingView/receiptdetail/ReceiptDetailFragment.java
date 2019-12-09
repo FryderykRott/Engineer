@@ -3,6 +3,7 @@ package com.fryderykrott.receiptcarerfinal.ReceiptsAddingView.receiptdetail;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -107,13 +108,14 @@ public class ReceiptDetailFragment extends Fragment implements ImageAdapter.OnNe
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        if(isAlreadyCreted)
-            return;
+//        if(isAlreadyCreted)
+//            return;
 
         viewpager = view.findViewById(R.id.view_pager_receipts);
-        viewpager.setAdapter(imagesAdapter);
+        viewpager.setOffscreenPageLimit(100);
 
         indicator = view.findViewById(R.id.indicator);
+        viewpager.setAdapter(imagesAdapter);
         indicator.setViewPager(viewpager);
         imagesAdapter.registerDataSetObserver(indicator.getDataSetObserver());
 
@@ -285,15 +287,26 @@ public class ReceiptDetailFragment extends Fragment implements ImageAdapter.OnNe
         autoCompleteTextView.setAdapter(adapterAutoCompliteTagsList);
     }
 
-    public void resetImageAdapter(){
+    public void resetImageAdapter(ArrayList<Bitmap> bitmaps) {
         imagesAdapter.notifyDataSetChanged();
-
+        receipt.somethingDifferentSetImagesAsBitmap(bitmaps);
         imagesAdapter = new ImageAdapter(getActivity(), receipt);
         viewpager.setAdapter(imagesAdapter);
 
         imagesAdapter.registerDataSetObserver(indicator.getDataSetObserver());
         imagesAdapter.notifyDataSetChanged();
     }
+
+    public void resetImageAdapter() {
+        imagesAdapter.notifyDataSetChanged();
+ mn
+        imagesAdapter = new ImageAdapter(getActivity(), receipt);
+        viewpager.setAdapter(imagesAdapter);
+
+        imagesAdapter.registerDataSetObserver(indicator.getDataSetObserver());
+        imagesAdapter.notifyDataSetChanged();
+    }
+
 
 
     private void createBasicChips() {
@@ -342,7 +355,11 @@ public class ReceiptDetailFragment extends Fragment implements ImageAdapter.OnNe
     }
 
     public void notifyDataSetChanges() {
-        imagesAdapter.notifyDataSetChanged();
+        imagesAdapter = new ImageAdapter(context, receipt, position, this);
+        viewpager.setAdapter(imagesAdapter);
+        indicator.setViewPager(viewpager);
+        imagesAdapter.registerDataSetObserver(indicator.getDataSetObserver());
+//        imagesAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -354,7 +371,7 @@ public class ReceiptDetailFragment extends Fragment implements ImageAdapter.OnNe
         ReceiptAddingActivity a = ((ReceiptAddingActivity) getActivity());
         a.setCurrentReceiptPhotoTakingPosition(position);
         a.getNavController().navigate(R.id.navigation_camera_preview);
-
+        notifyDataSetChanges();
     }
 
     public boolean validateFragment() {

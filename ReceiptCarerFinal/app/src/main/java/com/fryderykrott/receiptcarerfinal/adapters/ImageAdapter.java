@@ -174,7 +174,7 @@ public class ImageAdapter extends PagerAdapter implements AlertDialogFullScreenI
     public void imagePreviewCallback(int info) {
         notifyDataSetChanged();
         if(fragment != null)
-            ((ReceiptDetailFragment)fragment).resetImageAdapter();
+            ((ReceiptDetailFragment)fragment).resetImageAdapter(images);
     }
 
     public interface OnNewPhotoCallbackListener {

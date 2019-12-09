@@ -97,6 +97,7 @@ public class AlertDialogFullScreenImageDisplayer extends Dialog implements andro
 
 
         viewpager = findViewById(R.id.view_pager_receipts);
+        viewpager.setOffscreenPageLimit(100);
         viewpager.setAdapter(adapter);
         viewpager.setCurrentItem(position);
 
@@ -121,6 +122,7 @@ public class AlertDialogFullScreenImageDisplayer extends Dialog implements andro
     public void onClick(View v) {
         switch (v.getId()){
             case (R.id.buttonOK):
+                listener.imagePreviewCallback(125534);
                 dismiss();
                 break;
             case (R.id.buttonDetele):
