@@ -96,24 +96,21 @@ public class EditingReceiptFragment extends Fragment implements ImageAdapter.OnN
         context = (MainActivity) getActivity();
 
         receiptToEdit = context.getReceiptToEdit();
-        receipt = new Receipt(receiptToEdit);
-        imagesAdapter = new ImageURLAdapter(context, receipt, this, this);
+        if(receipt == null)
+            receipt = new Receipt(receiptToEdit);
 
         return inflater.inflate(R.layout.fragment_editing_receipt, container, false);
     }
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        if(isAlreadyCreted)
-            return;
-
         viewpager = view.findViewById(R.id.view_pager_receipts);
-        viewpager.setAdapter(imagesAdapter);
-
+        viewpager.setOffscreenPageLimit(100);
         indicator = view.findViewById(R.id.indicator);
-        indicator.setViewPager(viewpager);
-        imagesAdapter.registerDataSetObserver(indicator.getDataSetObserver());
+
+        resetImageAdapter();
 
         acceptIcon = view.findViewById(R.id.button);
         acceptIcon.setVisibility(View.INVISIBLE);
@@ -241,6 +238,10 @@ public class EditingReceiptFragment extends Fragment implements ImageAdapter.OnN
         ArrayList<String> tagsID = receipt.getTagsID();
         ArrayList<Tag> allTags = Utils.user.getTags();
 
+        for(String tag: receiptTags){
+            addChipToGroup(tag, tagsChipGroup);
+        }
+
         for(Tag tag: allTags){
             for(String tagUID: tagsID){
                 if(tag.getUid().equals(tagUID)){
@@ -249,6 +250,8 @@ public class EditingReceiptFragment extends Fragment implements ImageAdapter.OnN
                 }
             }
         }
+
+
     }
 
     private void setAutoCompleteTextOfTags() {
@@ -332,13 +335,10 @@ public class EditingReceiptFragment extends Fragment implements ImageAdapter.OnN
     }
 
     public void resetImageAdapter(){
-        imagesAdapter.notifyDataSetChanged();
-
-        new ImageURLAdapter(context, receipt, null, this);
+        imagesAdapter = new ImageURLAdapter(context, receiptToEdit, this, this);
         viewpager.setAdapter(imagesAdapter);
-
+        indicator.setViewPager(viewpager);
         imagesAdapter.registerDataSetObserver(indicator.getDataSetObserver());
-        imagesAdapter.notifyDataSetChanged();
     }
 
     private void createBasicChips() {
@@ -398,7 +398,9 @@ public class EditingReceiptFragment extends Fragment implements ImageAdapter.OnN
 
     @Override
     public void onNewPhotoCallback(int position_off_receipt) {
-//        ((MainActivity)getActivity()).getNavController().navigate(R.id.navigation_camera_preview);
+        preparePreReceipt();
+        ((MainActivity)getActivity()).getNavController().navigate(R.id.fragment_camera_preview_edit);
+
     }
 
     public boolean validateFragment() {
@@ -444,6 +446,34 @@ public class EditingReceiptFragment extends Fragment implements ImageAdapter.OnN
         receiptToEdit.getTagsID().clear();
         for(String tag: receiptTags){
             receiptToEdit.addTag(tag);
+        }
+
+        Log.i("dsa", "dsa");
+    }
+
+    public void preparePreReceipt() {
+        String receiptName = receiptNameTextInput.getText().toString();
+        String dateOfCreation = Utils.formatDateToString(calendarChipConteiner.getDate());
+
+        String dateWarantyDateEnd = "";
+        if(warrantyChipConteiner.getDate_of_end() != null)
+            if(warrantyChipConteiner.isInfiniteWarranty())
+                receipt.setInfiniteWarranty(true);
+            else
+                dateWarantyDateEnd = Utils.formatDateToString(warrantyChipConteiner.getDate_of_end());
+
+        String groupUID = groupChossingContainerChip.getGroup().getGroupID();
+        float total = (float) priceChipConteiner.getPrice();
+
+        receipt.setDateOfCreation(dateOfCreation);
+        receipt.setName(receiptName);
+        receipt.setDateOfEndOfWarrant(dateWarantyDateEnd);
+        receipt.setGroupID(groupUID);
+        receipt.setSumTotal(total);
+
+        receipt.getTagsID().clear();
+        for(String tag: receiptTags){
+            receipt.addTag(tag);
         }
 
         Log.i("dsa", "dsa");

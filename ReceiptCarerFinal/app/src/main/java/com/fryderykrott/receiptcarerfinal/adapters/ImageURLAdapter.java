@@ -10,6 +10,8 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.PagerAdapter;
 
+import com.fryderykrott.receiptcarerfinal.MainView.EditingReceiptFragment;
+import com.fryderykrott.receiptcarerfinal.MainView.MainActivity;
 import com.fryderykrott.receiptcarerfinal.R;
 import com.fryderykrott.receiptcarerfinal.alertdialogs.AlertDialogFullScreenImageDisplayer;
 import com.fryderykrott.receiptcarerfinal.Model.Receipt;
@@ -65,7 +67,7 @@ public class ImageURLAdapter extends PagerAdapter implements AlertDialogFullScre
                     @Override
                     public void onClick(View v) {
 //                        FragmentActivity a, OnImagePreviewCallbackListener listener,Receipt receipt, int position, boolean isDeletable) {
-                        AlertDialogFullScreenImageDisplayer ad = new AlertDialogFullScreenImageDisplayer(context, adapter, receipt, position, false);
+                        AlertDialogFullScreenImageDisplayer ad = new AlertDialogFullScreenImageDisplayer(context, adapter, receipt, position, true);
                         ad.show();
 
                     }
@@ -119,7 +121,7 @@ public class ImageURLAdapter extends PagerAdapter implements AlertDialogFullScre
     public void imagePreviewCallback(int info) {
         notifyDataSetChanged();
         if(fragment != null)
-            ((ReceiptDetailFragment)fragment).resetImageAdapter();
+            ((EditingReceiptFragment)fragment).resetImageAdapter();
     }
 
     public interface OnNewPhotoCallbackListener {

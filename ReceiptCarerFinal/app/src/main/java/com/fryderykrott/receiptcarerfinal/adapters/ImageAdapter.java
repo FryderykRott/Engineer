@@ -28,26 +28,15 @@ public class ImageAdapter extends PagerAdapter implements AlertDialogFullScreenI
     private boolean isClickable;
 
     OnNewPhotoCallbackListener listener;
-    Fragment fragment;
+    ReceiptDetailFragment fragment;
 
-    public ImageAdapter(Activity context, Receipt receipt) {
-        this.context = context;
-        this.images = receipt.somethingDifferentImagesAsBitmap();
-        this.isClickable = false;
-    }
+//    public ImageAdapter(Activity context, Receipt receipt) {
+//        this.context = context;
+//        this.images = receipt.somethingDifferentImagesAsBitmap();
+//        this.isClickable = false;
+//    }
 
-    public ImageAdapter(Activity context, Receipt receipt, int receipt_position, OnNewPhotoCallbackListener listener) {
-        this.receipt = receipt;
-        this.context = context;
-        this.images = receipt.somethingDifferentImagesAsBitmap();
-        this.isClickable = true;
-        this.receipt_position = receipt_position;
-        this.listener = listener;
-
-//        resizeImages();
-    }
-
-    public ImageAdapter(Activity context, Receipt receipt, int receipt_position, OnNewPhotoCallbackListener listener, Fragment fragment) {
+    public ImageAdapter(Activity context, Receipt receipt, int receipt_position, OnNewPhotoCallbackListener listener, ReceiptDetailFragment fragment) {
         this.receipt = receipt;
         this.context = context;
         this.images = receipt.somethingDifferentImagesAsBitmap();
@@ -58,12 +47,26 @@ public class ImageAdapter extends PagerAdapter implements AlertDialogFullScreenI
 //        resizeImages();
     }
 
-    public ImageAdapter(MainActivity context, Receipt receipt) {
-        this.receipt = receipt;
-        this.context = context;
-        this.images = receipt.somethingDifferentImagesAsBitmap();
-        this.receipt_position = 0;
-    }
+//    public ImageAdapter(Activity context, Receipt receipt, int receipt_position, OnNewPhotoCallbackListener listener, Fragment fragment) {
+//        this.receipt = receipt;
+//        this.context = context;
+//        this.images = receipt.somethingDifferentImagesAsBitmap();
+//        this.isClickable = true;
+//        this.receipt_position = receipt_position;
+//        this.listener = listener;
+//        this.fragment = fragment;
+////        resizeImages();
+//    }
+//
+//    public ImageAdapter(MainActivity context, Receipt receipt, OnNewPhotoCallbackListener listener, Fragment fragment) {
+//        this.receipt = receipt;
+//        this.context = context;
+//        this.images = receipt.somethingDifferentImagesAsBitmap();
+//        this.receipt_position = 0;
+//        this.isClickable = true;
+//        this.listener = listener;
+//        this.fragment = fragment;
+//    }
 
     public ImageAdapter(Activity context, ArrayList<Bitmap> bitmaps) {
         this.context = context;
@@ -72,18 +75,7 @@ public class ImageAdapter extends PagerAdapter implements AlertDialogFullScreenI
     }
 
 
-    private void resizeImages() {
-        Bitmap bitmap;
-        Bitmap new_bitmap;
-        for (int i = 0; i < images.size(); i++){
-            bitmap = images.get(i);
-            new_bitmap = Bitmap.createScaledBitmap(
-                    bitmap, bitmap.getWidth() / 2 , bitmap.getHeight() /2, false);
-            images.set(i, new_bitmap);
-        }
-    }
 
-    TextView information;
     ImageView add_photo_image;
 
     @Override
@@ -174,7 +166,7 @@ public class ImageAdapter extends PagerAdapter implements AlertDialogFullScreenI
     public void imagePreviewCallback(int info) {
         notifyDataSetChanged();
         if(fragment != null)
-            ((ReceiptDetailFragment)fragment).resetImageAdapter(images);
+            ((ReceiptDetailFragment)fragment).resetImageAdapter(0);
     }
 
     public interface OnNewPhotoCallbackListener {

@@ -78,6 +78,48 @@ public class Database{
         updateAllArrays(voidOnCompleteListener);
     }
 
+    public void uploadBitmapsOfReceipt(final Receipt receipt, final ArrayList<Bitmap> bitmaps, final OnCompleteListener<Void> listener){
+        final String userDocRef = Utils.user.getDocRefUser();
+
+        ByteArrayOutputStream baos;
+        byte[] data;
+        String path;
+        StorageReference receiptImageRef;
+
+
+        for (int i = 0; i < bitmaps.size(); i++) {
+            Bitmap bitmap = bitmaps.get(i);
+            baos = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+            data = baos.toByteArray();
+
+            path = "receiptimages/" + UUID.randomUUID() + ".png";
+            receiptImageRef = store.getReference(path);
+
+            final UploadTask uploadTask = receiptImageRef.putBytes(data);
+            final String finalPath = path;
+
+            final int finalI = i;
+            uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    Task<Uri> uri = taskSnapshot.getStorage().getDownloadUrl();
+                    while (!uri.isComplete()) ;
+                    Uri url = uri.getResult();
+                    receipt.getImages_as_base64().add(url.toString());
+
+                    if (finalI == bitmaps.size() - 1) {
+                        updateAllArrays(listener);
+//                        listener.onComplete(null);
+                    }
+
+                }
+            });
+
+        }
+
+    }
+
     public void uploadAndUpgradeReceipts(final ArrayList<Receipt> receipts, final OnCompleteListener<Void> listener){
         final String userDocRef = Utils.user.getDocRefUser();
 

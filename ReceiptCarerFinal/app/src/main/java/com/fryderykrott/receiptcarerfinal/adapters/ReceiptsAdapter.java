@@ -102,9 +102,12 @@ public class ReceiptsAdapter extends RecyclerView.Adapter<ReceiptsAdapter.Receip
         setWarrantyDate(holder, receipt);
 
 //        dodaj chip grupy
+
         Group group = Utils.findGroupById(receipt.getGroupID());
-        MiniBasicChipContainer miniGroupChipContainer = new MiniBasicChipContainer(context, group);
-        holder.tagsChipGroup.addView(miniGroupChipContainer.getMiniChip());
+        if(group != null){
+            MiniBasicChipContainer miniGroupChipContainer = new MiniBasicChipContainer(context, group);
+            holder.tagsChipGroup.addView(miniGroupChipContainer.getMiniChip());
+        }
 
 //        dodaj chipy tagów
         ArrayList<String> tagsID = receipt.getTagsID();

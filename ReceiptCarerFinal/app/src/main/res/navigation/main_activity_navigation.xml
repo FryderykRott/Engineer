@@ -42,4 +42,9 @@
         android:name="com.fryderykrott.receiptcarerfinal.MainView.EditingReceiptFragment"
         android:label="Edytuj paragon"
         tools:layout="@layout/fragment_editing_receipt" />
+    <fragment
+        android:id="@+id/fragment_camera_preview_edit"
+        android:name="com.fryderykrott.receiptcarerfinal.ReceiptsAddingView.camerapreview.CameraPreviewFragment"
+        android:label="fragment_camera_preview"
+        tools:layout="@layout/fragment_camera_preview" />
 </navigation>

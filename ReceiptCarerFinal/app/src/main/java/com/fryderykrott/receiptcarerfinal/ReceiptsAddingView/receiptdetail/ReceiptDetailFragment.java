@@ -88,7 +88,6 @@ public class ReceiptDetailFragment extends Fragment implements ImageAdapter.OnNe
         fragment.receipt = receipt;
         fragment.position = position;
 
-        fragment.imagesAdapter = new ImageAdapter(context, receipt, position, fragment);
         return fragment;
     }
 
@@ -115,9 +114,8 @@ public class ReceiptDetailFragment extends Fragment implements ImageAdapter.OnNe
         viewpager.setOffscreenPageLimit(100);
 
         indicator = view.findViewById(R.id.indicator);
-        viewpager.setAdapter(imagesAdapter);
-        indicator.setViewPager(viewpager);
-        imagesAdapter.registerDataSetObserver(indicator.getDataSetObserver());
+
+        resetImageAdapter(position);
 
         acceptIcon = view.findViewById(R.id.button);
         acceptIcon.setVisibility(View.INVISIBLE);
@@ -287,24 +285,22 @@ public class ReceiptDetailFragment extends Fragment implements ImageAdapter.OnNe
         autoCompleteTextView.setAdapter(adapterAutoCompliteTagsList);
     }
 
-    public void resetImageAdapter(ArrayList<Bitmap> bitmaps) {
-        imagesAdapter.notifyDataSetChanged();
-        receipt.somethingDifferentSetImagesAsBitmap(bitmaps);
-        imagesAdapter = new ImageAdapter(getActivity(), receipt);
+//    public void resetImageAdapter(ArrayList<Bitmap> bitmaps) {
+//        imagesAdapter.notifyDataSetChanged();
+//        receipt.somethingDifferentSetImagesAsBitmap(bitmaps);
+//        imagesAdapter = new ImageAdapter(context, receipt, this, this);
+//        viewpager.setAdapter(imagesAdapter);
+//
+//        imagesAdapter.registerDataSetObserver(indicator.getDataSetObserver());
+//        imagesAdapter.notifyDataSetChanged();
+//    }
+
+    public void resetImageAdapter(int position) {
+        imagesAdapter = new ImageAdapter(context, receipt, position, this, this);
+
         viewpager.setAdapter(imagesAdapter);
-
+        indicator.setViewPager(viewpager);
         imagesAdapter.registerDataSetObserver(indicator.getDataSetObserver());
-        imagesAdapter.notifyDataSetChanged();
-    }
-
-    public void resetImageAdapter() {
-        imagesAdapter.notifyDataSetChanged();
- mn
-        imagesAdapter = new ImageAdapter(getActivity(), receipt);
-        viewpager.setAdapter(imagesAdapter);
-
-        imagesAdapter.registerDataSetObserver(indicator.getDataSetObserver());
-        imagesAdapter.notifyDataSetChanged();
     }
 
 
@@ -320,6 +316,9 @@ public class ReceiptDetailFragment extends Fragment implements ImageAdapter.OnNe
 
 //        Gwarancja
       warrantyChipConteiner = new WarrantyChipContainer(context);
+        if(!receipt.getDateOfEndOfWarrant().isEmpty()){
+            warrantyChipConteiner.setWarranty(Utils.formatStringToDate(receipt.getDateOfEndOfWarrant()));
+        }
         tagsChipGroup.addView(warrantyChipConteiner.getWarrantyChip());
 
 //        Cena na apragonie
@@ -332,6 +331,8 @@ public class ReceiptDetailFragment extends Fragment implements ImageAdapter.OnNe
 
 //        Grupa i wybieranie grupy
         groupChossingContainerChip = new GroupChossingContainer(context);
+        if(!receipt.getGroupID().isEmpty())
+            groupChossingContainerChip.setGroup(Utils.findGroupById(receipt.getGroupID()));
         tagsChipGroup.addView(groupChossingContainerChip.getGroupChip());
 
 
@@ -355,10 +356,7 @@ public class ReceiptDetailFragment extends Fragment implements ImageAdapter.OnNe
     }
 
     public void notifyDataSetChanges() {
-        imagesAdapter = new ImageAdapter(context, receipt, position, this);
-        viewpager.setAdapter(imagesAdapter);
-        indicator.setViewPager(viewpager);
-        imagesAdapter.registerDataSetObserver(indicator.getDataSetObserver());
+        resetImageAdapter(0);
 //        imagesAdapter.notifyDataSetChanged();
     }
 
@@ -368,6 +366,7 @@ public class ReceiptDetailFragment extends Fragment implements ImageAdapter.OnNe
 //        nakladamy kolejny fragment, zapisac pozycje paragon z listy
 //        mamy aktywnosc i jestes we fragmencie i mozemy wrzucić na wierzch fragment ktory cofając się wrzuci nas do aktywnosci, a w aktywnosic sa paragony, wiec trzeba powiedziae
 //        ktory paragon jest akutalnie robione
+        prepareReceipt();
         ReceiptAddingActivity a = ((ReceiptAddingActivity) getActivity());
         a.setCurrentReceiptPhotoTakingPosition(position);
         a.getNavController().navigate(R.id.navigation_camera_preview);
@@ -394,17 +393,8 @@ public class ReceiptDetailFragment extends Fragment implements ImageAdapter.OnNe
         return pass;
     }
 
-//    groupChossingContainerChip;
-//    private CalendarChipContainer calendarChipConteiner;
-//    private WarrantyChipContainer warrantyChipConteiner;
-//    private PriceChipContainer priceChipConteiner;
 
     public void prepareReceipt() {
-//        1. dodaj datę do apragonu
-//        2. updatów nazwę paragonu
-//        3. ustal datę gwarancji paragonu
-//        4. ustal grupę
-//        5. włóż wszystkie znaczniki
         String receiptName = receiptNameTextInput.getText().toString();
         String dateOfCreation = Utils.formatDateToString(calendarChipConteiner.getDate());
 

@@ -1,5 +1,6 @@
 package com.fryderykrott.receiptcarerfinal.MainView;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -8,7 +9,11 @@ import android.widget.FrameLayout;
 
 import com.fryderykrott.receiptcarerfinal.Model.Receipt;
 import com.fryderykrott.receiptcarerfinal.R;
+import com.fryderykrott.receiptcarerfinal.ReceiptsAddingView.camerapreview.CameraPreviewFragment;
+import com.fryderykrott.receiptcarerfinal.Services.Database;
 import com.fryderykrott.receiptcarerfinal.utils.Utils;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.FirebaseApp;
@@ -26,7 +31,9 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-public class MainActivity extends AppCompatActivity implements NavController.OnDestinationChangedListener {
+import java.util.ArrayList;
+
+public class MainActivity extends AppCompatActivity implements NavController.OnDestinationChangedListener, CameraPreviewFragment.OnPhotoTakingListener {
     Receipt receiptToEdit;
     private NavController navController;
     private BottomNavigationView bottomNavigationView;
@@ -85,7 +92,10 @@ public class MainActivity extends AppCompatActivity implements NavController.OnD
 
     @Override
     public void onDestinationChanged(@NonNull NavController controller, @NonNull NavDestination destination, @Nullable Bundle arguments) {
-        if(destination.getId() == R.id.navigation_login || destination.getId() == R.id.navigation_register || destination.getId() == R.id.navigation_editing_receipt){
+        if(destination.getId() == R.id.navigation_login || destination.getId() == R.id.navigation_register ){
+            setNavigationVisibility(false);
+        }
+        else if(destination.getId() == R.id.navigation_editing_receipt || destination.getId() == R.id.fragment_camera_preview_edit ){
             setNavigationVisibility(false);
         }
         else
@@ -144,5 +154,25 @@ public class MainActivity extends AppCompatActivity implements NavController.OnD
 
     public Receipt getReceiptToEdit(){
         return receiptToEdit;
+    }
+
+    @Override
+    public void onPhotoTakeingCallback(ArrayList<Bitmap> bitmaps) {
+
+        if(bitmaps == null) {
+            navController.popBackStack();
+            return;
+        }
+
+        setProgressView(true);
+
+        Database.getInstance().uploadBitmapsOfReceipt(receiptToEdit, bitmaps, new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                setProgressView(false);
+                navController.popBackStack();
+            }
+        });
+
     }
 }

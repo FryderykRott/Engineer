@@ -33,6 +33,7 @@ public class AlertDialogFullScreenImageDisplayer extends Dialog implements andro
     public ImageButton delete;
     private int position;
     ArrayList<Bitmap> bitmaps;
+    ArrayList<String> bitmapsURL;
     PagerAdapter adapter;
 
     ViewPager viewpager;
@@ -110,7 +111,14 @@ public class AlertDialogFullScreenImageDisplayer extends Dialog implements andro
         if(!isDeletable){
             delete.setVisibility(View.GONE);
         }
-        else if(bitmaps.size() == 1){
+
+        if(bitmaps.size() == 1){
+            delete.setVisibility(View.GONE);
+        }
+        if(receipt != null)
+            bitmapsURL = receipt.getImages_as_base64();
+
+        if(receipt != null && bitmapsURL.size() == 1){
             delete.setVisibility(View.GONE);
         }
         delete.setOnClickListener(this);
@@ -160,7 +168,11 @@ public class AlertDialogFullScreenImageDisplayer extends Dialog implements andro
                     delete.setVisibility(View.GONE);
                 }
 
-                listener.imagePreviewCallback(NO_RESPONSE);
+                if(receipt != null && bitmapsURL.size() == 1){
+                    delete.setVisibility(View.GONE);
+                }
+
+//                listener.imagePreviewCallback(NO_RESPONSE);
                 break;
         }
 
@@ -170,5 +182,10 @@ public class AlertDialogFullScreenImageDisplayer extends Dialog implements andro
         public void imagePreviewCallback(int info);
     }
 
+    @Override
+    public void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        listener.imagePreviewCallback(0);
+    }
 }
 

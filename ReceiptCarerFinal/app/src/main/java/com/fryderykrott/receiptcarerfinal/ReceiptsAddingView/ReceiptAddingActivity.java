@@ -9,6 +9,7 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -188,4 +189,9 @@ public class ReceiptAddingActivity extends AppCompatActivity implements CameraPr
         this.currentReceiptPhotoTakingPosition = currentReceiptPhotoTakingPosition;
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.i("fdsa", "das");
+    }
 }

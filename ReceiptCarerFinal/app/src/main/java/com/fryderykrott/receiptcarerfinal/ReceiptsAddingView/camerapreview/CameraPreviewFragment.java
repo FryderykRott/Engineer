@@ -1,5 +1,6 @@
 package com.fryderykrott.receiptcarerfinal.ReceiptsAddingView.camerapreview;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -9,6 +10,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
@@ -22,6 +24,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.fryderykrott.receiptcarerfinal.MainView.MainActivity;
 import com.fryderykrott.receiptcarerfinal.R;
 import com.fryderykrott.receiptcarerfinal.ReceiptsAddingView.ReceiptAddingActivity;
 import com.fryderykrott.receiptcarerfinal.utils.Utils;
@@ -94,8 +97,8 @@ public class CameraPreviewFragment extends Fragment implements View.OnClickListe
 
         mListener = (OnPhotoTakingListener) getActivity();
 
+        hideActionBar();
 
-        ((ReceiptAddingActivity) getActivity()).getSupportActionBar().hide();
         getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         myContext = getContext();
 
@@ -147,6 +150,11 @@ public class CameraPreviewFragment extends Fragment implements View.OnClickListe
         notifyFlashStateChanges();
     }
 
+    private void hideActionBar() {
+        AppCompatActivity activity = (AppCompatActivity) getActivity();
+        activity.getSupportActionBar().hide();
+    }
+
     private void commitStateChanges() {
         setBasicState();
 
@@ -169,7 +177,12 @@ public class CameraPreviewFragment extends Fragment implements View.OnClickListe
 
         acceptButton.hide();
 
-        mCamera.startPreview();
+//        try {
+            mCamera.startPreview();
+
+//        }catch (Exception ignored){
+//
+//        }
     }
 
 
@@ -377,7 +390,7 @@ public class CameraPreviewFragment extends Fragment implements View.OnClickListe
     @Override
     public void imagePreviewCallback(int info) {
 //        mCamera.startPreview();
-        commitStateChanges();
+//        commitStateChanges();
     }
 
     public interface OnPhotoTakingListener {
