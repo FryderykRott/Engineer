@@ -186,6 +186,8 @@ public class Utils {
     }
 
     public static Group findGroupByString(String basicGroupName) {
+        if(user == null)
+            return null;
         ArrayList<Group> groups = user.getGroups();
 
         for (Group group: groups){
@@ -197,6 +199,9 @@ public class Utils {
     }
 
     public static Group findGroupById(String UID){
+        if(user == null)
+            return null;
+
         ArrayList<Group> groups = user.getGroups();
 
         for (Group group: groups){
@@ -208,6 +213,9 @@ public class Utils {
     }
 
     public static Tag findTagById(String UID){
+        if(user == null)
+            return null;
+
         ArrayList<Tag> tags = user.getTags();
 
         for (Tag tag: tags){

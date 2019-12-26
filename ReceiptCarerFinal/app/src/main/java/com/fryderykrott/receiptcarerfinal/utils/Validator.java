@@ -44,8 +44,13 @@ public class Validator {
             }else
                 massage += "Grupa musi miec inną nazwę niż orginał";
         }
-        else
-            massage += "Istnieje już grupa o podanej nazwie";
+        else{
+            if(name.equals(orginal_name)){
+                return true;
+            }else
+                massage += "Istnieje już grupa o podanej nazwie";
+        }
+
 
         return false;
     }

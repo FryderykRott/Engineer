@@ -103,7 +103,9 @@ public class ReceiptsAdapter extends RecyclerView.Adapter<ReceiptsAdapter.Receip
 
 //        dodaj chip grupy
 
+
         Group group = Utils.findGroupById(receipt.getGroupID());
+
         if(group != null){
             MiniBasicChipContainer miniGroupChipContainer = new MiniBasicChipContainer(context, group);
             holder.tagsChipGroup.addView(miniGroupChipContainer.getMiniChip());
@@ -116,6 +118,10 @@ public class ReceiptsAdapter extends RecyclerView.Adapter<ReceiptsAdapter.Receip
 
         for(int i = 0; i < tagsID.size(); i++){
             tag = Utils.findTagById(tagsID.get(i));
+
+            if(tag ==null)
+                continue;
+
             miniBasicChipContainer = new MiniBasicChipContainer(context, "#" + tag.getName());
             holder.tagsChipGroup.addView(miniBasicChipContainer.getMiniChip());
         }

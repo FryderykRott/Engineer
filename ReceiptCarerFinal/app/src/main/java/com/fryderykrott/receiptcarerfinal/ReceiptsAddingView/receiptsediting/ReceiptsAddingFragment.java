@@ -1,5 +1,6 @@
 package com.fryderykrott.receiptcarerfinal.ReceiptsAddingView.receiptsediting;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 
@@ -100,6 +101,7 @@ public class ReceiptsAddingFragment extends Fragment {
 //                Validate
                 boolean pass = true;
                 ((ReceiptAddingActivity)getActivity()).setProgressView(true);
+
                 for(ReceiptDetailFragment fragment :sectionsPagerAdapter.getFragments())
                     if(!fragment.validateFragment())
                         pass = false;
@@ -112,14 +114,16 @@ public class ReceiptsAddingFragment extends Fragment {
 
                    for(Receipt receipt :receipts){
 //                       group = Utils.findGroupById(receipt.getGroupID());
-                       Utils.user.getReceipts().add(receipt);
+                       Utils.user.getReceipts().add(0, receipt);
                    }
 
 
                    Database.getInstance().uploadAndUpgradeReceipts(receipts, new OnCompleteListener<Void>() {
                        @Override
                        public void onComplete(@NonNull Task<Void> task) {
-                           getActivity().finish();
+                           Activity activity = getActivity();
+                           if(activity != null)
+                               activity.finish();
                        }
                    });
 

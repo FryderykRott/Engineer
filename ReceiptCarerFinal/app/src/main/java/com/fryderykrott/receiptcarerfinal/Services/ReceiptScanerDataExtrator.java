@@ -59,8 +59,11 @@ public class ReceiptScanerDataExtrator {
             if (block.getText().toLowerCase().contains("pln")) {
 
                 for (int j = 1; j <= number_Of_surrending_words; j++) {
-                    words_surrending_SUMA.add(result_blocks.get(i + j));
-                    words_surrending_SUMA.add(result_blocks.get(i - j));
+                    if(i - j >= 0 && i + j < result_blocks.size())
+                    {
+                        words_surrending_SUMA.add(result_blocks.get(i + j));
+                        words_surrending_SUMA.add(result_blocks.get(i - j));
+                    }
                 }
 
                 findIfPriceIsThere(block, words_surrending_SUMA);
